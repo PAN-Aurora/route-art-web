@@ -1,0 +1,156 @@
+/* 登录页样式Start */
+
+#app.login{
+    background-image: url('/assets/images/bg-images/bg3.jpg');
+}
+/* 登录框样式 */
+#app.login .auth-content{
+    background: rgba(0, 0, 0, 0) url("../../assets/images/login/login_block.png") repeat scroll 0 0 / 100% 100%;
+}
+  
+/* 黄山样式 */
+.login .card-body {
+    height: 93%;
+    margin: auto;
+    padding: 17.4% 6% 2% 6.6%;
+    position: relative;
+    width: 50%;
+}
+
+.login .input-group {
+    height: 19%;
+}
+
+.login .input-group:nth-child(1) {
+    margin-bottom: 6.4% !important;
+}
+
+.login .input-group:nth-child(2) {
+    margin-bottom: 3% !important;
+}
+
+.login .form-group {
+    height: 8%;
+    margin-bottom: 2% !important;
+}
+
+.login .form-control {
+    border-radius: 4px;
+    border-width: 0;
+    padding: 0 0 0 13%;
+    color: #adb7be !important;
+}
+
+.login #to-login {
+    border-radius: 0.25rem;
+    font-size: 14px;
+    margin-bottom: 1% !important;
+    margin-right: 1%;
+    padding: 2% 6%;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.login .checkbox.checkbox-fill input[type="checkbox"]:checked + .cr::before {
+    color: #FFFC03;
+}
+
+/* 登录页样式End */
+.pcoded-header.header-img {
+    background: rgba(0, 0, 0, 0) url("../images/header/header_bg.jpg") no-repeat scroll center center / 100% 100% !important;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pcoded-header span.logo {
+    background: url('../images/logo.png') no-repeat scroll center /100%;
+}
+
+/* 主页head头Start */
+
+
+/* 主页head头End */
+
+/* 主页菜单Start */
+.pcoded-navbar.navbar-green {
+    background: #184907 url("../images/nav-bg/navbar-img.png") no-repeat scroll 0 0 / 100% auto;
+}
+
+.pcoded-navbar.navbar-green .pcoded-inner-navbar li.active > a,
+.pcoded-navbar.navbar-green .pcoded-inner-navbar li:focus > a,
+.pcoded-navbar.navbar-green .pcoded-inner-navbar li:hover > a {
+    color: #E8F605;
+}
+
+/* 按钮 */
+.el-button--primary {
+    background-color: #3c763d;
+    border-color: #3c763d;
+    color: #fff;
+}
+
+.el-button:focus, .yGreen.el-button:hover {
+    background-color: #e5f1ee;
+    border-color: #e5f1ee;
+    color: #3c763d;
+}
+
+.el-button--primary:focus, .yGreen.el-button--primary:hover {
+    background-color: #629b58;
+    border-color: #629b58;
+    color: #fff;
+}
+
+/*页面先渲染数据 再加载页面*/
+[v-cloak] {
+    display: none !important;
+}
+
+/*仓库树形样式*/
+.kfTree {
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: #fff;
+    border-radius: 4px;
+    height: calc(100% - 12px);
+    position: absolute;
+    width: 15%;
+    overflow: auto;
+}
+
+/*车型树样式*/
+.cxTree {
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: #fff;
+    border-radius: 4px;
+    height: calc(100% - 12px);
+    position: absolute;
+    width: 15%;
+    overflow: auto;
+}
+/*左侧树样式*/
+.treeTd{
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: #fff;
+    border-radius: 4px;
+    height: calc(100% - 12px);
+    position: absolute;
+    width: 15%;
+    overflow: auto;
+}
+/* tab页 */
+.el-menu--horizontal > .el-menu-item.is-active {
+    color: #10d0a8;
+}
+.el-menu--horizontal .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    outline: 0;
+    color: #10d0a8;
+}
+.el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
+    border-bottom: 2px solid #629b58;
+    color: #10d0a8;
+}
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #10d0a8;
+}
+#_DialogBGMask{
+    opacity: 0.6;
+}
+/* 主页菜单End */

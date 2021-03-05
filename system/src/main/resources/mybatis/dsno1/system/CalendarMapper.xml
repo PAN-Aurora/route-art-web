@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.system.CalendarMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+        SYS_CALENDAR
+    </sql>
+
+
+    <!-- 字段 -->
+    <sql id="Field">
+        f.ID,
+        f.STARTTIME,
+        f.ENDTIME,
+        f.USER,
+        f.TITLE,
+        f.ALLDAY,
+        f.CLASSNAME,
+        f.ZDTX,
+        f.COLOR,
+        f.SORT,
+        f.URL
+
+    </sql>
+
+    <!-- 字段用于新增 -->
+    <sql id="Field2">
+        ID,
+        STARTTIME,
+        ENDTIME,
+        USER,
+        TITLE,
+        ALLDAY,
+        CLASSNAME,
+        ZDTX,
+        COLOR,
+        SORT,
+        URL
+    </sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+        #{ID},
+        #{STARTTIME},
+        #{ENDTIME},
+        #{USER},
+        #{TITLE},
+        #{ALLDAY},
+        #{CLASSNAME},
+        #{ZDTX},
+        #{COLOR},
+        #{SORT},
+        #{URL}
+    </sql>
+
+    <!-- 列表(根据用户获取) -->
+    <select id="listByUser" parameterType="pd" resultType="pd">
+        select
+        f.ID,date_format(f.STARTTIME,'%Y-%m-%dT%H:%i:%sZ') STARTTIME,
+        date_format(f.ENDTIME,'%Y-%m-%dT%H:%i:%sZ') ENDTIME,f.TITLE,f.ALLDAY,f.CLASSNAME,
+               f.COLOR,f.SORT,f.ZDTX,f.URL
+        from
+        <include refid="tableName"></include> f
+        where 1=1
+        <if test="USERNAME != null and USERNAME != ''">
+            and f.USER = #{USERNAME}
+        </if>
+        ORDER BY
+        starttime,
+        sort
+    </select>
+
+    <!-- 用于excel导出 -->
+    <select id="listToExcel" parameterType="pd" resultType="pd">
+        select
+        f.ID,date_format(f.STARTTIME,'%Y-%m-%d %H:%i:%s') STARTTIME,
+        date_format(f.ENDTIME,'%Y-%m-%d %H:%i:%s') ENDTIME,f.TITLE,f.ALLDAY,
+        f.SORT,f.URL
+        from
+        <include refid="tableName"></include> f
+        where 1=1
+        <if test="USERNAME != null and USERNAME != ''">
+            and f.USER = #{USERNAME}
+        </if>
+        ORDER BY
+        starttime,
+        sort
+    </select>
+
+    <!-- 新增事项 -->
+    <insert id="saveCalendar" parameterType="pd" >
+        replace into <include refid="tableName"></include>(
+        <include refid="Field2"></include>
+        ) values (<include refid="FieldValue"></include>)
+    </insert>
+
+    <!-- 删除事项 -->
+    <delete id="deleteCalendar" parameterType="pd">
+        delete from
+        <include refid="tableName"></include>
+        where
+        ID = #{ID}
+    </delete>
+</mapper>

@@ -1,0 +1,63 @@
+
+.skin3 button {
+  border-radius: 4px;
+  border-width: 0px;
+  color: #fff;
+  background: linear-gradient(180deg, #3EBB3E, #008134);
+  box-shadow: 0px 0px 7px 0px rgba(9, 137, 51, 0.29);
+}
+.skin3 button:hover {
+  background: linear-gradient(180deg, #91E72B, #60A408) !important;
+}
+.skin3 button:focus,.skin3 button.active {
+  background: linear-gradient(180deg, #91E72B, #60A408) !important;
+  outline: none;
+}
+
+
+* {
+  font-family: "微软雅黑";
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+button {
+  outline: 0;
+}
+
+
+
+.group-container {
+  height: 6rem;
+  display: grid;
+  place-items: center;
+  justify-items: center;
+}
+
+.multi-button {
+  font-size: 0;
+}
+
+button {
+  background: transparent;
+  /* min-width: 100px; */
+  text-transform: uppercase;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  margin: 0 0.2rem 0 0;
+  cursor: pointer;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-in-out;
+}
+
+
+/*
+@media only screen and (max-width: 767px) {
+  button {
+    min-width: 80px;
+  }
+}*/

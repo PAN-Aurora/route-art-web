@@ -1,0 +1,155 @@
+
+body{
+    line-height: 1.15;
+    font-size: 0.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    color: #b3b3b3;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    border: 0px;
+  }
+/* 左中右布局 */
+.bzsl {
+  float: left;
+  margin-left: 1%;
+  width: 98%;
+}
+.bzsl .inner{
+  padding:1rem 10.5rem !important
+}
+.main_top {
+    float: left;
+    margin-left: 1%;
+    width: 98%;
+    height: calc(34% - 1.933rem);
+  }
+  .main_mid {
+    float: left;
+    margin-left: 1%;
+    width: 98%;
+    height: calc(33% - 1.95rem);
+  }
+  .main_bot {
+    float: left;
+    margin-left: 1%;
+    width: 98%;
+    height: calc(33% - 1.95rem);
+  }
+  .zfwl,.yfwl{
+    width: 49.5%;
+  }
+/* 概览区域 */
+.overview{
+  height: 5rem;
+}
+.overview .inner{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: inherit;
+}
+.overview h4{
+  font-size: 1.167rem;
+  /* padding-left: 0.2rem; */
+  color: #fff;
+  margin-bottom: 0.333rem;
+  text-align: center;
+}
+.overview span{
+  font-size: 1rem;
+  color: #4c9bfd;
+}
+  /* panel面板 */
+
+  .panel .inner {
+    /* 装内容 */
+    /* height: 60px; */
+    position: absolute;
+    top: -2.125rem;
+    right: 0rem;
+    bottom: -0.875rem;
+    left: -5.5rem;
+    padding: 1rem 1.5rem;
+  }
+  .panel h3{
+    padding: 0 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+  }
+  
+  .ydfwl {
+    height: calc(100% - 0.833rem);
+  }
+  .ydfwl .chart {
+    display: flex;
+    margin-top: 1rem;
+    justify-content: space-between;
+    height:calc(100% - 2.7rem)
+  }
+  .ydfwl .ydfw {
+    width: 100%;
+    height: 100%;
+    margin-left: -0.4rem;
+  }
+
+
+  .zfwl {
+    height: calc(100% - 0.833rem);
+  }
+  .zfwl .chart {
+    display: flex;
+    margin-top: 1rem;
+    justify-content: space-between;
+    height:calc(100% - 2.7rem)
+  }
+  .zfwl .bzfw {
+    width: 100%;
+    height: 100%;
+    margin-left: -0.4rem;
+  }
+
+
+  .ndfwl {
+    height: calc(100% - 0.833rem);
+  }
+  .ndfwl .chart {
+    display: flex;
+    margin-top: 1rem;
+    justify-content: space-between;
+    height:calc(100% - 2.7rem)
+  }
+  .ndfwl .ndfw {
+    width: 100%;
+    height: 100%;
+    margin-left: -0.4rem;
+  }
+
+
+
+  .yfwl {
+    height: calc(100% - 0.833rem);
+  }
+  .yfwl .chart {
+    display: flex;
+    margin-top: 1rem;
+    justify-content: space-between;
+    height:calc(100% - 2.7rem)
+  }
+  .yfwl .byfw {
+    width: 100%;
+    height: 100%;
+    margin-left: -0.4rem;
+  }
+

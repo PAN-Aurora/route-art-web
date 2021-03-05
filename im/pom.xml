@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!--  im的版本信息 -->
+    <groupId>com.dyx</groupId>
+    <artifactId>im</artifactId>
+    <version>4.0.0</version>
+    <name>im</name>
+    <description>即时通讯</description>
+
+    <!-- 声明父模块 -->
+    <parent>
+        <groupId>com.dyx</groupId>
+        <artifactId>jslx</artifactId>
+        <version>4.0.0</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.dyx</groupId>
+            <artifactId>system</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <!-- websocket即时通讯 -->
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.3.7</version>
+        </dependency>
+    </dependencies>
+
+</project>

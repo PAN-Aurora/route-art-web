@@ -1,0 +1,151 @@
+
+/* 左中右布局 */
+.main_left {
+  float: left;
+  margin-left: 1%;
+  width: 20%;
+  height: 100%;
+}
+.main_cen {
+  float: left;
+  margin-left: 1.5%;
+  width: 45%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.main_rig {
+  float: left;
+  width: 30%;
+  margin-right: 1%;
+  margin-left: 1.5%;
+  height: 100%;
+}
+.main_rig .head{
+  width: 100%;
+  height: 30%;
+  text-align: center;
+}
+.main_rig .head .col{
+  display: block;
+  width: 15%;
+  height: 100%;
+  float: left;
+  white-space: nowrap;
+  margin-top: 5%;
+}
+/*.main_rig .head .col:nth-child(2n){*/
+  /*margin-left: -3%;*/
+/*}*/
+  /* 弹出层样式 */
+  .el-popover ul{
+    list-style: none;
+  }
+  .el-popover ul li{
+    margin-bottom: 4px;
+  }
+ 
+/* 装备维修 */
+.zbwx{
+  height: calc(100% - 0.833rem);
+}
+.zbwx .head{
+  text-align: center;
+  height: 5vh;
+  align-items: center;
+}
+.zbwx .row{
+  height:5vh;
+  text-align: center;
+  align-items: center;
+}
+  .zbwx ul{
+    padding: 0 1rem;
+    margin: 0;
+  }
+  .zbwx ul li{
+    line-height: 2rem;
+    font-size: 14px;
+    justify-content: space-between;
+    list-style: none;
+  }
+  .zbwx ul h3{
+    padding: 0;
+  }
+  /*.zbwx .col{*/
+    /*padding: 0rem 1.5rem;*/
+  /*}*/
+  .zbwx .marquee-view{
+    position: absolute;
+    top: 5vh;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+/* ------------------------------------------------------------动画 */
+@keyframes row{
+    0%{}
+    100%{
+      transform: translateY(-50%);
+    }
+  }
+  /* 调用动画 */
+  /*.zbwx .marquee {*/
+    /*!* //infinite永久调用动画 *!*/
+    /*animation: row  10s linear infinite;*/
+  /*}*/
+  /*鼠标划入 停止动画  */
+  .zbwx .marquee:hover {
+    animation-play-state: paused;
+  }
+  
+/* 地图  */
+.main_cen h3 {
+  line-height: 1;
+  padding: 0.667rem 0;
+  margin: 0;
+  font-size: 0.833rem;
+  color: #fff;
+}
+.main_cen .icon-cube {
+  color: #68d8fe;
+}
+.main_cen .chart {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+.main_cen .geo {
+  width: 100%;
+  height: 100%;
+}
+.dwlin .tags{
+  position: relative;
+  z-index:9;
+}
+
+
+  /*隐藏版权信息*/
+  .ol-attribution.ol-unselectable.ol-control.ol-collapsed {
+    display: none;
+  }
+
+  /*隐藏放大缩小图标*/
+  .ol-zoom.ol-unselectable.ol-control {
+      display: none;
+  }
+  /**地图文字设置*/
+  .fontClass {
+      -webkit-transform: scale(1, 1) !important;;
+      -webkit-transform-origin: 0 0;
+  }
+
+  .mini-panel-header-inner {
+      background: #2D71BB !important;;
+      background-size: 100% 100%;
+  }
+  .map {
+      width: 100%;
+      height: 100%;
+      margin: 0% auto;
+      border-radius: 5px;
+  }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.gisapi.TsDeptMapper">
+
+    <resultMap type="Dept" id="deptResultMap">
+        <id column="DEPT_ID" property="DEPT_ID"/>
+        <result column="NAME" property="NAME"/>
+        <result column="PARENT_ID" property="PARENT_ID"/>
+    </resultMap>
+
+    <!--表名 -->
+    <sql id="tableName">
+        SYS_DEPT
+    </sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+        f.NAME,
+        f.ZQNM,
+        f.ZQMC,
+        f.SSQYMC,
+        f.SSQYNM,
+        f.BIANMA,
+        f.PARENT_ID,
+        f.ADDRESS,
+        f.ZT,
+        f.LON,
+        f.LAT,
+        f.DEPT_ID
+    </sql>
+
+    <!-- 根据传来的部门ID查询其子部门信息集合 -->
+    <select id="getListByParentId" parameterType="String" resultType="pd">
+        select NAME    AS DWMC,
+               DEPT_ID AS DWNM,
+               ZQMC    AS SSZQ,
+               LON,
+               LAT,
+               ADDRESS
+        from
+            SYS_DEPT
+        where
+            PARENT_ID = #{strDeptId}
+        <if test="strZq !=null and strZq != ''">
+            and zqnm = #{strZq}
+        </if>
+
+        ORDER BY
+            NAME
+    </select>
+
+    <!-- 获取通过单位内码获取下级单位id -->
+    <select id="getDeptId" parameterType="String" resultType="String">
+        SELECT GROUP_CONCAT(dept_id)
+        FROM SYS_DEPT
+        where FIND_IN_SET(dept_id, queryChildrenOnDept(#{strDeptId}))
+    </select>
+
+    <!-- 根据传来的部门ID查询其子部门信息集合 -->
+    <select id="getListByQy" parameterType="String" resultType="pd">
+        SELECT NAME,
+               ZQMC,
+               SSQYMC
+        FROM
+            SYS_DEPT
+        WHERE
+            PARENT_ID = #{strDeptId}
+        GROUP BY
+            SSQYMC
+        ORDER BY
+            NAME
+    </select>
+
+    <!--获取单位部署数据 调用根据所属区域名称，单位ID查询单位部署数据-->
+    <select id="getDwbs" parameterType="pd" resultType="pd">
+        select GROUP_CONCAT(NAME) AS DW,GROUP_CONCAT(DEPT_ID) AS DWID
+        from
+            SYS_DEPT
+        where
+            PARENT_ID = #{strDeptId}
+          and SSQYMC = #{SSQYMC}
+    </select>
+
+    <!--根据单位id 获取该单位的经纬度数据-->
+    <select id="getDeptJwd" parameterType="String" resultType="pd">
+        select
+            LON,
+            LAT
+        from
+            SYS_DEPT
+        where
+            DEPT_ID = #{strDwid}
+    </select>
+
+    <!-- 通过ID获取其子级列表 -->
+    <select id="listByParentId" parameterType="String" resultMap="deptResultMap">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include> f
+        where
+        f.PARENT_ID = #{strParentId}
+
+        <if test="strZqnm!=null and strZqnm!=''"><!-- 战区内码判空 -->
+            and f.zqnm = #{strZqnm}
+        </if>
+        order by f.NAME
+    </select>
+
+    <!-- 通过ID获取其子级列表 -->
+    <select id="strHasChildrens" parameterType="String" resultType="String">
+        SELECT GROUP_CONCAT(DEPT_ID)  FROM sys_dept where
+        FIND_IN_SET(dept_id,queryChildrenOnDept(#{strParentId}))
+        <if test="strZqnm!=null and strZqnm!=''"><!-- 战区内码判空 -->
+            and zqnm = #{strZqnm}
+        </if>
+    </select>
+
+    <!-- 调用获取查询阵地实力信息方法 -->
+    <select id="getZdslTpList" parameterType="String" resultType="pd">
+        SELECT DICTIONARIES_ID,NAME FROM sys_dictionaries
+        WHERE DICTIONARIES_ID = #{strZdslnm} or PARENT_ID = #{strZdslnm} order by ORDER_BY desc
+    </select>
+
+</mapper>

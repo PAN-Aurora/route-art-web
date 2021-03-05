@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+html{
+    height: 100%;
+}
+body,html{
+     height: calc(100% - 5px);
+    background-color: rgba(0,0,0,0);
+ }
+::-webkit-scrollbar{
+    display: none;
+}
+#ccts_box{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex: 3;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    position: relative;
+    flex-wrap: nowrap;
+}
+/*右标记图*/
+.ccts_righttop{
+    position: absolute;
+    right: 2rem;
+    white-space: nowrap;
+    height: 5rem;
+    z-index: 9;
+}
+.ccts_righttop p{
+    float: left;
+    margin-left: 3rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+}
+.ccts_righttop p img{
+    width: 5.4rem;
+    height: 1.2rem;
+    float: left;
+}
+.ccts_righttop p img:last-child{
+    width: 5rem;
+    height: 5rem;
+}
+.ccts_righttop p span{
+    color: #fff;
+    font-size: 1rem;
+    float: left;
+    margin-left: 1rem;
+}
+/*左边工具导航*/
+.ccts_leftnav{
+    float: left;
+    width: 10%;
+    height: calc(100% - 5rem);
+    position: relative;
+    top: 5rem;
+    left: 1.8rem;
+}
+.ccts_leftnav p{
+    width: 100%;
+    height: 20%;
+    position: relative;
+    margin-bottom: 0;
+}
+.ccts_leftnav p img{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.ccts_leftnav p span{
+    text-align: center;
+    height: 100%;
+    color: #0BB36A;
+    font-size: 1vw;
+    font-weight: bolder;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    vertical-align: middle;
+}
+.ccts_leftnav .nav_two{
+    width: 100%;
+    height: 30%;
+}
+.ccts_leftnav .nav_two>img{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.ccts_leftnav .ccts_hu{
+    width: 50%;
+    height: 20%;
+    margin-left: 20%;
+}
+.ccts_leftnav .ccts_hu1{
+    width: 50%;
+    height: 10%;
+    margin-left: 20%;
+}
+.ccts_leftnav p .ccts_mhq{
+    float: right;
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    width: 10%;
+    height: 30%;
+}
+/*中间内容*/
+.ccts_center{
+    width: calc(78% - 3.6rem);
+    height: calc(100% - 5rem);
+    position: relative;
+    top: 5rem;
+    margin: 0 3%;
+}
+.ccts_center .center-top,.ccts_center .center-bottom{
+    height: 12%;
+    width: 100%;
+    display: flex;
+}
+.ccts_center ul{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+.ccts_center ul li{
+    width: 10%;
+    height: 100%;
+    float: left;
+    list-style: none;
+    text-align: center;
+}
+
+.ccts_center ul li div img{
+    width: 5.6rem;
+    height: 1.5rem;
+}
+.ccts_center ul li div .center_car{
+    width: 4.4rem;
+    height: 2.2rem;
+}
+.ccts_center ul li div p{
+    font-size: 1rem;
+    color: #31EBC2;
+}
+/*表格1*/
+.center_table{
+    width: 100%;
+    height: 74%;
+  /*  float: left;
+    display: flex;*/
+    /*position: absolute;*/
+}
+.center_table span{
+    display: block;
+    color: #fff;
+    font-size: 1.25rem;
+}
+.center_table .center_box{
+    height: 50%;
+    display: flex;
+    position: relative;
+    float: left;
+}
+.center_table .center_box1{
+    width: 70%;
+}
+.center_table .center_box2{
+    width: 30%;
+}
+.center_table .center_box3{
+    width: 70%;
+}
+.center_table .center_box4{
+    width: 30%;
+}
+.center_table .center_box .content{
+    display: block;
+    background: url(/assets/images/ccts_img/back.png) no-repeat center /100% 100%;
+    width: 100%;
+    height: 100%;
+}
+.center_table .center_box .content .head{
+    height: 3rem;
+    width: 94%;
+    padding-top: 1%;
+    padding-left: 3%;
+    font-size: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+.center_table .center_box .content .head span,.center_table .center_box .content .marquee-view .row span{
+    width: 5rem;
+}
+.center_table .center_box .content .marquee-view{
+    height: calc(100% - 5rem);
+    width: 94%;
+    padding-top: 1%;
+    padding-left: 3%;
+    overflow: auto;
+}
+.center_table .center_box .content .marquee-view .row{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    height: 3rem;
+}
+
+/*右工具导航*/
+.ccts_rightnav{
+    width: 6%;
+    height:calc(100% - 5rem);
+    top:5rem;
+    position: relative;
+}
+.ccts_rightnav img{
+    width:100%;
+    height: 100%;
+}
+
+.ccts_rightnav .right_fyj,.ccts_rightnav .right_bjk{
+    height: 20%;
+    width: 100%;
+    position: relative;
+}
+.ccts_rightnav ul{
+    height: 60%;
+    width: 100%;
+    margin-bottom: 0;
+}
+.ccts_rightnav ul li{
+    width: 100%;
+    height: 20%;
+    list-style: none;
+}
+.ccts_rightnav .right_fyj span,.ccts_rightnav .right_bjk span{
+    text-align: center;
+    height: 100%;
+    color: #0BB36A;
+    font-size: 1vw;
+    font-weight: bolder;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    vertical-align: middle;
+}
+.ccts_rightnav ul li .carstatus-right-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ccts_rightnav ul li div p {
+    font-size: 1rem;
+    color: #31EBC2;
+}
+.ccts_rightnav ul li .carstatus-right-item .flex-column {
+    flex-direction: column;
+    text-align: center;
+}
+.ccts_rightnav ul li div .center_car {
+    width: 4.4rem;
+    height: 2.2rem;
+}
+.ccts_rightnav ul li div img{
+    width: 5.6rem;
+    height: 1.5rem;
+}
+

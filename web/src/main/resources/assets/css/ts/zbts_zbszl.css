@@ -1,0 +1,234 @@
+
+body{
+    line-height: 1.15;
+    font-size: 0.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+.container{
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    color: #b3b3b3;
+    font-size: 12px;
+    font-family: "微软雅黑";
+    border: 0px;
+  }
+/* 左中右布局 */
+.main_left {
+    float: left;
+    width: 25%;
+    height: 100%;
+  }
+  .main_cen {
+    float: left;
+    margin-left: 1.5%;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .main_rig {
+    float: left;
+    width: 22%;
+    margin-left: 1.5%;
+    height: 100%;
+  }
+.el-dialog, .el-pager li {
+  box-shadow: #1f5f4a 0 0 10px 5px inset;
+  background: #073908;
+}
+.table thead tr{
+  box-shadow: #1f5f4a 0 0 10px 5px inset;
+  background: #175520;
+  border: none;
+}
+.table tbody tr:nth-child(1n){
+  background: #063914;
+  box-shadow: none;
+  color: #fff;
+  border: none;
+}
+.table tbody tr:nth-child(2n){
+  background: #175520;
+  box-shadow: #1f5f4a 0 0 10px 5px inset;
+  color: #fff;
+}
+.table thead th{
+  border-bottom: none;
+}
+.table td, .table th{
+  border-top: none;
+}
+
+  /* panel面板 */
+
+  .panel .inner {
+    /* 装内容 */
+    /* height: 60px; */
+    position: absolute;
+    top: -2.125rem;
+    right: 0rem;
+    bottom: -0.875rem;
+    left: -5.5rem;
+    padding: 1rem 1.5rem;
+  }
+  .panel h3{
+    padding: 0 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+  }
+  
+/* 装备数质量 */
+.zbszl{
+	height: calc(57% - 0.833rem);
+  }
+  .zbszl .head{
+    text-align: center;
+    height: 5vh;
+    align-items: center;
+  }
+  .zbszl .col:nth-child(1) {
+  width: 3.2rem;
+  padding: 0rem 1.5rem;
+  }
+  .zbszl .col:nth-child(2) {
+  width: 8.4rem;
+  padding: 0rem 1.5rem;
+	/* 不换行  一行省略*/
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+  }
+  .zbszl .col:nth-child(3) {
+  width: 3.2rem;
+  	padding: 0rem 1.5rem;
+  }
+  .zbszl .marquee-view{
+  position: absolute;
+  top: 5vh;
+  bottom: 0; 
+  width: 100%; 
+  overflow: hidden;
+} 
+  .zbszl .row{
+	font-size: 0.8rem;
+    height:5vh;
+    text-align: center;
+    align-items: center;
+  }
+/* ------------------------------------------------------------动画 */
+@keyframes row{
+    0%{}
+    100%{
+      transform: translateY(-50%);
+    }
+  }
+  /*鼠标划入 停止动画  */
+  .zbszl .marquee:hover {
+    animation-play-state: paused;
+  }
+  
+/* 地图  */
+
+.type-btn-jf.active {
+  width: 2.5rem;
+  height: 1.25rem;
+  line-height: 1.25rem !important;
+  text-align: center;
+  background-color:
+          #386AE3;
+  border-radius: 0.25rem;
+  margin-top: 0.4rem;
+}
+.type-btn-jf {
+  font-size: 0.75rem !important;
+  margin-left: 1.85rem;
+  vertical-align: middle;
+  line-height: 2rem;
+  padding: 0rem  !important;
+  border-right: none  !important;
+  margin-bottom: 0rem !important;
+  color: #fff !important;
+}
+.clzl a.active {
+  background-color: #739d0e;
+  color: #fff;
+}
+/* 导弹质量 */
+.ddzl {
+  height: calc(50% - 0.833rem);
+}
+.ddzl .chart {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: space-between;
+  height:calc(100% - 2.7rem)
+}
+.ddzl .pie {
+  width: 100%;
+  height: 100%;
+  margin-left: -0.4rem;
+}
+.ddzl .data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 7rem;
+  padding: 1.5rem 1.25rem;
+  box-sizing: border-box;
+  background-image: url(../../images/ts/rect.png);
+  background-size: cover;
+}
+
+/* 作战状态 */
+.zzzt {
+  height: calc(50% - 0.833rem);
+}
+.zzzt .chart {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: space-between;
+  height:calc(100% - 2.7rem)
+}
+.zzzt .pie2 {
+  width: 100%;
+  height: 100%;
+  margin-left: -0.4rem;
+}
+.zzzt .data {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 7rem;
+  padding: 1.5rem 1.25rem;
+  box-sizing: border-box;
+  background-image: url(../../images/ts/rect.png);
+  background-size: cover;
+}
+
+
+/* 车辆质量 */
+.clzl {
+  height: calc(46% - 0.833rem);
+  display: flex;
+}
+.clzl .chart {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: space-between;
+  height:calc(100% - 2.7rem)
+}
+.clzl .bar {
+  width: 100%;
+  height: 100%;
+  margin-left: -0.4rem;
+}
+

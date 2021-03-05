@@ -1,0 +1,46 @@
+/*嵌套页面iframe的样式*/
+html,body,#app{
+    height: 100%;
+}
+
+a{
+    text-decoration: none;
+}
+
+nav{
+    height: 30px;
+    line-height: 30px;
+    margin: 0px auto;
+    margin-top: 5px;
+}
+
+nav a{
+    color:white;
+    display: inline-block;
+    text-align: center;
+    width:200px;
+    height: 30px;
+    line-height: 30px;
+    margin-right: 10px;
+    background: #C7DCE9;
+}
+
+nav a:first-child{
+    margin-left: 10px;
+}
+
+
+nav a:last-child{
+    margin-right: 0px;
+}
+
+.active{
+    background: #DCEAF4;
+    color:black;
+}
+
+.content{
+    margin-right: 5px;
+    margin-left: 10px;
+    border: 1px solid #C7DCE9;
+}

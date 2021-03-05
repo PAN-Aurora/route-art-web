@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.system.DeptMapper">
+	
+	<resultMap type="Dept" id="deptResultMap">
+		<id column="DEPT_ID" property="DEPT_ID"/>
+		<result column="NAME" property="NAME"/>
+		<result column="PARENT_ID" property="PARENT_ID"/>
+	</resultMap>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_DEPT
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.NAME,	
+		f.ZQNM,
+		f.ZQMC,
+		f.SSQYMC,
+		f.SSQYNM,
+		f.BIANMA,
+		f.PARENT_ID,
+		f.BZ,
+		f.HEADMAN,
+		f.TEL,
+		f.FUNCTIONS,
+		f.ADDRESS,
+		f.ZT,
+		f.LON,
+		f.LAT,
+		f.PATH,
+		f.DEPT_ID,
+		f.LXMC,
+		f.LXNM
+	</sql>
+
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		NAME,
+		ZQNM,
+		ZQMC,
+		SSQYMC,
+		SSQYNM,
+		BIANMA,
+		PARENT_ID,
+		BZ,
+		HEADMAN,
+		TEL,
+		FUNCTIONS,
+		ADDRESS,
+		ZT,
+		LON,
+		LAT,
+		PATH,
+		DEPT_ID,
+		LXMC,
+		LXNM
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{NAME},
+		#{ZQNM},
+		#{ZQMC},
+		#{SSQYMC},
+		#{SSQYNM},
+		#{BIANMA},
+		#{PARENT_ID},
+		#{BZ},
+		#{HEADMAN},
+		#{TEL},
+		#{FUNCTIONS},
+		#{ADDRESS},
+		#{ZT},
+		#{LON},
+		#{LAT},
+		#{PATH},
+		#{DEPT_ID},
+		#{LXMC},
+		#{LXNM}
+	</sql>
+
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+			DEPT_ID = #{DEPT_ID}
+	</delete>
+
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+			NAME = #{NAME},
+			ZQNM = #{ZQNM},
+			ZQMC = #{ZQMC},
+			SSQYMC = #{SSQYMC},
+			SSQYNM = #{SSQYNM},
+			BIANMA = #{BIANMA},
+			BZ = #{BZ},
+			HEADMAN = #{HEADMAN},
+			TEL = #{TEL},
+			FUNCTIONS = #{FUNCTIONS},
+			ADDRESS = #{ADDRESS},
+			ZT = #{ZT},
+			LON = #{LON},
+			LAT = #{LAT},
+			NAME = #{NAME},
+			LXMC = #{LXMC},
+			LXNM = #{LXNM},
+			DEPT_ID = DEPT_ID
+		where
+			DEPT_ID = #{DEPT_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.DEPT_ID = #{DEPT_ID}
+	</select>
+
+	<!-- 通过单位名称全路径获取数据 -->
+	<select id="findDeptByPath" parameterType="string" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.PATH = #{strSjdwPath}
+	</select>
+
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 检索 -->
+		<if test="pd.DEPT_ID!= null and pd.DEPT_ID != ''">
+			and f.PARENT_ID = #{pd.DEPT_ID}
+		</if>
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+				(
+					f.NAME LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+					  OR
+					f.ZQMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+					  OR
+					f.BIANMA LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+				)
+		</if>
+	</select>
+
+	<!-- 获取通过单位内码获取下级单位id -->
+	<select id="getDeptId" parameterType="page" resultType="pd">
+		select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{pd.SSDWNM}) as dp
+		where PATH like concat(dp.pa, '%') or PATH = dp.pa
+	</select>
+
+	<!-- 通过ID获取其子级列表 -->
+	<select id="listByParentId" parameterType="String" resultMap="deptResultMap">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.PARENT_ID = #{parentId} order by f.NAME 
+	</select>
+
+	<!-- 通过ID获取其子级列表 -->
+	<select id="lstfindById" parameterType="String" resultMap="deptResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.DEPT_ID = #{dept_id}
+	</select>
+
+	<!-- 通过ID获取其所有子级列表 -->
+	<select id="listZjlb" parameterType="String" resultMap="deptResultMap">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.DEPT_ID in
+		(
+		select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{parentId}) as dp
+		where PATH like concat(dp.pa, '%') or PATH = dp.pa
+		)
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<if test="DEPT_ID != null and DEPT_ID != ''">
+		and f.PARENT_ID = #{DEPT_ID}
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keyWords != null and keyWords != ''">
+			and
+			(
+			f.NAME LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			  OR
+			f.ZQMC LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			  OR
+			f.BIANMA LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			)
+		</if>
+	</select>
+
+	<!-- 通过父亲ID获取数据 -->
+	<select id="findByParentId" parameterType="String" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.DEPT_ID = #{strParentId}
+	</select>
+
+	<!-- 通过父亲ID获取 -->
+	<select id="listForParentId" parameterType="String" resultType="pd">
+		select NAME,DEPT_ID,ZQMC,LON,LAT from
+		<include refid="tableName"></include>
+		where
+		PARENT_ID = #{dept_id}
+	</select>
+
+	<!-- 左侧字典树（懒加载） 拿父级节点下所有子节点 -->
+	<select id="getChildrenByParentId" parameterType="pd" resultType="pd">
+		SELECT
+			f.DEPT_ID,
+			f.NAME,
+			f.BIANMA,
+			f.ZQNM,
+			f.ZQMC,
+			f.SSQYMC,
+			f.SSQYNM,
+			f.PARENT_ID,
+			CASE
+				WHEN ( SELECT count( 1 ) FROM sys_dept c WHERE c.PARENT_ID = f.DEPT_ID ) > 0 THEN
+					'true' ELSE 'false'
+				END AS isParent
+		FROM
+			sys_dept f
+		WHERE
+			f.PARENT_ID =#{DEPT_ID}
+	</select>
+
+	<!-- 单位选择目录树（懒加载） 拿父级节点下所有子节点 -->
+	<select id="getDwChildrenByParentId" parameterType="pd" resultType="pd">
+		SELECT
+		f.DEPT_ID,
+		f.NAME,
+		f.PARENT_ID,
+		CASE
+		WHEN ( SELECT count( 1 ) FROM sys_dept c WHERE c.PARENT_ID = f.DEPT_ID ) > 0 THEN
+		'true' ELSE 'false'
+		END AS isParent
+		FROM
+		sys_dept f
+		WHERE
+		<choose>
+			<when test="isInit == 'true'">
+				f.DEPT_ID =#{DEPT_ID}
+			</when>
+			<otherwise>
+				f.PARENT_ID = #{DEPT_ID}
+			</otherwise>
+		</choose>
+		order by f.PATH
+	</select>
+
+	<select id="getMaxPathByPid" parameterType="String" resultType="String">
+		select max(path) from sys_dept where parent_id = #{parentId}
+	</select>
+
+	<!-- 根据单位内码获取该单位所有父节点ids -->
+	<select id="getParentDeptIds" parameterType="pd" resultType="java.lang.String">
+		select queryChildrenDeptParentinfo (#{DEPT_ID})
+	</select>
+
+	<!-- 向上递归获取该单位的上级单位信息 -->
+	<select id="getDelegateParentDept" parameterType="pd" resultType="java.util.Map">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where f.DEPT_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+</mapper>

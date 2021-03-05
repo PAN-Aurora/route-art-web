@@ -1,0 +1,119 @@
+/* 左中右布局 */
+  .main_left {
+    float: left;
+    margin-left: 1%;
+    width: 20%;
+    height: 100%;
+  }
+  .main_cen {
+    float: left;
+    margin-left: 1.5%;
+    width: 77.5%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .main_cen .zbds{
+      width: 100%;
+      height: 100%;
+      margin-bottom: 0.833rem;
+  }
+  .main_cen .panel{
+    float: left;
+    height: 15rem;
+    width: 22rem;
+    margin:0 1% 1% 1%;
+  }
+  /* 左侧装备树样式 */
+.zbml{
+  height: calc(100% - 0.833rem);
+}
+  .el-collapse {
+    border-top: 0px solid #417bb4;
+    border-bottom: 0px solid #417bb4;
+    background-color: #155416;
+}
+  .el-collapse-item__header{
+    background-color: rgba(0,0,0,0);
+    color: #FFF;
+    border-bottom: 0px solid #417bb4;
+    margin: 0 20px;
+    font-size: 1rem;
+  }
+  .el-collapse-item__content{
+    font-size: 1rem;
+    line-height: 3rem;
+  }
+  .el-collapse-item__wrap {
+    background-color: #053D0A;
+    border-bottom: 0px solid #417bb4;
+  }
+  .el-collapse-item__content ul{
+    list-style: none;
+    color: #FFF;
+    cursor: pointer;
+  }
+  .el-collapse-item__content ul li a:hover{
+    transform: scale(1.2);
+    background: linear-gradient(to right, #1de9b6, #00d4ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  /* 表格样式 */
+/*新*/
+.bz-item{
+  height: 100%;
+  background: #053D0A;
+  border-radius: 0.65rem;
+  opacity: 0.9;
+  margin-bottom: 1.25rem;
+  color:#fff;
+  font-size:1rem;
+}
+.bz-item:nth-child(3n+3){
+  margin-right: 0;
+}
+.bz-title{
+  height: 3.12rem;
+  padding: 0 1.25rem;
+  border-bottom: solid 0.1rem #5F89EB;
+  align-items: center;
+  display: flex;
+}
+.F-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.bz-con{
+  height: calc(100% - 3.5rem);
+  padding: 0 1.25rem;
+
+}
+.bz-con-text div{
+  margin-bottom: 1.25rem;
+}
+/*旧*/
+  .panel .inner{
+    overflow: auto;
+    margin-bottom: 1rem;
+  }
+  .table_zbds{
+    border-collapse: collapse;
+    color: #ffffff;
+  }
+  .table_zbds tr td{
+    border: 1px solid #417bb4;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-indent: 10px;
+    font-size: 0.88rem;
+  }
+  .table_zbds tr td img{
+    width: 93%;
+    height: 100%;
+  }
+  /*右侧按钮*/
+.pos-left {
+  top: calc(50% - 15.4rem);
+}

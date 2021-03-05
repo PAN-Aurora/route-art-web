@@ -1,0 +1,463 @@
+/* 登录页样式Start */
+
+#app.login{
+    background-image: url('/assets/images/cl/login/login_bg.jpg');
+}
+.text-muted {
+    color: #ffffff !important;
+}
+/* 登录框样式 */
+#app.login .auth-content{
+    background: rgba(0, 0, 0, 0) url("../../assets/images/cl/login/login.png") no-repeat scroll 0 0 / 100% auto;
+}
+.auth-wrapper .auth-content {
+    height: 65vh;
+    width: 127vh;
+}
+.login .card-body {
+    /* height: 88%;
+    margin: auto;
+    padding: 22.6% 6.4% 2% 6.4%;
+    position: relative;
+    width: 50%; */
+    height: 61%;
+    margin: 22% 0 0 31%;
+    padding: 0;
+    position: relative;
+    width: 38%;
+}
+
+.login .input-group {
+    height: 4.4vh;
+    margin-left: 26%;
+    width: 73%;
+}
+
+.login .input-group {
+    margin-bottom:  7% !important;
+}
+
+.login .form-group {
+    height: 8%;
+    margin-bottom: 2% !important;
+}
+
+.login .form-control {
+    border: 0 solid #fff;
+    padding: 0 0 0 5%;
+    color: #515151 !important;
+}
+
+.login .form-control:focus {
+    box-shadow: none;
+}
+
+.login #to-login {
+    background: rgba(0, 0, 0, 0) url("../images/cl/login/login_btn.png") no-repeat scroll center top /100% 100%;
+    width: 39%;
+    height: 14%;
+    border: none;
+    border-radius: 0.25rem;
+    margin-left: 25%;
+    margin-bottom: 1% !important;
+    margin-right: 1%;
+    padding: 0;
+    line-height: 1;
+    /* text-indent: 20px;
+    letter-spacing: 20px; */
+    color:rgb(46, 45, 45);
+    margin-top:5%
+}
+
+.login #to-login:hover {
+    background-color: rgba(0, 0, 0, 0) !important;
+}
+
+.login .checkbox.checkbox-fill input[type="checkbox"]:checked + .cr::before {
+    color: #FFFFFF;
+}
+
+.login .text-muted {
+    margin-left: 25%;
+}
+
+/* 登录页样式End */
+
+/* 主页head头Start */
+.pcoded-header.header-img {
+    background: rgba(0, 0, 0, 0) url("../images/cl/header/top.jpg") no-repeat scroll center center / 100% 100% !important;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.pcoded-header span.logo {
+    background: url('../images/cl/header/dgreen_logo.png') no-repeat scroll center /100%;
+}
+
+/* 主页head头End */
+.pcoded-header.header-dark .dropdown.drp-user.show:before {
+    color: #418175;
+}
+/* 主页菜单Start */
+.pcoded-navbar.navbar-green {
+    background: #025245;
+    font-size: 16px;
+}
+
+.pcoded-navbar.navbar-green .pcoded-inner-navbar li.active > a,
+.pcoded-navbar.navbar-green .pcoded-inner-navbar li:focus > a,
+.pcoded-navbar.navbar-green .pcoded-inner-navbar li:hover > a {
+    background: #0aa477 none repeat scroll 0 0;
+    border-left-color: #c73e23;
+    color: #fff;
+}
+.pcoded-navbar.brand-blue .header-logo, .pcoded-navbar[class*="navbar-"].brand-blue .header-logo {
+    background: rgba(0, 0, 0, 0);
+}
+/* 主页菜单End */
+
+/* 工作区Start */
+
+/* zTree */
+.tree li a.curSelectedNode {
+    background-color: #ebedf2;
+    border: 1px solid #7b996d;
+    color: black;
+    opacity: 0.8;
+}
+
+.el-tree-node:focus > .el-tree-node__content {
+    background-color: #ebedf2;
+}
+
+/* 按钮 */
+.btn-light {
+    background-color: #34705e;
+}
+/* 弹框标签样式 */
+.icon-list.btn-lg {
+    padding: 13px 1rem;
+}
+/* .el-button {
+    background: #ffffff;
+} */
+
+.el-button--primary {
+    background-color: #34705e;
+    border-color: #34705e;
+    color: #fff;
+}
+
+.el-button:focus, .dGreen.el-button:hover {
+    background-color: #e5f1ee;
+    border-color: #34705e;
+    color: #34705e;
+}
+
+.el-button--primary:focus, .dGreen.el-button--primary:hover {
+    background-color: #34705e;
+    border-color: #34705e;
+    color: #fff;
+}
+.el-button--info {
+    color:#FFF;
+    background-color: #D15B47;
+    border-color: #D15B47;
+}
+.el-button--info:focus, .el-button--info:hover {
+    color:#FFF;
+    background: #b74635 !important;
+    border-color: #a58883 !important;
+}
+/* elementUI输入框 */
+.el-input__inner {
+    border: 1px solid #a5acb5 !important;
+}
+.el-input__inner:focus {
+    box-shadow: none;
+    border-color: #808891
+}
+/* table */
+.table thead tr {
+    background: #34705e none repeat scroll 0 0;
+    color: white;
+}
+
+.table tbody tr.tags {
+    background-color: #aff0b7 !important;
+}
+.table tbody tr:nth-child(2n) {
+    background-color: #f5f5f5;
+}
+
+.table tbody tr:hover, .dGreen .table tbody tr:focus {
+    background-color: #dcf0e7;
+}
+.table .checkbox input[type="checkbox"]:checked + .cr::before {
+    background: #fff none repeat scroll 0 0;
+    border-color: #3c763d;
+    color: #3c763d;
+}
+
+.table td, .table th {
+    padding: 0.6rem 0.2rem;
+    line-height: 1.6;
+}
+
+.el-table__header tr {
+    background-color: #34705e;
+    color: white;
+}
+
+.el-table__body .el-table__row:nth-child(2n) {
+    background-color: #f5f5f5;
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+    background: #f5f5f5 none repeat scroll 0 0;
+}
+.el-table--striped .el-table__body tr.el-table__row--striped.current-row td {
+    background-color: #dcf0e7;
+}
+.el-table__body tr.current-row > td {
+    background-color: #dcf0e7;
+}
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+    background-color: #dcf0e7;
+}
+.el-table td, .el-table th {
+    padding: 0.5rem 0;
+    text-align: center;
+    border-right:0px
+}
+.el-table .cell {
+    line-height: 1.5rem;
+}
+label {
+    margin-bottom: 0rem;
+}
+.el-button--success {
+    color: #FFF;
+    background-color: #34705e !important;
+    border-color: #3c763d;
+}
+.el-button--success:focus, .el-button--success:hover {
+    background: #058c61 !important;
+    border-color: #87b87f !important;
+    color: #FFF;
+}
+.el-button--danger {
+    color: #FFF;
+    background-color: #d15b47;
+    border-color: #d15b47;
+    height: 31px;
+}
+.el-button--danger:hover,.el-button--danger:focus {
+    color: #fff;
+    background-color: #b74635 !important;
+    border-color: #a58883 !important;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner {
+    border-color: #3c763d
+}
+/* input框 */
+.input-group-sm > .custom-select,
+.input-group-sm > .form-control,
+.input-group-sm > .input-group-append > .btn,
+.input-group-sm > .input-group-append > .input-group-text,
+.input-group-sm > .input-group-prepend > .btn,
+.pagination li a,
+.pagination li input,
+.pagination li select,
+.selectpicker,
+.input-group > select,
+.vue-treeselect__control {
+    border: 1px solid #a5acb5 !important;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #808891
+}
+
+td.hasText {
+    padding: 0.4rem 0.75rem !important;
+    text-align: left !important;
+    width: 150px;
+}
+
+.hasText .text {
+    padding: 0.2rem !important;
+}
+
+/* 分页 */
+.pagination li a {
+    background-color: #fafafa;
+    border-right: 0 none !important;
+    color: #34705e !important;
+    display: inline-block;
+    height: 30px !important;
+    padding: 4px 12px 8px;
+}
+
+.pagination li:nth-child(3) a, .pagination li.active a {
+    background-color: #34705e !important;
+    color: white !important;
+}
+
+.el-select-dropdown__item.selected {
+    color: #34705e;
+    font-weight: 700;
+}
+
+/*页面先渲染数据 再加载页面*/
+[v-cloak] {
+    display: none !important;
+}
+/*仓库树形样式*/
+.kfTree{
+    box-shadow:0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: #fff;
+    border-radius: 4px;
+    height: calc(100% - 12px);
+    position: absolute;
+    width: 15%;
+    overflow: auto;
+}
+/*车型树样式*/
+.cxTree {
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: #fff;
+    border-radius: 4px;
+    height: calc(100% - 12px);
+    position: absolute;
+    width: 15%;
+    overflow: auto;
+}
+/*左侧树样式*/
+.treeTd{
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    background-color: #fff;
+    border-radius: 4px;
+    height: calc(100% - 12px);
+    position: absolute;
+    width: 15%;
+    overflow: auto;
+}
+/* tab页 */
+.el-menu--horizontal > .el-menu-item.is-active {
+    color: #10d0a8;
+}
+.el-menu--horizontal .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal .el-menu-item:not(.is-disabled):hover {
+    outline: 0;
+    color: #10d0a8;
+}
+.el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
+    border-bottom: 2px solid #629b58;
+    color: #10d0a8;
+}
+/* tab页样式 */
+.nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
+    color: #10d0a8;
+    border-bottom: 2px solid #34705e;
+}
+
+#_DialogBGMask{
+    opacity: 0.6;
+}
+.nav-tabs .nav-link:hover {
+    color: #10d0a8;
+}
+.el-button--success {
+    color: #FFF;
+    background-color: #34705e;
+    border-color: #3C763D;
+    height: 31px;
+}
+.el-button {
+    color: #FFF;
+}
+/* 单选按钮 */
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #34705e;
+    background: #34705e;
+}
+.el-radio__inner:hover {
+    border-color: #34705e;
+}
+.radio.radio-primary input[type=radio]:checked + .cr:after {
+    background: #3c763d;
+}
+.radio.radio-primary input[type=radio]:checked + .cr:before {
+    border-color: #3c763d;
+}
+/* tab导航页 */
+.el-menu--horizontal > .el-menu-item {
+    height: 40px;
+    line-height: 40px;
+}
+.el-menu--horizontal > .el-submenu .el-submenu__title {
+    height: 40px;
+    line-height: 40px;
+}
+.el-menu--horizontal .el-menu .el-menu-item.is-active, .el-menu--horizontal .el-menu .el-submenu.is-active > .el-submenu__title {
+    color: #10d0a8;
+}
+
+.switch.switch-info input[type=checkbox]:checked + .cr:before {
+    background: #34705e;
+}
+.input-group-text{
+    padding-right: 0px !important;
+}
+.mb-3.adjustMarg{
+    margin-bottom: 0.5rem !important;
+}
+.boldXh,.boldCz a i.feather{
+    font-weight: 600;
+}
+/* 查询框文字 */
+.searchName{
+    float: left;height: 30px;line-height: 30px;
+}
+/* elementUI 树样式 */
+ /* 设置树形最外层的背景颜色和字体颜色 */
+ .el-tree {
+    /* color: #fff; */
+    background: transparent;
+}
+
+/* 复选框样式 */
+.checkbox input[type=checkbox] + .cr:before {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #6f5c5c;
+}
+/* 查询栏布局 */
+.queryLayout table tr td{
+    display: inline-block;
+}
+/* 上传图片组件 */
+.el-upload--picture-card:hover, .el-upload:focus {
+    border-color: #7b996d;
+    color: #7b996d;
+}
+.col-xl-12{
+    padding:0px
+}
+/* 流程页面table表格 */
+.table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: #f5f5f5;
+}
+.table-striped tbody tr:nth-of-type(2n) {
+    background-color: rgba(0,0,0,0);
+}
+.table-striped tbody tr:hover{
+    background-color: #dcf0e7;
+}
+
+/*列表页面左侧留白太多*/
+.card .card-block{
+    padding: 15px 15px;
+}
+/* 工作区End */
+

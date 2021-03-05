@@ -1,0 +1,27 @@
+/*公共分页css start*/
+.pcoded-content {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.card {
+    margin-bottom: 0px;
+}
+
+html, html body, .pcoded-wrapper, .pcoded-content, .pcoded-inner-content,
+.main-body, .page-wrapper, .row, .col-xl-12, .card, .table-responsive {
+    height: 100%;
+}
+
+.table-border-style {
+    height: calc(100% - 136px);
+    padding: 0px 15px !important;
+    margin-top: 0px !important;
+}
+
+/*公共分页css end*/
+
+/*下拉框去掉查询框*/
+.select2-search__field {
+    display: none !important;
+}

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.gisapi.XtyyGisApiMapper">
+
+    <!--机动装备表名 -->
+    <sql id="tableName">
+        SYS_USER
+    </sql>
+
+    <!-- 根据单位查询系统应用的 获取访问量 返回前台。 -->
+    <select id="getXtyyfwlByDw" parameterType="page" resultType="pd">
+        SELECT
+        (
+        SELECT
+        count( * ) sl
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        TO_DAYS( sf.CZTIME ) = to_days( now( ) ) AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        ) dayCount,
+        (
+        SELECT
+        count( * ) sl
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        YEARWEEK( DATE_FORMAT( sf.CZTIME, '%Y-%m-%d' ) ) = YEARWEEK( now( ) ) AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        ) weekCount,
+        (
+        SELECT
+        count( * ) sl
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        DATE_FORMAT( sf.CZTIME, '%Y%m' ) = DATE_FORMAT( CURDATE( ), '%Y%m' ) AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        ) monthCount
+        FROM
+        DUAL
+    </select>
+
+    <!-- 根据单位查询系统应用的 本周访问量 返回单位及数量前台。 -->
+    <select id="getBzfwByDwCount" parameterType="page" resultType="pd">
+        SELECT
+        count( * ) sl,
+        su.DEPT_NAME dw
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        YEARWEEK( DATE_FORMAT( sf.CZTIME, '%Y-%m-%d' ) ) = YEARWEEK( now( ) )
+        AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        GROUP BY
+        su.DEPT_NAME
+    </select>
+
+    <!-- 根据单位查询系统应用的 本月访问量 返回单位及数量前台。 -->
+    <select id="getByfwByDwCount" parameterType="page" resultType="pd">
+        SELECT
+        count( * ) sl,
+        su.DEPT_NAME dw
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        DATE_FORMAT( sf.CZTIME, '%Y%m' ) = DATE_FORMAT( CURDATE( ), '%Y%m' )
+        AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        GROUP BY
+        su.DEPT_NAME
+    </select>
+
+    <!-- 2020年系统月度访问量统计 （现为前12个月到当前月）。 -->
+    <select id="getXtydfwByDwCount" parameterType="page" resultType="pd">
+        SELECT
+        DATE_FORMAT( sf.CZTIME, '%Y-%m' ) month,
+        count( * ) sl
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        DATE_FORMAT( sf.CZTIME, '%Y-%m' ) > DATE_FORMAT( DATE_SUB( CURDATE( ), INTERVAL 6 MONTH ), '%Y-%m' )
+        AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        GROUP BY
+        month
+    </select>
+
+    <!-- 2020年度各单位系统累计访问量。 -->
+    <select id="getNdxtByDwCount" parameterType="page" resultType="pd">
+        SELECT
+        count( * ) sl,
+        su.DEPT_NAME dw
+        FROM
+        <include refid="tableName"></include>
+        su
+        LEFT JOIN ( SELECT * FROM sys_fhlog sf WHERE sf.CONTENT = '成功登录系统' ) sf ON sf.USERNAME = su.USERNAME
+        WHERE
+        DATE_FORMAT( sf.CZTIME, '%Y' ) = DATE_FORMAT( CURDATE( ), '%Y' )
+        AND FIND_IN_SET(
+        su.DEPT_ID,#{pd.SSDWNM})
+        GROUP BY
+        su.DEPT_NAME
+    </select>
+
+</mapper>

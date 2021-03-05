@@ -1,0 +1,174 @@
+
+
+
+var vm = new Vue({
+	el: '#app',
+
+	data:{
+		varList: [],	//好友list
+		page: [],		//分页类
+		id: '',			//ID
+		type: '',		//类型(群或好友)
+		showCount: -1,	//每页显示条数(这个是系统设置里面配置的，初始为-1即可，固定此写法)
+		currentPage: 1,	//当前页码
+		loading:false	//加载状态
+    },
+
+	methods: {
+
+        //初始执行
+        init() {
+        	//复选框控制全选,全不选
+			$('#zcheckbox').click(function(){
+			 if($(this).is(':checked')){
+				 $("input[name='ids']").click();
+			 }else{
+				$("input[name='ids']").prop("checked", false);
+			 }
+			});
+			var id = this.getUrlKey('id');		//链接参数
+			var type = this.getUrlKey('type');	//链接参数
+        	if(null != id){
+        		this.id = id;
+        		this.type = type;
+        		this.getList();
+        	}
+        },
+
+        //获取列表
+        getList: function(){
+        	this.loading = true;
+        	$.ajax({
+        		xhrFields: {
+                    withCredentials: true
+                },
+        		type: "POST",
+        		url: httpurl+'hismsg/list?showCount='+this.showCount+'&currentPage='+this.currentPage,
+        		data: {id:this.id,type:this.type,tm:new Date().getTime()},
+        		dataType:"json",
+        		success: function(data){
+        		 if("success" == data.result){
+        			 vm.varList = data.varList;
+        			 vm.page = data.page;
+        			 vm.loading = false;
+        			$("input[name='ids']").prop("checked", false);
+        		 }else if ("exception" == data.result){
+                 	showException("聊天记录",data.exception);//显示异常
+                 }
+        		}
+        	}).done().fail(function(){
+                message('warning', '请求服务器无响应，稍后再试!', 1000);
+                setTimeout(function () {
+                	window.location.href = "../../login.html";
+                }, 2000);
+            });
+        },
+
+		//删除
+		goDel:function del(Id){
+			this.$confirm("确定要删除吗?", '提示', {
+            	confirmButtonText: '确定',
+            	cancelButtonText: '取消',
+				type: 'warning',
+				cancelButtonClass: 'el-button--info',
+            }).then(() => {
+                	this.loading = true;
+	            	$.ajax({
+	            		xhrFields: {
+	                        withCredentials: true
+	                    },
+	        			type: "POST",
+	        			url: httpurl+'hismsg/delete',
+	        	    	data: {HISMSG_ID:Id,tm:new Date().getTime()},
+	        			dataType:'json',
+	        			success: function(data){
+	        				 if("success" == data.result){
+	        					 message('success', '已经从列表中删除!', 1000);
+	        				 }
+	        				 vm.getList();
+	        			}
+	        		});
+				}).catch(() => {
+                    
+                });
+		},
+
+		//批量操作
+		makeAll: function (msg){
+			this.$confirm(msg, '提示', {
+            	confirmButtonText: '确定',
+            	cancelButtonText: '取消',
+				type: 'warning',
+				cancelButtonClass: 'el-button--info',
+            }).then(() => {
+	            	var str = '';
+	    			for(var i=0;i < document.getElementsByName('ids').length;i++){
+	    				  if(document.getElementsByName('ids')[i].checked){
+	    				  	if(str=='') str += document.getElementsByName('ids')[i].value;
+	    				  	else str += ',' + document.getElementsByName('ids')[i].value;
+	    				  }
+	    			}
+	    			if(str==''){
+	    				$("#cts").tips({
+	    					side:2,
+	    		            msg:'点这里全选',
+	    		            bg:tipsColor,
+	    		            time:3
+	    		        });
+	                     message('warning', '您没有选择任何内容!', 1000);
+	    				return;
+	    			}else{
+	    				if(msg == '确定要删除选中的数据吗?'){
+	    					this.loading = true;
+	    					$.ajax({
+	    						xhrFields: {
+	    	                        withCredentials: true
+	    	                    },
+	    						type: "POST",
+	    						url: httpurl+'hismsg/deleteAll?tm='+new Date().getTime(),
+	    				    	data: {DATA_IDS:str},
+	    						dataType:'json',
+	    						success: function(data){
+	    							if("success" == data.result){
+	    								message('success', '已经从列表中删除!', 1000);
+	    	        				 }
+	    							vm.getList();
+	    						}
+	    					});
+	    				}
+	    			}
+				}).catch(() => {
+
+				});
+		},
+
+		//根据url参数名称获取参数值
+        getUrlKey: function (name) {
+            return decodeURIComponent(
+                (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
+        },
+
+        //-----分页必用----start
+        nextPage: function (page){
+        	this.currentPage = page;
+        	this.getList();
+        },
+        changeCount: function (value){
+            this.currentPage = 1;
+        	this.showCount = value;
+        	this.getList();
+        },
+        toTZ: function (){
+        	var toPaggeVlue = document.getElementById("toGoPage").value;
+        	if(toPaggeVlue == ''){document.getElementById("toGoPage").value=1;return;}
+        	if(isNaN(Number(toPaggeVlue))){document.getElementById("toGoPage").value=1;return;}
+        	this.nextPage(toPaggeVlue);
+        }
+       //-----分页必用----end
+
+	},
+
+	mounted(){
+        this.init();
+    }
+})

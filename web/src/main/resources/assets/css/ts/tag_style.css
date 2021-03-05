@@ -1,0 +1,222 @@
+/* @import url("https://fonts.googleapis.com/css?family=Lato"); */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font: 600 62.5% "Lato", sans-serif;
+  background-color: #17141d;
+}
+
+a {
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 1rem;
+  color: #a1a1af;
+}
+a.tag {
+  color:#fff;
+  width:calc(12.5% - 0.8em);
+  /* height: calc(100% - 0.8em); */
+  display: block;
+  padding: 0.3em 0.4em;
+  margin: 0.4em;
+  text-transform: uppercase;
+  background: #134a1f;
+  box-shadow: #1f5f4a 0 0 8px 5px inset;
+  border-radius: 0.4em;
+  transition: transform 0.2s;
+  transition-timing-function: cubic-bezier(0.45, -0.85, 0.55, -0.45);
+  text-align: center;
+}
+a.tag:hover {
+  transform: scale(1.2);
+  /* background: linear-gradient(to right, #ff8a00, #da1b60); */
+  background: #739d0e;
+  box-shadow: #739d0e 0 0 8px 5px inset;
+
+}
+
+.container {
+  margin: 2em 6em;
+  padding: 3em;
+  padding-left: 1em;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  color: #a1a1af;
+  border: 1px solid #28242f;
+  border-radius: 0.35em;
+  background-color: #201c29;
+  /* background-image: url(https://css-tricks.com/wp-content/themes/CSS-Tricks-17/images/featured-comment.svg); */
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 70% 50%;
+  box-shadow: 0 10px 60px #070509;
+}
+.container .tags {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 35%;
+  float: right;
+  height: 98%;
+}
+.container .tags span {
+  margin-right: 1em;
+  padding: 1em;
+  text-transform: uppercase;
+  transform: rotate(180deg);
+  writing-mode: vertical-rl;
+  border-left: 3px solid #28242f;
+  background: linear-gradient(to right, #ff8a00, #da1b60);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.container .tags a:last-child {
+  margin-left: 0.5em;
+}
+.container .tags a:last-child:hover {
+  color: white;
+}
+.container label {
+  position: relative;
+  white-space: nowrap;
+  /* display: flex; */
+  width: 100%;
+  height: 2.85rem;
+  align-items: center;
+  justify-content: flex-end;
+  border: 1px solid transparent;
+  border-radius: 0.18rem;
+  background:
+          #175520;
+  box-shadow:
+          #1f5f4a 0 0 10px 5px inset;
+  transition: all 250ms ease-in-out;
+  max-height: 98%;
+  margin-bottom:0px;
+}
+/* .container label::before {
+  position: absolute;
+  left: 0;
+  z-index: 0;
+  transform: rotate(-90deg) translate(0px, -15px);
+  width: 4px;
+  height: 100%;
+  content: "";
+  border-radius: 2px;
+  background-image: linear-gradient(to top, #3486da, #5679d8);
+  transition: all 250ms ease-in-out;
+} */
+.container label .tag_search {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding-left: 1.75em;
+  width: 100%;
+  height: 43px;
+  font-size: 1rem;
+  border: 0;
+  border-radius: inherit;
+  color: white;
+  transition: width 250ms ease-in-out;
+  max-height: 98%;
+}
+.container label .tag_search:focus {
+  outline: none;
+}
+.container label:hover {
+  width: 100%;
+}
+.container label:hover::before {
+  height: 100%;
+  transform: rotate(-90deg) translate(0px, -15px);
+}
+.container label:hover .tag_search {
+  width: 100%;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+.container label .tag_search .el-input__inner{
+  height: 100%;
+  color: #fff;
+  padding:0 1rem;
+}
+
+.container label .tag_search .el-input__icon{
+  line-height: initial;
+}
+
+@media (max-width: 1536px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1280px) {
+  html {
+    font-size: 12px;
+  }
+}
+@media (max-width: 1097px) {
+  html {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 991px) {
+  .container {
+    background-image: none;
+  }
+  html{
+    font-size: 8px;
+  }
+  /* .container label {
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+  } */
+}
+@media (max-width: 768px) {
+  html {
+    font-size: 6px;
+  }
+}
+@media (max-width: 480px) {
+  html {
+    font-size: 4px;
+  }
+}
+.text-circle {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(10deg);
+  z-index: -1;
+  width: 400px;
+}
+.text-circle path {
+  opacity: 0;
+}
+.text-circle text {
+  fill: #a1a1af;
+  opacity: 0.1;
+}
+
+.dribbble {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+}

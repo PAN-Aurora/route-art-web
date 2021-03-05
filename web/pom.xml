@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!--  web的版本信息 -->
+    <groupId>com.dyx</groupId>
+    <artifactId>web</artifactId>
+    <version>4.0.0</version>
+    <name>web</name>
+    <description>装备管理系统</description>
+
+    <!-- 声明父模块 -->
+    <parent>
+        <groupId>com.dyx</groupId>
+        <artifactId>jslx</artifactId>
+        <version>4.0.0</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.dyx</groupId>
+            <artifactId>system</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyx</groupId>
+            <artifactId>im</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyx</groupId>
+            <artifactId>generator</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyx</groupId>
+            <artifactId>activiti</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dyx</groupId>
+            <artifactId>ywgl</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.eljah</groupId>
+            <artifactId>xmindjbehaveplugin</artifactId>
+            <version>0.8</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>zcgl</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.4.2.RELEASE</version><!-- springboot项目打jar包运行 插件版本只能是1.4.2.RELEASE -->
+                <configuration>
+                    <mainClass>com.dyx.WebApplication</mainClass><!--入口类-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                           <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <targetPath>META-INF/resources</targetPath>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/**</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>

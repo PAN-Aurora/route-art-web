@@ -1,0 +1,142 @@
+#main{
+    width: 100%;
+    height: 100%;
+}
+#main_left{
+    width: 24%;
+    height: 70%;
+    float: left;
+    margin-right: 1%;
+}
+.main_lefttop{
+    width: 100%;
+    height: 4rem;
+    border:1px solid #0b2e13;
+}
+
+.main_lefttop ul{
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.main_lefttop ul li{
+    float: left;
+    list-style: none;
+    width: auto;
+    height: 100%;
+    text-align: center;
+    margin-top: 0.2rem;
+    font-size: 1rem;;
+}
+.main_lefttop ul li p{
+    width: 100%;
+    color: #01AAED;
+    float: left;
+    margin: 0.6rem 0rem 0rem;
+    font-size: 1rem;
+}
+.main_leftbtm{
+    width: 100%;
+    height: calc(100% - 5rem);
+    margin-top: 1rem;
+}
+.main_leftbtm h4{
+    color: #fff;
+    font-size: 0.8rem;
+    border-left: #739F0F 0.04rem solid;
+    background: linear-gradient(90deg, #093D03,transparent);
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+}
+#main_center{
+    width: 50%;
+    float: left;
+    height: 70%;
+    margin-right: 1%;
+}
+#main_right{
+    float: left;
+    width: 24%;
+    height: 70%;
+}
+.right_top{
+    width: 100%;
+    height: calc(50% - 0.5rem);
+    float: left;
+    margin-bottom: 1rem;
+}
+.right_top h4{
+    color: #fff;
+    font-size: 0.8rem;
+    border-left: #739F0F 0.04rem solid;
+    background: linear-gradient(90deg, #093D03,transparent);
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+}
+
+.rcenter_box{
+    width: 30%;
+    height: 100%;
+    float: left;
+    margin-right: 3%;
+}
+.rcenter_box p{
+    color: #fff;
+    font-size: 0.8rem;
+    border-left: #739F0F 0.04rem solid;
+    background: linear-gradient(90deg, #093D03,transparent);
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+    margin-right: 2%;
+}
+.right_btm{
+    width: 100%;
+    height: calc(50% - 0.5rem);
+    float: left;
+}
+.right_btm h4{
+    color: #fff;
+    font-size: 0.8rem;
+    border-left: #739F0F 0.04rem solid;
+    background: linear-gradient(90deg, #093D03,transparent);
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+}
+#main_bottom{
+    width: 100%;
+    height: calc(30% - 1.5rem);
+    float: left;
+    margin-top: 1rem;
+}
+.bottom_left{
+    width: 24%;
+    height: 100%;
+    float: left;
+    margin-right: 1%;
+}
+.bottom_center{
+     width: 50%;
+     float: left;
+     height: 100%;
+     margin-right: 1%;
+ }
+.bottom_right{
+    float: left;
+    width: 24%;
+    height: 100%;
+}
+#main_bottom h4{
+    color: #fff;
+    font-size: 0.8rem;
+    border-left: #739F0F 0.04rem solid;
+    background: linear-gradient(90deg, #093D03,transparent);
+    height: 2rem;
+    line-height: 2rem;
+    padding: 0 1rem;
+}
