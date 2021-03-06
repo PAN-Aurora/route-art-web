@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; overflow: hidden;">
+
+<head>
+    <meta charset="utf-8">
+    <title>装备管理信息系统</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../plugins/tab/css/framework/form.css">
+
+    <!--引入弹窗组件-->
+    <link type="text/css" rel="stylesheet" href="../../../plugins/fhdrag/style.css" />
+    <!--粉色日历组件-->
+    <link rel="stylesheet" href="../../../plugins/fhdrag/calendar.css">
+    <!--可编辑日历组件-->
+    <link rel="stylesheet" href="../../../plugins/jalendar/documentation.css" type="text/css" />
+    <link rel="stylesheet" href="../../../plugins/jalendar/jalendar.css" type="text/css" />
+
+    <!-- 及时通讯css -->
+    <link rel="stylesheet" href="../../../plugins/fhim/dist/css/layui.css">
+    <link rel="stylesheet" href="../../../plugins/fhim/dist/css/contextMenu.css">
+
+    <link rel="stylesheet" prePath="../../../plugins/tab/" type="text/css" id="skin"  />
+    <script type="text/javascript" charset="utf-8" src="../../../plugins/tab/js/tab.js"></script>
+    <!-- vue -->
+    <script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+        <style>
+            html,.pcoded-main-container{
+                height:100%;
+            }
+            .col-xl-12,.card,.ul-yydt{
+                width: 100%;
+                height: 100%;
+            }
+            .ul-yydt li{
+                float: left;
+                margin:10px;
+                text-align: center;
+                width:calc(15% - 20px);
+
+            }
+            li{
+                list-style: outside none none;
+            }
+            .ul-yydt li img{
+                width:100%;
+            }
+            a{
+                color:#333;
+                text-decoration: none;
+            }
+        </style>
+
+</head>
+
+<body id="FHSKIN3" class="" style="height: 100%;width: 100%;">
+    <div class="col-xl-12">
+        <div class="card" style="height: calc(50% - 10px);">
+            
+            <!--<ul class="ul-yydt">
+                <template v-for="item in subSystemDicList">
+                    <li v-bind:id="subSystemDicList.">{{subSystemDicList.NAME}}</li>
+                </template>
+
+            </ul>-->
+
+            <ul class="ul-yydt">
+                <li><a target="_parent" href="../index.html?appid=jdzbService"><img src="../../../../assets/images/widget/shape1.png"> <span>机动装备</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=ddwqService"><img src="../../../../assets/images/widget/shape1.png"> <span>DDWQ</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=sssbService"><img src="../../../../assets/images/widget/shape1.png"> <span>设施设备</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=zbcsService"><img src="../../../../assets/images/widget/shape1.png"> <span>装备测试</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=wzglService"><img src="../../../../assets/images/widget/shape1.png"> <span>物资管理</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=htglService"><img src="../../../../assets/images/widget/shape1.png"> <span>项目合同</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=sysService"><img src="../../../../assets/images/widget/shape1.png"> <span>系统应用</span></a></li>
+                <li><a target="_parent" href="../index.html?appid=ywptService"><img src="../../../../assets/images/widget/shape1.png"> <span>运维平台</span></a></li>
+
+            </ul>
+
+        </div>
+    </div>
+<!-- Required Js -->
+<!--<script type="text/javascript" src="../../../assets/js/vendor-all.min.js"></script>-->
+<script type="text/javascript" src="../../../assets/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../assets/js/pcoded.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+
+<!--引入弹窗组件start-->
+<script type="text/javascript" src="../../../plugins/fhdrag/drag.js"></script>
+<script type="text/javascript" src="../../../plugins/fhdrag/dialog.js"></script>
+<!--引入弹窗组件end-->
+
+<!--粉色日历组件start-->
+<script src="../../../plugins/fhdrag/calendar.js"></script>
+<!--粉色日历组件end-->
+
+<!--可编辑日历组件start-->
+<script type="text/javascript" src="../../../plugins/jalendar/jalendar.js"></script>
+<!--可编辑日历组件end-->
+
+<!-- 提示 -->
+<script type="text/javascript" src="../../../assets/js/jquery.tips.js"></script>
+
+
+<!-- 及时通讯js¨ -->
+<script type="text/javascript" src="../../../plugins/fhim/dist/layui.js"></script>
+<script type="text/javascript" src="../../../assets/js-v/fhim/fhim.js"></script>
+
+</body>
+<script type="text/javascript">
+  
+</script>
+</html>

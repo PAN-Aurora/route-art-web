@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--自适应设置-->
+    <link rel="stylesheet" href="../../../assets/css/adaption_cd.css">
+    <!--滚动条样式设置-->
+    <link rel="stylesheet" href="/assets/css/page.css">
+    <style type="text/css">
+        .xlk {
+            width: calc(52% - 115px);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content" style="padding-top: 0px;">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+
+                                <!-- 检索条件  -->
+                                <div id="cx" style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
+                                    <table style="margin-top:5px;width: 99.4%;">
+                                        <tr>
+                                            <template v-if="type != 'view'">
+                                                <a class="btn btn-light btn-sm" v-on:click="goAdd"
+                                                   title="选择"><i style="margin-top:-3px;margin-left: -6px;"
+                                                                 class="feather icon-plus"></i>新增采购明细</a>
+                                            </template>
+                                            <td v-show="loading">
+                                                <!-- [加载状态 ] start -->
+                                                <div class="d-flex justify-content-center" style="margin-top:-10px;">
+                                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <!-- [ 加载状态  ] End -->
+                                            </td>
+                                            <!--统计信息-->
+                                            <td style="width:85%;">
+                                                <div style="padding: 6px;float: right;">
+										<span>采购数量：
+                                        <span style="font-style:italic;font-weight: bold; color: blue;">{{pd.CGSL}}&emsp;</span>&emsp;&emsp;采购金额：
+                                        <span style="font-style:italic;font-weight: bold; color: blue;">{{pd.CGJE}}&nbsp;</span>元</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- 检索  -->
+                                <div style="padding-left: 15px;">
+                                    <table>
+                                        <tr>
+                                            <td v-show="loading">
+                                                <!-- [加载状态 ] start -->
+                                                <div class="d-flex justify-content-center" style="margin-top:-10px;">
+                                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <!-- [ 加载状态  ] End -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- 检索  -->
+                                <div class="card-block table-border-style" style="margin-top: -15px">
+                                    <div class="table-responsive">
+                                        <table id="simple-table" class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 5%;">序号</th>
+                                                <th style="width: 25%;" notnullflag>物资名称</th>
+                                                <th style="width: 25%;" notnullflag>物资分类</th>
+                                                <th style="width: 25%;">生产厂家</th>
+                                                <th style="width: 25%;">型号</th>
+                                                <th style="width: 15%;" notnullflag>单价(元)</th>
+                                                <th style="width: 15%;" notnullflag>数量</th>
+                                                <th style="width: 15%;" notnullflag>金额</th>
+                                                <th style="width: 15%;" notnullflag>计量单位</th>
+                                                <template v-if="type != 'view'">
+                                                    <th style="width: 15%;">操作</th>
+                                                </template>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <!-- 开始循环 -->
+                                            <template v-for="(data,index) in varList">
+                                                <tr>
+                                                    <td scope="row"
+                                                        class="boldXh">
+                                                        {{page.showCount*(page.currentPage-1)+index+1}}
+                                                    </td>
+                                                    <template v-if="type != 'view'">
+                                                        <td class="hasText"><input
+                                                                type="text" class="form-control text"
+                                                                v-bind:id="'WZMC'+index" v-model="data.WZMC"
+                                                                v-on:blur="updateRow('wzmc',data,index)"
+                                                                maxlength="30" placeholder="物资名称"
+                                                                title="物资名称">
+                                                        </td>
+                                                        <td class="hasText">
+                                                            <select v-model="data.WZFLNM" ref="WZFLNM"
+                                                                    v-bind:id="'WZFLNM'+index"
+                                                                    class="selectpicker text"
+                                                                    v-on:blur="updateRow('wzfl',data,index)"
+                                                                    placeholder="请选择物资分类"
+                                                                    title="物资分类" style="width:100%;">
+                                                                <option v-for="data in wzfl_options"
+                                                                        :value="data.dictionaries_ID">
+                                                                    {{data.name}}
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                        <td class="hasText"><input
+                                                                type="text" class="form-control text"
+                                                                v-model="data.SCCJ" id="SCCJ"
+                                                                v-on:blur="updateRow('sccj',data,index)"
+                                                                maxlength="30" placeholder="生产厂家"
+                                                                title="生产厂家">
+                                                        </td>
+                                                        <td class="hasText"><input
+                                                                type="text" class="form-control text"
+                                                                v-model="data.XH"
+                                                                v-on:blur="updateRow('',data,index)"
+                                                                maxlength="30" placeholder="型号"
+                                                                title="型号">
+                                                        </td>
+
+                                                        <td class="hasText"><input
+                                                                type="text" class="form-control text"
+                                                                v-bind:id="'DJ'+index" v-model="data.DJ"
+                                                                oninput="!/((^[1-9]\d*)|^0)(\.\d{0,2}){0,1}$/.test(value)?(value=value.substr(0,value.length-1)):''"
+                                                                v-on:keyup="onkeyup('DJ'+index,data)"
+                                                                maxlength="30" placeholder="单价"
+                                                                title="单价">
+                                                        </td>
+
+                                                        <td class="hasText"><input
+                                                                v-bind:id="'SL'+index" type="text"
+                                                                class="form-control text"
+                                                                v-model="data.SL"
+                                                                oninput="value=value.replace(/^(0+)|[^\d]+/g,'')"
+                                                                v-on:keyup="onkeyup('SL'+index,data)"
+                                                                maxlength="30" placeholder="数量"
+                                                                title="数量">
+                                                        </td>
+                                                        <td>{{data.JE}}</td>
+                                                        <td class="hasText">
+                                                            <select v-model="data.JLDW" ref="JLDW"
+                                                                    v-bind:id="'JLDW'+index"
+                                                                    class="selectpicker text"
+                                                                    v-on:blur="updateRow('',data,index)"
+                                                                    placeholder="请选择计量单位"
+                                                                    title="计量单位" style="width:100%;">
+                                                                <option v-for="data in jldw_options"
+                                                                        :value="data.name">
+                                                                    {{data.name}}
+                                                                </option>
+                                                            </select>
+                                                        </td>
+                                                        <td class="boldCz">
+                                                            <a title="删除" v-on:click="goDel(data.WZCGMX_ID,index)"
+                                                               style="cursor:pointer;"><i
+                                                                    class="feather icon-x"></i></a>
+                                                        </td>
+                                                    </template>
+                                                    <template v-else>
+                                                        <td>{{data.WZMC}}</td>
+                                                        <td>{{data.WZFL}}</td>
+                                                        <td>{{data.SCCJ}}</td>
+                                                        <td>{{data.XH}}</td>
+                                                        <td>{{data.DJ}}</td>
+                                                        <td>{{data.SL}}</td>
+                                                        <td>{{data.JE}}</td>
+                                                        <td>{{data.JLDW}}</td>
+                                                    </template>
+                                                </tr>
+                                            </template>
+                                            <tr v-show="varList.length==0">
+                                                <td colspan="11">没有相关数据</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <table style="width:100%;margin-top:15px;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                                     v-html="page.pageStr"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- [ Hover-table ] end -->
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+<!--底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!--本页面js-->
+<script src="../../../assets/js-v/zcgl/wzcgmx/wzcgmx_list.js"></script>
+</body>
+</html>

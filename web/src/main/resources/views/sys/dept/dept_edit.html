@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <script src="../../../assets/js-v/header.js"></script>
+
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app" v-cloak>
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <div style="width: 100%;">
+                            <div id="showform">
+                                <div class="input-group" style="margin-top:-15px;background-color: white">
+                                    <span style="width: 100%;height:50px;text-align: center;">
+                                       <a class="btn btn-light btn-sm" v-on:click="save">
+                                           <i style="margin-top:-3px;margin-left: -6px;"
+                                              class="feather icon-check"></i>保存</a>
+                                       <a class="btn btn-light btn-sm btn-danger" onclick="top.Dialog.close()">
+                                           <i style="margin-top:-3px;margin-left: -6px;"
+                                              class="feather icon-x"></i>取消</a>
+                                    </span>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;"
+                                                                                                  notnullflag="true">名称：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="NAME" id="NAME" v-model="pd.NAME"
+                                           checknull="true" checkerror="名称不能为空"
+                                           maxlength="50" placeholder="请输入名称" title="名称">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;"
+                                                                                                  notnullflag>区域：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="SSQYMC" id="SSQYMC" v-model="pd.SSQYMC"
+                                           maxlength="100" placeholder="点击选择所属区域名称" checknull checkerror="请选择所属区域名称"
+                                           title="所属区域" v-on:click="selectSsqy()" STYLE="cursor: pointer" readonly>
+                                    <div>
+                                        <span class="feather icon-list btn-lg" style="margin:-4px 10px 10px -50px;
+                                        position: absolute;
+                                        vertical-align: middle;
+                                        cursor: pointer;
+                                        z-index: 99;" v-on:click="selectSsqy()"></span>
+                                    </div>
+                                </div>
+
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;"
+                                                                                                  notnullflag="true">编号：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="BIANMA" id="BIANMA" v-model="pd.BIANMA"
+                                           checknull="true" checkerror="编码不能为空"
+                                           maxlength="50" placeholder="请输入编码" title="编码">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;">负责人：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="HEADMAN" id="HEADMAN"
+                                           v-model="pd.HEADMAN" maxlength="15" placeholder="请输入负责人" title="负责人">
+                                </div>
+
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;">电话：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="TEL" id="TEL" v-model="pd.TEL"
+                                           maxlength="11" placeholder="请输入电话" title="电话">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;">地址：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="ADDRESS" id="ADDRESS"
+                                           v-model="pd.ADDRESS" maxlength="30" placeholder="请输入地址" title="地址">
+                                </div>
+
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 85px;"><span style="width: 100%;">备注：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="BZ" id="BZ" v-model="pd.BZ"
+                                           maxlength="255" placeholder="请输入备注" title="备注">
+                                </div>
+                            </div>
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:50px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/dept_edit.js"></script>
+</body>
+</html>

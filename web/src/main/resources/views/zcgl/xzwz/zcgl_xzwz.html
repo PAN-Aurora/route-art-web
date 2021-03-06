@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>选择物资</title>
+    <!--
+    Description：选择装备物资列表页面
+    Author：李可
+    Date：2020/12/18
+    -->
+    <!--引入头js-->
+    <script src="../../../assets/js-v/header.js"></script>
+
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+<div style="margin: 0 0px;" id="app" v-cloak>
+    <el-row style="padding-top:5px;padding-left: 3px">
+        <el-col :span="24">
+            <el-button type="success" size="mini" icon="el-icon-check" @click="saveSelectData">保存</el-button>
+            <span style="line-height: 30px;height: 30px">模糊查询：</span>
+            <el-input placeholder="请输入物资名称、编号、责任人查询(点击回车查询)" style="width: 350px;" v-model="keyWords" @change="getData">
+                <!--<i slot="prefix" class="el-input__icon el-icon-search"></i>-->
+            </el-input>
+            <el-button type="success" size="mini" icon="feather icon-refresh-cw" @click="getData">查询</el-button>
+            <el-button type="success" size="mini" icon="feather icon-refresh-cw" @click="rest">重置</el-button>
+        </el-col>
+    </el-row>
+
+    <template>
+        <el-table ref="centerTable" :data="centerTableData" stripe tooltip-effect="dark"
+                  style="width: 100%;margin-top: 5px;" :height="tblHeight" @selection-change="centerSelectionChange"
+                  highlight-current-row border>
+            <el-table-column type="selection">
+            </el-table-column>
+            <el-table-column type="index" label="序号"></el-table-column>
+            <el-table-column prop="WZMC" label="物资名称" header-align="center"></el-table-column>
+            <el-table-column prop="WZFL" label="物资分类" header-align="center"></el-table-column>
+            <el-table-column prop="SCCJ" label="生产厂家" header-align="center"></el-table-column>
+            <el-table-column prop="XH" label="型号" header-align="center"></el-table-column>
+            <el-table-column prop="WZBH" label="物资编号" header-align="center"></el-table-column>
+            <el-table-column prop="JLDW" label="计量单位" header-align="center"></el-table-column>
+            <el-table-column prop="DJ" label="单价" header-align="center"></el-table-column>
+            <el-table-column prop="DJRQ" label="登记日期" header-align="center"></el-table-column>
+            <el-table-column prop="ZRR" label="责任人" header-align="center"></el-table-column>
+            <el-table-column prop="SSBM" label="所属部门" header-align="center"></el-table-column>
+        </el-table>
+    </template>
+
+</div>
+<!--底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/zcgl/xzwz/zcgl_xzwz.js"></script>
+</body>
+
+</html>

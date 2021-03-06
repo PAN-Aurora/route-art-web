@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<script src="../../../assets/js-v/header.js"></script>
+	<!--滚动条样式设置-->
+	<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content" style="padding-top: 5px;">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+
+								<!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+							
+                                   		<!-- 检索条件  -->									
+										<div style="padding-left: 15px;padding-top: 5px;"class="queryLayout">
+										<table>
+											<tr>
+												<td><span class="searchName">模糊查询：</span>
+													<div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+														<input class="form-control" type="text" v-model="keyWords" onkeydown="keyDown()" title="请输入流程名称查询" placeholder="请输入流程名称查询" />
+													</div>
+												</td>
+												<td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;创建时间：从&nbsp;&nbsp;</span>
+													<div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: 150px;">
+														<input type="text" class="span10 date-picker form-control" name="STRARTTIME" id="STRARTTIME" startDateformat="yyyy-mm-dd"
+															   readonly="readonly" placeholder="开始时间" title="开始时间" style="width:150px;cursor: pointer">
+													</div>
+												</td>
+												<td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;到&nbsp;&nbsp; </span>
+													<div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: 150px;">
+														<input type="text" class="span10 date-picker form-control" name="ENDTIME" id="ENDTIME" endDateformat="yyyy-mm-dd"
+															   readonly="readonly" placeholder="结束时间" title="结束时间" style="width:150px;cursor: pointer">
+													</div>
+												</td>
+												<td style="vertical-align:top;padding-left:5px;">
+													<a id="key-search" class="btn btn-light btn-sm" v-on:click="getList" title="查询">
+														<i style="margin-top:-3px;margin-left: -6px;" class="feather icon-search"></i>查询
+													</a>
+												</td>
+												<td style="vertical-align:top;">
+													<a class="btn btn-light btn-sm" v-on:click="rest"  title="重置">
+														<i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-refresh-cw"></i>重置
+													</a>
+												</td>
+												<td v-show="loading">
+													<!-- [加载状态 ] start -->
+											    	<div class="d-flex justify-content-center" style="margin-top:-10px;">
+			                                            <div class="spinner-grow spinner-grow-sm" role="status">
+			                                                <span class="sr-only">Loading...</span>
+			                                            </div>
+			                                        </div>
+											    	<!-- [ 加载状态  ] End -->
+												</td>
+											</tr>
+										</table>
+										</div>
+										<!-- 检索  -->
+										<div class="card-block table-border-style" style="margin-top: -15px">
+                                				<div class="table-responsive">
+												<table class="table table-hover">		
+													<thead>
+														<tr>
+															<th style="width:35px;">序号</th>
+															<th>流程名称</th>
+															<th>申请人</th>
+															<th>办理人or角色</th>
+															<th>任务节点</th>
+															<th>开始时间</th>
+															<th>办完时间</th>
+															<th>用时</th>
+															<th>操作</th>
+														</tr>
+													</thead>
+													<tbody>
+														<!-- 开始循环 -->	
+														<template v-for="(data,index) in varList">
+															<tr>
+																<td scope="row" class="boldXh">{{page.showCount*(page.currentPage-1)+index+1}}</td>
+																<td>{{data.PNAME_}}</td>
+																<td><a v-on:click="viewUser(data.INITATOR)" style="cursor:pointer;"><i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-search"></i>{{data.INITATOR}}</a></td>
+																<td>
+																	<template v-if="data.DELEGATE_TAG_ != 'dept'">
+																		<a v-on:click="viewUser(data.ASSIGNEE_)" style="cursor:pointer;"><i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-search"></i>{{data.ASSIGNEE_}}</a>
+																	</template>
+																	<template v-else>
+																		<a v-on:click="viewDept(data.ASSIGNEE_)" style="cursor:pointer;"><i
+																				style="margin-top:-3px;margin-left: -6px;" class="feather icon-search"></i>{{data.DEPT_NAME}}</a>
+																	</template>
+																</td>
+
+																<td>{{data.NAME_}}</td>
+																<td>{{formatDate(data.START_TIME_)}}</td>
+																<td>{{formatDate(data.END_TIME_)}}</td>
+																<td>{{data.ZTIME}}</td>
+																<td class="boldCz">
+																	<a v-show="cha" title="流程信息" v-on:click="view(data.PROC_INST_ID_,data.DEPLOYMENT_ID_,data.DGRM_RESOURCE_NAME_)" style="cursor:pointer;">
+																		<i class="feather icon-file-text"></i></a>
+																</td>
+															</tr>
+														</template>
+														<tr v-show="varList.length==0">
+															<td colspan="10">没有相关数据</td>
+													 	</tr>
+													</tbody>
+												</table>
+											</div>
+											<table style="width:100%;">
+												<tr>
+													<td style="vertical-align:top;">
+													</td>
+													<td style="vertical-align:top;"><div class="pagination" style="float: right;padding-top: 0px;margin-top: 0px;" v-html="page.pageStr"></div></td>
+												</tr>
+											</table>
+										</div>
+					
+                                    </div>
+								</div>
+								<!-- [ Hover-table ] start -->
+								
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+
+	<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/act/hitask_list.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>资产管理-退役报废的流程页面</title>
+    <!--
+      * Description：资产管理-退役报废
+      * @Author：陈磊
+      * Date：2020-12-18
+      -->
+    <!--引入顶部js-->
+    <script src="../../../assets/js-v/header.js"></script>
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app" v-cloak>
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <div style="width: 100%;">
+                            <div id="showform">
+                                <div class="input-group" style="margin-top:-10px;background-color: white">
+                                    <span style="width: 100%;height:50px;text-align: center;">
+                                        <a class="btn btn-light btn-sm" v-on:click="goWord(pd.TYBF_ID)"
+                                           title="导出">
+                                        <i style="margin-top:-3px;margin-left: -6px;"
+                                           class="mdi mdi-cloud-download"></i>导出
+                                        </a>
+                                    </span>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;"><span style="width: 100%;">申请单号：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="SQDH" id="SQDH" maxlength="50"
+                                           title="申请单号" disabled>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;"><span style="width: 100%;">申请人：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="SQR" id="SQR" v-model="pd.SQR"
+                                           maxlength="32"
+                                           placeholder="请输入申请人" title="申请人" disabled>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;"><span style="width: 100%;">申请日期：</span></span>
+                                    </div>
+                                    <input type="text" class="span10 date-picker form-control"
+                                           dateformat="yyyy-mm-dd hh:ii" ref="SQRQ" id="SQRQ" maxlength="32"
+                                           title="申请日期" disabled>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;"><span style="width: 100%;">所属部门：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="SSBM" id="SSBM" v-model="pd.SSBM"
+                                           maxlength="32"
+                                           placeholder="点击选择所属部门" title="所属部门" disabled>
+                                </div>
+
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;align-items: baseline"><span
+                                                style="width: 100%;" notnullflag>报废原因：</span></span>
+                                    </div>
+                                    <textarea type="text" class="form-control" ref="BFYY" id="BFYY"
+                                              v-model="pd.BFYY" style="height: 80px" maxlength="300" checknull
+                                              checkerror="请输入正确的退役原因"
+                                              placeholder="请输入报废原因" title="报废原因" disabled></textarea>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;align-items: baseline"><span
+                                                style="width: 100%;">备注：</span></span>
+                                    </div>
+                                    <textarea rows="1" type="text" class="form-control" ref="BZ" id="BZ" disabled
+                                              v-model="pd.BZ" maxlength="300" style="height: 80px" placeholder="请输入备注"
+                                              title="备注"></textarea>
+                                </div>
+                            </div>
+                            <div class="card-block table-border-style" style="margin-top: -15px">
+                                <div class="table-responsive">
+                                    <table id="simple-table" class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>序号</th>
+                                            <th>物资编号</th>
+                                            <th>物资名称</th>
+                                            <th>物资分类</th>
+                                            <th>生产厂家</th>
+                                            <th>型号</th>
+                                            <th>计量单位</th>
+                                            <th>责任人</th>
+                                            <th>报废日期</th>
+                                            <th>登记日期</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <!-- 开始循环 -->
+                                        <template v-for="(data,index) in varList">
+                                            <tr>
+
+                                                <td scope="row" class="boldXh">{{index+1}}</td>
+                                                <td>{{data.WZBH}}</td>
+                                                <td>{{data.WZMC}}</td>
+                                                <td>{{data.WZFL}}</td>
+                                                <td>{{data.SCCJ}}</td>
+                                                <td>{{data.XH}}</td>
+                                                <td>{{data.JLDW}}</td>
+                                                <td>{{data.ZRR}}</td>
+                                                <td>{{data.BFRQ}}</td>
+                                                <td>{{data.DJRQ}}</td>
+                                            </tr>
+                                        </template>
+                                        <tr v-show="varList.length==0">
+                                            <td colspan="11">没有相关数据</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <table style="width:100%;margin-top:15px;">
+                                    <tr>
+                                        <td style="vertical-align:top;">
+                                            <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                                 v-html="page.pageStr"></div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<!--引入底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!--本页面js-->
+<script src="../../../assets/js-v/zcgl/tybf/tybf_viewLc.js"></script>
+
+</body>
+</html>

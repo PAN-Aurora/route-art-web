@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>组织机构</title>
+     <!--
+      * Description：组织机构
+      * Author：杨乐天
+      * Date：2020/5/19
+      -->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--滚动条样式设置-->
+    <link rel="stylesheet" href="/assets/css/page.css">
+
+</head>
+
+<body>
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content" style="padding-top: 0px;">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+
+                                <!-- 检索  -->
+                                <div style="padding-left: 15px;padding-top: 5px;">
+                                    <table style="margin-top:5px;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <a v-show="add" class="btn btn-light btn-sm"
+                                                   v-on:click="goAdd(DEPT_ID)"><i class="feather icon-plus"
+                                                                                  style="margin-top: -3px; margin-left: -6px;"></i>新增</a>
+                                                <template v-if="'0' != DEPT_ID && isViews == 'false'">
+                                                    <a class="btn btn-light btn-sm"
+                                                       v-on:click="getList(PARENT_ID)"><i class="feather icon-corner-down-left"
+                                                                                          style="margin-top: -3px; margin-left: -6px;"></i>返回</a>
+                                                </template>
+                                            </td>
+                                            <td ><span class="searchName">模糊查询：</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: 200px;">
+                                                    <input class="form-control" type="text" v-model="keyWords" onkeyup="keyDown()"
+                                                           title="请输入名称、战区、编码查询" placeholder="请输入名称、战区、编码查询"/>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;padding-left:5px;">
+                                                <a id="key-search" class="btn btn-light btn-sm" v-on:click="getList(DEPT_ID)"
+                                                   title="检索">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-search"></i>查询</a>
+                                                <a class="btn btn-light btn-sm" v-on:click="rest" title="重置">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-refresh-cw"></i>重置</a>
+                                            </td>
+                                            <td style="vertical-align:top">
+                                                <a class="btn btn-light btn-sm" v-on:click="goExcel">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="mdi mdi-cloud-download" title="导出到Excel"></i>导出</a>
+                                            </td>
+                                            <!--<td style="vertical-align:top">-->
+                                                <!--<a class="btn btn-light btn-sm" v-on:click="getExcel"-->
+                                                   <!--title="从EXCEL导入到系统">-->
+                                                    <!--<i style="margin-top:-3px;margin-left: -6px;"-->
+                                                       <!--class="mdi mdi-cloud-upload"></i>导入-->
+                                                <!--</a>-->
+                                            <!--</td>-->
+                                            <td v-show="loading">
+                                                <!-- [加载状态 ] start -->
+                                                <div class="d-flex justify-content-center" style="margin-top:-10px;">
+                                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <!-- [ 加载状态  ] End -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- 检索  -->
+                                <div class="card-block table-border-style" style="margin-top: -15px">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th style="width:35px;">序号</th>
+                                                <th>机构</th>
+                                                <th>名称</th>
+                                                <th>编码</th>
+                                                <th>负责人</th>
+                                                <th>电话</th>
+                                                <th>地址</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <!-- 开始循环 -->
+                                            <template v-for="(data,index) in varList">
+                                                <tr>
+                                                    <td class="boldXh">{{page.showCount*(page.currentPage-1)+index+1}}</td>
+                                                    <td><a v-on:click="getList(data.DEPT_ID)" style="cursor:pointer;">{{data.NAME}}
+                                                        <i class="feather icon-chevron-down"></i></a></td>
+                                                    <td>{{data.NAME}}</td>
+                                                    <td>{{data.BIANMA}}</td>
+                                                    <td>{{data.HEADMAN}}</td>
+                                                    <td>{{data.TEL}}</td>
+                                                    <td>{{data.ADDRESS}}</td>
+                                                    <td class="boldCz">
+                                                        <a v-show="edit" title="修改" v-on:click="goEdit(data.DEPT_ID)"
+                                                           style="cursor:pointer;"><i
+                                                                class="feather icon-edit-2"></i></a>
+                                                        <a v-show="del" title="删除" v-on:click="goDel(data.DEPT_ID)"
+                                                           style="cursor:pointer;"><i class="feather icon-x"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                            <tr v-show="varList.length==0">
+                                                <td colspan="20">没有相关数据</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                                     v-html="page.pageStr"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- [ Hover-table ] end -->
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/dept_list.js"></script>
+</body>
+</html>

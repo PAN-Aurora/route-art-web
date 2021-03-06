@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <script src="../../../assets/js-v/header.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../assets/plugins/easyui/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../assets/plugins/easyui/themes/icon.css">
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+
+        body {
+            padding: 5px;
+        }
+
+        .easyui-layout {
+            width: 100%;
+            height: 100%;
+        }
+
+        .panel-header,
+        .panel-body {
+            width: 100% ! important
+        }
+    </style>
+
+<body class="easyui-layout">
+
+<div class="easyui-layout" fit="true">
+    <div data-options="region:'west',split:true" title="字典目录" style="width:250px;height:100%;">
+        <div style="padding-bottom: 5px;padding-top: 5px;background-color: rgb(235, 232, 232);">
+            <a style="margin-left: 15px;cursor:pointer;" title="全部展开" onclick="expandAll()"><i
+                    class="feather icon-plus-circle"></i></a>
+            <a style="margin-left: 5px;cursor:pointer;" title="全部收缩" onclick="reset()"><i
+                    class="feather icon-minus-circle"></i></a>
+            <input style="margin-left: 15px;width: 150px" type="text" id="key" placeholder="请输入关键字查询" />
+        </div>
+
+        <ul id="leftTree" class="ztree"></ul>
+    </div>
+    <div data-options="region:'center'" style="width: calc(100% - 250px);height:100%;">
+        <iframe name="treeFrame" id="treeFrame" frameborder="0" src="dictionaries_list.html"
+                style="margin:0 auto;width:100%;height:100%;"></iframe>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/easyui/js/fuzzysearch.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/easyui/js/jquery.ztree.exhide.min.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/dictionaries_ztree.js"></script>
+
+</body>
+</html>

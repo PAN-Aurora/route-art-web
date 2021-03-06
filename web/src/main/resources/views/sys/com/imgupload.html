@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <title>图片上传</title>
+    <!--
+       Description：优化JS
+       Author：李可
+       Date：2020/4/30
+   -->
+    <!-- 引入头部JS-->
+    <script src="../../../assets/js-v/header.js"></script>
+</head>
+<style type="text/css">
+    .el-form-item{
+        margin-bottom: 0px;
+    }
+    .el-upload--picture-card{
+        height:132px;
+        width: 132px;
+        line-height: 130px;
+    }
+    .el-upload-list__item{
+        height:132px !important;
+        width: 132px !important;
+        line-height: 130px;
+        margin: 0 8px 0 0 !important;
+    }
+</style>
+<body>
+    <div id="app" v-cloak>
+        <el-form>
+            <el-form-item label="" :label-width="formLabelWidth">
+                <el-upload ref="upload" action="#@!" accept="image/png,image/gif,image/jpg,image/jpeg"
+                    list-type="picture-card" :limit=limitNum :auto-upload="true" :file-list="fileList"
+                    :on-exceed="handleExceed" :before-upload="handleBeforeUpload"
+                    :on-remove="handleRemove">
+                    <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+            </el-form-item>
+        </el-form>
+    </div>
+    <!--引入脚部JS-->
+    <script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+    <script>
+        var httpurl = httpurl;
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                dialogImageUrl: '',
+                dialogVisible: false,
+                formLabelWidth: '100px',
+                limitNum: 5,
+                fileList: [],
+                url: httpurl + 'filelib/upload',
+                //业务id
+                bizid: '',
+                //业务类型
+                biztype: '',
+                //业务名称
+                bizname: '',
+            },
+
+            methods: {
+                //初始执行
+                init() {
+                    //业务id、业务类型、业务名称赋值
+                    this.bizid = getUrlKey('id');
+                    this.biztype = getUrlKey('type');
+                    this.bizname = getUrlKey('biz');
+
+                    if (!isEmpty(this.bizid) && !isEmpty(this.biztype)) {
+                        //根据id查询图片列表
+                        $.ajax({
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            url: httpurl + 'filelib/list',
+                            type: 'POST',
+                            data: { BIZID: this.bizid, BIZTYPE: this.biztype },
+                            dataType: 'json',
+                            success: function (data) {
+                                //将返回结果添加至file集合中
+                                if (data != null && data.varList != null) {
+                                    data.varList.forEach(function (item) {
+                                        var elem = { id: item.FILELIB_ID, name: item.FILENAME, url: httpurl + 'filelib/showimg?FILENAME=' + item.FILENAME };
+                                        vm.fileList.push(elem);
+                                    })
+                                }
+                            }
+                        })
+                    }
+                },
+
+                // 上传文件之前的钩子
+                handleBeforeUpload(file) {
+                    if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+                        this.$notify.warning({
+                            title: '警告',
+                            message: '请上传格式为png、gif、jpg、jpeg的图片'
+                        });
+                        return false;
+                    }
+                    var size = file.size / 1024 / 1024 / 2;
+                    if (size > 2) {
+                        this.$notify.warning({
+                            title: '警告',
+                            message: '图片大小必须小于2M'
+                        });
+                        return false;
+                    }
+                    //调用上传方法
+                    this.uploadFile(file);
+                    return false;
+                },
+
+                // 文件超出个数限制时的钩子
+                handleExceed(files, fileList) {
+                    this.$message({
+                        message: '最多上传' + this.limitNum + '张图片',
+                        type: 'warning'
+                    });
+                },
+
+                // 文件列表移除文件时的钩子
+                handleRemove(file, fileList) {
+                    //调用删除方法
+                    this.delFile(file);
+                },
+
+                //上传文件
+                uploadFile(file) {
+                    if (isEmpty(this.bizid) || isEmpty(this.biztype)) {
+                        return;
+                    }
+                    //用formdata格式上传
+                    var fd = new FormData();
+                    fd.append("file", file);
+                    fd.append('bizid', this.bizid);
+                    fd.append('biztype', this.biztype);
+                    fd.append('bizname', this.bizname);
+                    //异步 跨域 上传文件
+                    $.ajax({
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        url: httpurl + 'filelib/upload',
+                        type: 'POST',
+                        data: fd,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            //返回结果添加到文件集合中
+                            if (data && data != null && data.result == 'success') {
+                                var fileinfo = data.file;
+                                var item = { id: fileinfo.FILELIB_ID, name: fileinfo.FILENAME, url: httpurl + 'filelib/showimg?FILENAME=' + fileinfo.FILENAME };
+                                vm.fileList.push(item);
+                            }
+                        }
+                    }).done().fail(function () {
+                        alert("登录失效!请求服务器无响应,稍后再试");
+                        $("#showform").show();
+                        $("#jiazai").hide();
+                    });
+                },
+
+                //删除文件
+                delFile(file) {
+                    //判断file.raw为空，后台删除
+                    if (file && !file.raw) {
+                        $.ajax({
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            url: httpurl + 'filelib/delete',
+                            type: 'POST',
+                            data: { FILENAME: file.name },
+                            dataType: 'json',
+                            success: function (data) {
+                                //刷新fileList集合
+                                if (data && data != null && data.result == 'success') {
+                                    vm.fileList = vm.fileList.filter(function (v) {
+                                        return v.name != file.name;
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+
+                //根据ID删除所有文件
+                delFilesByids() {
+                    var ids = '';
+                    $.ajax({
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        url: httpurl + 'filelib/deletebyids',
+                        type: 'POST',
+                        data: { IDS: ids },
+                        dataType: 'json',
+                        success: function (data) {
+
+                        }
+                    });
+                },
+
+                //根据业务删除未关联文件
+                delbybizname() {
+                    var ids = '';
+                    $.ajax({
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        url: httpurl + 'filelib/delbybizname',
+                        type: 'POST',
+                        data: { BIZNAME: '', BIZID: '' },
+                        dataType: 'json',
+                        success: function (data) {
+
+                        }
+                    });
+                }
+            },
+
+            //初始化创建
+            mounted() {
+                this.init();
+            },
+        });
+    </script>
+    <style lang="scss" scoped>
+    </style>
+</body>
+
+</html>

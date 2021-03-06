@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <script src="../../../assets/js-v/header.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../assets/plugins/easyui/themes/bootstrap/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../assets/plugins/easyui/themes/icon.css">
+
+    <style type="text/css">
+        html {
+            height: 100%;
+        }
+
+        body {
+            padding: 5px;
+        }
+
+        .easyui-layout {
+            width: 100%;
+            height: 100%;
+        }
+
+        .panel-header,
+        .panel-body {
+            width: 100% ! important
+        }
+
+    </style>
+<body>
+<div class="easyui-layout">
+    <div title="模块选择" style="width:100%;height:100%;">
+        <div style="padding-bottom: 5px;padding-top: 5px;background-color: rgb(235, 232, 232);">
+            <input style="margin-left: 15px;" type="text" id="key" placeholder="输入模块名称查询"/>
+            <a class="btn btn-light btn-sm" onclick="save();">
+                <i style="margin-top:-3px;margin-left: -6px;" class="feather icon-check"></i>确定
+            </a>
+            <a class="btn btn-light btn-sm btn-danger" onclick="top.Dialog.close()">
+                <i style="margin-top:-3px;margin-left: -6px;"
+                   class="feather icon-x"></i>取消
+            </a>
+        </div>
+
+        <ul  id="leftTree" class="ztree" style="height: 445px;overflow: scroll;"></ul>
+    </div>
+</div>
+<!--底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/easyui/js/fuzzysearch.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/easyui/js/jquery.ztree.exhide.min.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/mk_select.js"></script>
+</body>
+
+</html>

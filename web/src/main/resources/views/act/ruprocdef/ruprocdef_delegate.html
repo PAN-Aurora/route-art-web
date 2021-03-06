@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!--css-->
+    <script src="../../../assets/js-v/header.js"></script>
+
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <div style="width: 100%;">
+                            <div id="showform" style="margin-top: -6px;margin-left: 16px;">
+                                <div class="input-group" style="margin-top:-10px;background-color: white">
+							            	<span style="width: 100%;height:50px;text-align: center;">
+							            		<a class="btn btn-light btn-sm" v-on:click="save"><i
+                                                        style="margin-top:-3px;margin-left: -6px;"
+                                                        class="feather icon-user-check"></i>委派</a>
+							            		<a class="btn btn-light btn-sm btn-danger" v-on:click="close">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-x"></i>取消</a>
+							            	</span>
+                                </div>
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <td>
+                                            <div class="input-group input-group-sm mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" style="width: 79px;"><span
+                                                            style="width: 100%;">委派对象：</span></span>
+                                                </div>
+                                                <input type="hidden" v-model="ASSIGNEE_" id="ASSIGNEE_" />
+                                                <input type="text" class="form-control" ref="WPDX_NAME" id="WPDX_NAME"
+                                                       v-model="WPDX_NAME" maxlength="32" placeholder="请录入委派对象"
+                                                       title="委派对象" readonly="readonly">
+                                            </div>
+                                        </td>
+                                        <td style="vertical-align:top;padding-left:5px;">
+                                            <a class="btn btn-light btn-sm" title="选择办理人(单人)" v-on:click="getUser"
+                                               style="width: 80px;height:30px;margin-top:1px;cursor:pointer;">
+                                                <i class="feather icon-user" style="margin-top:-6px;margin-left: -6px;"></i>办理人
+                                            </a>
+                                            <a class="btn btn-light btn-sm" title="选择办理角色(此角色下所有人都可以办理)"
+                                               v-on:click="getRole"
+                                               style="width: 95px;height:30px;margin-top:1px;cursor:pointer;margin-left:-6px;">
+                                                <i class="feather icon-users" style="margin-top:-6px;margin-left: -6px;"></i>办理角色
+                                            </a>
+                                            <a class="btn btn-light btn-sm" title="选择办理单位(此单位下所有人都可以办理)"
+                                               v-on:click="getDept" style="width: 95px;height:30px;margin-top:1px;cursor:pointer;margin-left:-6px;">
+                                                <i class="feather icon-users" style="margin-top:-6px;margin-left: -6px;"></i>办理单位
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:5px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/act/ruprocdef_delegate.js"></script>
+
+</body>
+</html>

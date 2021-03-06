@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>jdzb技术资料</title>
+    <!--
+      Description：技术资料调整
+      Author：何学斌
+      Date：2020/3/26
+     -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--滚动条样式设置-->
+    <link rel="stylesheet" href="../../../assets/css/page.css">
+</head>
+
+<body>
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content" style="padding-top: 0px;">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <!-- 检索条件  -->
+                                <div style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
+                                    <table style="margin-top:5px;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <a v-show="true" class="btn btn-light btn-sm" v-on:click="goAdd"
+                                                   title="新增"><i style="margin-top:-3px;margin-left: -6px;"
+                                                                 class="feather icon-plus"></i>新增</a>
+
+                                                <a v-show="del" class="btn btn-light btn-sm btn-danger"
+                                                   v-on:click="makeAll('确定要删除选中的数据吗?')" title="删除">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-trash-2"></i>删除</a>
+                                            </td>
+                                            <td><span class="searchName">模糊查询：</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+                                                    <input class="form-control" type="text" v-model="keyWords" onkeyup="keyDown()" style="width: 270px"
+                                                           title="请输入文档名称、编号、版本号查询" placeholder="请输入文档名称、编号、版本号查询"/>
+                                                </div>
+                                            </td>
+                                            <td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;编制时间：从&nbsp;&nbsp;</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+                                                    <input class="span10 date-picker form-control" name="startTime"
+                                                           id="startTime"
+                                                           autocomplete="off" type="text" startDateformat="yyyy-mm-dd"
+                                                           readonly
+                                                           style="width:150px;cursor: pointer" placeholder="开始时间" title="开始时间"/>
+                                                </div>
+                                            </td>
+                                            <td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;到&nbsp;&nbsp;</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+                                                    <input class="span10 date-picker form-control" name="endTime"
+                                                           id="endTime"
+                                                           autocomplete="off" type="text" endDateformat="yyyy-mm-dd"
+                                                           readonly
+                                                           style="width:150px;cursor: pointer" placeholder="结束时间" title="结束时间"/>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;padding-left:5px;">
+                                                <a id="key-search" class="btn btn-light btn-sm" v-on:click="getList" title="查询">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-search"></i>查询</a>
+                                            </td>
+                                            <td style="vertical-align:top">
+                                                <a class="btn btn-light btn-sm" v-on:click="rest"title="重置">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-refresh-cw"></i>重置</a>
+                                            </td>
+                                            <td  style="vertical-align:top">
+                                                <a v-show="toExcel" class="btn btn-light btn-sm" v-on:click="goExcel">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="mdi mdi-cloud-download" title="导出到Excel"></i>导出</a>
+                                            </td>
+                                            <td v-show="loading">
+                                                <!-- [加载状态 ] start -->
+                                                <div class="d-flex justify-content-center" style="margin-top:-10px;">
+                                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <!-- [ 加载状态  ] End -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <!-- 检索  -->
+                                <div class="card-block table-border-style" style="margin-top: -15px">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 35px;" id="cts">
+                                                    <div class="checkbox d-inline">
+                                                        <input type="checkbox" name="fhcheckbox" id="zcheckbox">
+                                                        <label style="max-height: 12px;" for="zcheckbox"
+                                                               class="cr"></label>
+                                                    </div>
+                                                </th>
+                                                <th style="width:35px;">序号</th>
+                                                <th>文档编号</th>
+                                                <th>文档名称</th>
+                                                <th>版本号</th>
+                                                <th>生成单位</th>
+                                                <th>密级名称</th>
+                                                <th>编辑人</th>
+                                                <th>编制时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            <!-- 开始循环 -->
+                                            <template v-for="(data,index) in varList">
+                                                <tr>
+                                                    <td>
+                                                        <div class="checkbox d-inline">
+                                                            <input type="checkbox" v-bind:id="'zcheckbox'+index"
+                                                                   name='ids' v-bind:value="data.JSZL_ID">
+                                                            <label style="max-height: 12px;"
+                                                                   v-bind:for="'zcheckbox'+index" class="cr"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td scope="row"class="boldXh" >{{page.showCount*(page.currentPage-1)+index+1}}</td>
+                                                    <td>{{data.WDBH}}</td>
+                                                    <td>{{data.WDMC}}</td>
+                                                    <td>{{data.BBH}}</td>
+                                                    <td>{{data.LSDWMC}}</td>
+                                                    <td>{{data.MJMC}}</td>
+                                                    <td>{{data.BJRMC}}</td>
+                                                    <td>{{data.BZSJ}}</td>
+                                                    <td class="boldCz">
+                                                        <a v-show="edit" title="修改" v-on:click="goEdit(data.JSZL_ID)"
+                                                           style="cursor:pointer;"><i
+                                                                class="feather icon-edit-2"></i></a>
+                                                        <a title="查看" v-on:click="goView(data.JSZL_ID)"
+                                                           style="cursor:pointer;"><i class="feather icon-eye"></i></a>
+                                                        <a v-show="del" title="删除" v-on:click="goDel(data.JSZL_ID)"
+                                                           style="cursor:pointer;"><i class="feather icon-x"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                            <tr v-show="varList.length==0">
+                                                <td colspan="20">没有相关数据</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                                     v-html="page.pageStr"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- [ Hover-table ] end -->
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+<!--底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/jslx/wjgl/wjgl_list.js"></script>
+
+
+</body>
+</html>

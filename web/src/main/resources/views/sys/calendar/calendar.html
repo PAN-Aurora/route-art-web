@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>装备管理信息系统</title>
+
+		<meta name="description" content="with draggable and editable events" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="../../../assets/plugins/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css" />
+
+		<!-- page specific plugin styles -->
+		<link rel="stylesheet" href="../../../plugins/calendar/fullcalendar.css" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="../../../plugins/calendar/ace.min.css" />
+
+		<link rel="stylesheet" href="../../../plugins/calendar/ace-skins.min.css" />
+		<link rel="stylesheet" href="../../../plugins/calendar/ace-rtl.min.css" />
+		
+		<!-- 车辆样式css -->
+		<link rel="stylesheet" href="/assets/css/dgreen_style.css">
+		<!-- 黄山样式css -->
+		<!-- <link rel="stylesheet" href="/assets/css/ygreen_style.css"></link> -->
+
+		<!-- element UI -->
+		<link rel="stylesheet" href="../../../assets/element/index.css">				
+
+		<!-- ace settings handler -->
+		<script src="../../../plugins/calendar/ace-extra.min.js"></script>
+		<!-- vue -->
+		<script src="../../../assets/js-vue/vue.js"></script>
+		<!--全局配置-->
+		<script src="../../../assets/js-v/config.js"></script>
+		<!-- element UI -->
+		<script src="../../../assets/element/index.js"></script>
+
+		<style type="text/css">
+			.el-dialog{
+				width: 40%;
+			}
+			.el-date-editor{
+				width: 100% !important;
+			}
+			.el-dialog__body{
+				margin-top: -10px;
+				padding-top:0px;
+			}
+			
+		</style>
+	</head>
+
+	<body  class="no-skin">
+		<div id="app" >
+			<div id="navbar" class="navbar" style="display: none;">		
+
+			</div>
+			<div class="main-container" id="main-container">
+				<div class="main-content">
+					<div class="page-content">
+	
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-sm-9">
+										<div class="space"></div>
+	
+										<div id="calendar"></div>
+	
+										<!-- 编辑页面弹框 -->
+										<el-dialog v-dialogdrag :visible.sync="addFormVisible" :before-close="handleClose">
+											<el-row style="margin-bottom: 16px;">
+												<el-col :span="24"  style="text-align: center;">
+													<el-button icon="el-icon-check" size="mini" style="width: 66px;height:34px;margin-top:1px;"  type="success"  @click="save">保存</el-button>
+													<el-button v-if="form.id !=''" icon="el-icon-delete" size="mini" style="width: 66px;height:34px;margin-top:1px;margin-left: 0px;"  type="danger"  @click="deleteCal">删除</el-button>
+													<el-button icon="el-icon-close" size="mini" style="width: 66px;height:34px;margin-top:1px;margin-left: 0px;"  type="info" @click="resert">取消</el-button>
+												</el-col>
+											</el-row>											
+											<el-form  :model="form" ref="form" id="form">
+												<el-row>
+													<el-col :span="24">
+														<el-form-item label="任务名称：" required="true" :label-width="formLabelWidth" >
+															<el-input type="textarea" v-model="form.title" ></el-input>
+														</el-form-item>
+													</el-col>
+												</el-row>
+												<el-row>													
+													<el-col :span="11">
+														<el-form-item label="开始时间：" required="true" :label-width="formLabelWidth">
+															<el-date-picker
+																id="start"
+																v-model="form.start"  												
+																type="datetime"
+																format="yyyy-MM-dd HH:mm"
+																value-format="yyyy-MM-dd HH:mm:ss"
+																placeholder="选择开始时间" 
+																:picker-options="startPickerOptions">
+															</el-date-picker>
+														</el-form-item>
+													</el-col>
+													<el-col :span="11" :offset="2">
+														<el-form-item label="结束时间：" :label-width="formLabelWidth">
+															<el-date-picker
+															id="end"
+																v-model="form.end"
+																type="datetime"
+																format="yyyy-MM-dd HH:mm"
+																value-format="yyyy-MM-dd HH:mm:ss"
+																placeholder="选择结束时间"
+																:picker-options="endPickerOptions">
+															</el-date-picker>
+														</el-form-item>
+													</el-col>
+												</el-row>
+												<el-row>
+													<el-col :span="4">
+														<el-form-item label="是否全天：" :label-width="formLabelWidth">
+															<el-switch v-model="form.allDay" active-value="1" inactive-value="0" ></el-switch>
+														</el-form-item>
+													</el-col>
+													<el-col :span="4" :offset="2">
+														<el-form-item label="自动提醒：" :label-width="formLabelWidth">
+															<el-switch v-model="form.zdtx" active-value="1" inactive-value="0"></el-switch>
+														</el-form-item>
+													</el-col>
+												</el-row>
+												<el-row>
+													
+													<el-col :span="11">
+														<el-form-item label="优先级：" :label-width="formLabelWidth">
+															<el-select v-model="form.sort" placeholder="请选择优先级" style="width: 100%;">
+																<el-option label="重要紧急" value="1"></el-option>
+																<el-option label="重要" value="2"></el-option>
+																<el-option label="一般" value="3"></el-option>
+															</el-select>
+														</el-form-item>
+													</el-col>
+													
+													<el-col :span="11" :offset="2">
+														<el-form-item label="背景颜色：" :label-width="formLabelWidth">
+															<el-select v-model="form.className[0]" placeholder="请选择背景颜色" >
+																<el-option v-for="color in predefineColors" :key="color.value" :label="color.label" 
+																:value="color.value" :class="color.value" style="color: white;margin-top: 6px;"></el-option>
+															</el-select>
+														</el-form-item>														
+													</el-col>
+													
+												</el-row>
+												
+												
+											</el-form>
+										</el-dialog>
+										
+									</div>								
+	
+									<div class="col-sm-3" style="margin-top: 16px;">
+										<div class="widget-box transparent">
+											<div class="widget-header">
+												<h4 style="color: #005443;">拖动事件</h4>
+											</div>
+	
+											<div class="widget-body">
+												<div class="widget-main no-padding">
+													<div id="external-events">
+														<div class="external-event label-grey" data-class="label-grey">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件1
+														</div>
+	
+														<div class="external-event label-success" data-class="label-success">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件2
+														</div>
+	
+														<div class="external-event label-danger" data-class="label-danger">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件3
+														</div>
+	
+														<div class="external-event label-purple" data-class="label-purple">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件4
+														</div>
+	
+														<div class="external-event label-yellow" data-class="label-yellow">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件5
+														</div>
+	
+														<div class="external-event label-pink" data-class="label-pink">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件6
+														</div>
+	
+														<div class="external-event label-info" data-class="label-info">
+															<i class="ace-icon fa fa-arrows-alt"></i>
+															事件7
+														</div>
+
+														<label>
+															<el-button icon="el-icon-download" size="mini" style="width: 66px;height:34px;margin-top:1px;"  type="success"  @click="goExcel">导出</el-button>
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+	
+								<!-- PAGE CONTENT ENDS -->
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+	
+				<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+					<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+				</a>
+			</div><!-- /.main-container -->
+	
+		</div>
+		
+		<script src='/plugins/calendar/jquery.min.js'></script>
+
+		<script src="/plugins/calendar/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script src="/plugins/calendar/jquery-ui.custom.min.js"></script>
+		<script src="/plugins/calendar/jquery.ui.touch-punch.min.js"></script>
+		<script src="/plugins/calendar/fullcalendar.min.js"></script>
+		<script src="/plugins/calendar/bootbox.min.js"></script>
+
+		<!-- ace scripts -->
+		<script src="/plugins/calendar/ace-elements.min.js"></script>
+		<script src="/plugins/calendar/ace.min.js"></script>			
+
+		<script src="/assets/js-vue/dialogDrag.js"></script>
+		<script type="text/javascript" src="/assets/js-v/sys/calendar.js"></script>
+		<script type="text/javascript" src="/assets/js-v/sys/yscalendar.js"></script>
+		
+		
+	</body>
+</html>

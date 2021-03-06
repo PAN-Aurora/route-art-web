@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <script src="../../../assets/js-v/header.js"></script>
+
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app" v-cloak>
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <div style="width: 100%;">
+                            <div id="showform">
+                                <div class="input-group" style="margin-top:-15px;background-color: white">
+                                    <span style="width: 100%;height:50px;text-align: center;">
+                                       <a class="btn btn-light btn-sm btn-danger" onclick="top.Dialog.close()">
+                                           <i style="margin-top:-3px;margin-left: -6px;"
+                                              class="feather icon-x"></i>取消</a>
+                                    </span>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;"
+                                        >名称：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="NAME" id="NAME" v-model="pd.NAME"
+                                           title="名称" readonly="readonly">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;"
+                                        >单位编码：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="BIANMA" id="BIANMA" v-model="pd.BIANMA"
+                                           title="单位编码" readonly="readonly">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">战区：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="ZQNM" id="ZQNM" v-model="pd.ZQNM"
+                                           checktype="nineInt" title="战区" readonly="readonly">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">区域：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="SSQYMC" id="SSQYMC" v-model="pd.SSQYMC"
+                                           maxlength="100" title="所属区域" readonly="readonly">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">电话：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="TEL" id="TEL" v-model="pd.TEL"
+                                           maxlength="11" title="电话" readonly="readonly">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">地址：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="ADDRESS" id="ADDRESS"
+                                           v-model="pd.ADDRESS" title="地址" readonly="readonly">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">经度：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="LON" id="LON" v-model="pd.LON"
+                                           maxlength="10" title="经度" readonly="readonly">
+
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">纬度：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="LAT" id="LAT" v-model="pd.LAT"
+                                           maxlength="10" title="纬度" readonly="readonly">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;">备注：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="BZ" id="BZ" v-model="pd.BZ"
+                                           maxlength="255" title="备注" readonly="readonly">
+                                </div>
+                            </div>
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:50px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/dept_view.js"></script>
+</body>
+</html>

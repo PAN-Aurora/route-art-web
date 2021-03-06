@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <title>图片上传</title>
+    <!--
+       Description：优化JS
+       Author：李可
+       Date：2020/4/30
+   -->
+    <!-- 引入头部JS-->
+    <script src="../../../assets/js-v/header.js"></script>
+</head>
+<style type="text/css">
+    .el-form-item{
+        margin-bottom: 0px;
+    }
+    .el-upload--picture-card{
+        height:132px;
+        width: 132px;
+        line-height: 130px;
+        pointer-events: none;
+    }
+    .el-upload-list__item{
+        height:132px !important;
+        width: 132px !important;
+        line-height: 130px;
+        margin: 0 8px 0 0 !important;
+    }
+
+    .el-upload--picture-card i{
+        display: none;
+    }
+    .el-upload-list__item-delete .el-icon-delete{
+        display: none;
+    }
+    .el-icon-close-tip{
+        display: none !important;
+    }
+</style>
+<body>
+    <div id="app"v-cloak>
+        <el-form>
+            <el-form-item label="" :label-width="formLabelWidth">
+                <el-upload ref="upload" action="#@!" accept="image/png,image/gif,image/jpg,image/jpeg"
+                    list-type="picture-card" :limit=limitNum :auto-upload="true" :file-list="fileList"
+                    :on-exceed="handleExceed" >
+                    <i class="el-icon-plus"></i>
+                </el-upload>
+                <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt="">
+                </el-dialog>
+            </el-form-item>
+        </el-form>
+    </div>
+    <!--引入脚部JS-->
+    <script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+    <script>
+        var httpurl = httpurl;
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                dialogImageUrl: '',
+                dialogVisible: false,
+                formLabelWidth: '100px',
+                limitNum: 5,
+                fileList: [],
+                url: httpurl + 'filelib/upload',
+                //业务id
+                bizid: '',
+                //业务类型
+                biztype: '',
+                //业务名称
+                bizname: '',
+            },
+
+            methods: {
+                //初始执行
+                init() {
+                    //业务id、业务类型、业务名称赋值
+                    this.bizid = getUrlKey('id');
+                    this.biztype = getUrlKey('type');
+                    this.bizname = getUrlKey('biz');
+
+                    if (!isEmpty(this.bizid) && !isEmpty(this.biztype)) {
+                        //根据id查询图片列表
+                        $.ajax({
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            url: httpurl + 'filelib/list',
+                            type: 'POST',
+                            data: { BIZID: this.bizid, BIZTYPE: this.biztype },
+                            dataType: 'json',
+                            success: function (data) {
+                                //将返回结果添加至file集合中
+                                if (data != null && data.varList != null) {
+                                    data.varList.forEach(function (item) {
+                                        var elem = { id: item.FILELIB_ID, name: item.FILENAME, url: httpurl + 'filelib/showimg?FILENAME=' + item.FILENAME };
+                                        vm.fileList.push(elem);
+                                    })
+                                }
+                            }
+                        })
+                    }
+                },
+
+                // 文件超出个数限制时的钩子
+                handleExceed(files, fileList) {
+                    this.$message({
+                        message: '最多上传' + this.limitNum + '张图片',
+                        type: 'warning'
+                    });
+                },
+
+                //上传文件
+                uploadFile(file) {
+                    if (isEmpty(this.bizid) || isEmpty(this.biztype)) {
+                        return;
+                    }
+                    //用formdata格式上传
+                    var fd = new FormData();
+                    fd.append("file", file);
+                    fd.append('bizid', this.bizid);
+                    fd.append('biztype', this.biztype);
+                    fd.append('bizname', this.bizname);
+                    //异步 跨域 上传文件
+                    $.ajax({
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        url: httpurl + 'filelib/upload',
+                        type: 'POST',
+                        data: fd,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            //返回结果添加到文件集合中
+                            if (data && data != null && data.result == 'success') {
+                                var fileinfo = data.file;
+                                var item = { id: fileinfo.FILELIB_ID, name: fileinfo.FILENAME, url: httpurl + 'filelib/showimg?FILENAME=' + fileinfo.FILENAME };
+                                vm.fileList.push(item);
+                            }
+                        }
+                    }).done().fail(function () {
+                        alert("登录失效!请求服务器无响应,稍后再试");
+                        $("#showform").show();
+                        $("#jiazai").hide();
+                    });
+                },
+            },
+
+            //初始化创建
+            mounted() {
+                this.init();
+            },
+        });
+    </script>
+    <style lang="scss" scoped>
+    </style>
+</body>
+
+</html>

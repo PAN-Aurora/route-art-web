@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>FH Admin</title>
+    <meta charset="utf-8"/>
+    <script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="../../../assets/element/index.css">
+    <!-- vue -->
+    <script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    <!-- import JavaScript -->
+    <script src="../../../assets/element/index.js"></script>
+
+<body>
+<div style="width:100%;" id="app">
+    <table style="width:100%;">
+        <tr>
+            <td style="width:15%;" valign="top">
+                <el-input placeholder="请输入关键字进行过滤" v-model="filterText" style="width: 65%">
+                </el-input>
+                <el-button type="success" size="mini" icon="el-icon-check" style="font-size: 15px"
+                           @click="savePublicDw">选择
+                </el-button>
+                <el-tree class="filter-tree" :data="treeData" :props="defaultProps" node-key="id"
+                         :default-expanded-keys="expands"
+                         :filter-node-method="filterNode" ref="tree" @node-click="nodeClick">
+                </el-tree>
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/PublicDw.js"></script>
+</body>
+
+</html>

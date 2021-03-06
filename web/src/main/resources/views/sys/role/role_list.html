@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>角色(基础权限)</title>
+   <!--
+    * Description：角色(基础权限)
+    * Author：杨乐天
+    * Date：2020/5/18
+    -->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<link rel="stylesheet" href="../../../assets/fonts/simple-line-icons/css/simple-line-icons.css">
+	<!--css-->
+	<script src="../../../assets/js-v/header.js"></script>
+	<!--滚动条样式设置-->
+	<link rel="stylesheet" href="/assets/css/page.css">
+</head>
+
+<body>
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+    <div class="pcoded-wrapper" id="app" >
+        <div class="pcoded-content" style="padding-top: 0px;">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+			    			<!-- [ Hover-table ] start -->
+                            <div class="col-xl-12">
+                                <div class="card">
+
+									<!--<table style="margin-top: 8px;margin-left: 15px;">-->
+										<!--<tr height="35">-->
+											<!--<td style="vertical-align:top;"><button v-show="add" v-on:click="addRole(0);" class="btn btn-light btn-sm"><i style="margin-top:-3px;margin-left: -6px;"-->
+																																						  <!--class="feather icon-plus"></i>新增组</button></td>-->
+											<!--&lt;!&ndash; 开始循环 &ndash;&gt;	-->
+								            <!--<template v-for="(role,index) in roleList">-->
+												<!--<td style="vertical-align:top;">-->
+													<!--<button v-bind:class="'btn btn-'+(ROLE_ID == role.role_ID?'secondary':'light')+' btn-sm'"  v-on:click="getList(role.role_ID)">-->
+													<!--<i class="feather icon-users"></i>{{role.role_NAME}}-->
+													<!--</button>-->
+												<!--</td>-->
+												<!--<td  style="vertical-align:top;"></td>-->
+											<!--</template>-->
+											<!--<td v-show="loading" style="vertical-align:top;">-->
+												<!--&lt;!&ndash; [加载状态 ] start &ndash;&gt;-->
+										    	<!--<div class="d-flex justify-content-center" style="margin-top:-1px;">-->
+		                                            <!--<div class="spinner-grow spinner-grow-sm" role="status">-->
+		                                                <!--<span class="sr-only">Loading...</span>-->
+		                                            <!--</div>-->
+		                                        <!--</div>-->
+										    	<!--&lt;!&ndash; [ 加载状态  ] End &ndash;&gt;-->
+											<!--</td>-->
+										<!--</tr>-->
+										<!--<tr v-show="roleList.length==0"><td colspan="100">没有相关数据</td></tr>-->
+									<!--</table>-->
+									
+									<table style="margin-top: 5px;margin-left: 15px;">
+										<tr>
+										<!--<td style="vertical-align:top;">本组：</td>-->
+										<td style="vertical-align:top;">
+										<!--<a v-show="edit" class="btn btn-light btn-sm" v-on:click="editRole(ROLE_ID)">修改组名称</a>-->
+											<a v-show="edit" class="btn btn-light btn-sm" v-on:click="editRights(ROLE_ID)">
+												<template v-if="ROLE_ID == '1'">Admin 菜单权限</template>
+												<!--<template v-if="ROLE_ID != '1'">组菜单权限</template>-->
+											</a>
+
+										</td>
+										</tr>
+									</table>
+
+									<table style="margin-top: 5px;margin-left: 15px;">
+										<tr>
+									<td style="vertical-align:top;">
+										<a class="btn btn-light btn-sm" v-on:click="addRole(ROLE_ID)"
+										   title="新增"><i style="margin-top:-3px;margin-left: -6px;"
+														 class="feather icon-plus"></i>新增</a>
+										<a v-show="del && ROLE_ID != '1'" class="btn btn-light btn-sm btn-danger"  title="删除" v-on:click="delRole(ROLE_ID,'z',pd.ROLE_NAME);">
+											<i style="margin-top:-3px;margin-left: -6px;" class="feather icon-trash-2"></i>删除</a>
+
+										</a>
+									</td>
+									</tr>
+									</table>
+									<div class="card-block table-border-style" style="margin-top: -15px">
+                                    	<div class="table-responsive">
+											<table class="table table-hover">
+												<thead>
+												<tr>
+													<th style="width:35px;">序号</th>
+													<th>角色</th>
+													<th>编码</th>
+													<th v-show="edit">增</th>
+													<th v-show="edit">删</th>
+													<th v-show="edit">改</th>
+													<th v-show="edit">查</th>
+													<th>操作</th>
+												</tr>
+												</thead>
+												<template v-for="(role,index) in roleList_z">
+													<tr>
+													<td scope="row" style="width:30px;" class="boldXh">{{index+1}}</td>
+													<td style="width:200px;" v-bind:id="'ROLE_NAMETd'+role.role_ID">{{role.role_NAME}}</td>
+													<td>{{role.rnumber }}</td>
+													<td style="width:30px;" v-show="edit"><a v-on:click="roleButton(role.role_ID,'add_qx')" title="分配新增权限" style="cursor:pointer;"><i class="icon-wrench"></i></a></td>
+													<td style="width:30px;" v-show="edit"><a v-on:click="roleButton(role.role_ID,'del_qx')" title="分配删除权限" style="cursor:pointer;"><i class="icon-wrench"></i></a></td>
+													<td style="width:30px;" v-show="edit"><a v-on:click="roleButton(role.role_ID,'edit_qx')" title="分配修改权限" style="cursor:pointer;"><i class="icon-wrench"></i></a></td>
+													<td style="width:30px;" v-show="edit"><a v-on:click="roleButton(role.role_ID,'cha_qx')" title="分配查看权限" style="cursor:pointer;"><i class="icon-wrench"></i></a></td>
+													<td style="width:155px;" class="boldCz">
+													<a v-show="edit" v-on:click="editRights(role.role_ID)" title="菜单权限" style="cursor:pointer;"><i class="feather icon-tag"></i></a>
+														<template v-if="role.role_ID != 'fhadminzhuche'"><!-- 注册用户角色不能修改 -->
+															<a v-show="edit" title="编辑" v-on:click="editRole(role.role_ID)" style="cursor:pointer;"><i class="feather icon-edit-2"></i></a>
+														</template>
+														<template v-if="role.role_ID != '1' && role.role_ID != 'fhadminzhuche'"><!-- 注册用户角色和admin角色不能删除 -->
+															<a v-show="del" title="删除" v-on:click="delRole(role.role_ID,'c',role.role_NAME);" style="cursor:pointer;"><i class="feather icon-x"></i></a>
+														</template>
+													</td>
+													</tr>
+												</template>
+												<tr v-show="roleList_z.length==0"><td colspan="100">没有相关数据</td></tr>
+											</table>
+										</div>
+                                	</div>
+								</div>
+                        	</div>
+                        	<!-- [ Hover-table ] end -->
+
+                    	</div>
+                    	<!-- [ Main Content ] end -->
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+<!-- [ 主内容区 ] end -->
+<!--js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/role_list.js"></script>
+
+</body>
+</html>

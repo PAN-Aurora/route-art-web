@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>新增角色</title>
+     <!--
+      * Description：新增角色
+      * Author：杨乐天
+      * Date：2020/5/19
+      -->
+    <!-- Meta -->
+    <script src="../../../assets/js-v/header.js"></script>
+</head>
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <div style="width: 100%;">
+                            <div id="showform">
+                                <div class="input-group" style="margin-top:-15px;background-color: white">
+							         <span style="width: 100%;height:50px;text-align: center;">
+							            <a class="btn btn-light btn-sm" v-on:click="save">
+											<i style="margin-top:-3px;margin-left: -6px;"
+                                               class="feather icon-check"></i>保存</a>
+                                         <a class="btn btn-light btn-sm btn-danger" onclick="top.Dialog.close()">
+                                             <i style="margin-top:-3px;margin-left: -6px;"
+                                                class="feather icon-x"></i>取消
+                                         </a>
+                                     </span>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top:-10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;"
+                                                                                                  notnullflag>名称：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="ROLE_NAME" id="ROLE_NAME"  checknull
+                                           checkillegal checkerror="用户名不能为空"  v-on:blur="hasRole"
+                                           v-model.trim="ROLE_NAME" maxlength="32"
+                                           placeholder="请输入名称" title="名称">
+                                </div>
+
+                            </div>
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:10px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only" id="fok">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/role_edit.js"></script>
+
+</body>
+</html>

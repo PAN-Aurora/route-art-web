@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>FH Admin</title>
+    <meta charset="utf-8" />
+    <!--
+        Description：优化JS
+        Author：李可
+        Date：2020/4/30
+    -->
+    <!-- 引入头部JS-->
+    <script src="../../../assets/js-v/header.js"></script>
+
+
+<body>
+<el-form id="app" ref="form" style="margin-top: 10px;" v-cloak>
+    <el-form-item style="margin-left: 10px;">
+        <el-input placeholder="输入关键字进行过滤" v-model="filterText" style="width: 65%">
+        </el-input>
+        <el-button type="success" size="mini" icon="el-icon-check" style="font-size: 15px" @click="savePublicDw">确定
+        </el-button>
+    </el-form-item>
+    <el-form-item>
+        <el-tree class="filter-tree" :data="treeData" :props="defaultProps" node-key="id"
+                 :default-expanded-keys="expands" :filter-node-method="filterNode" ref="tree"
+                 :default-checked-keys="selects" show-checkbox :check-strictly="true" @check-change="checkChange"
+                 :highlight-current="true" @node-click="nodeClick">
+                <span slot-scope="{node, data}">
+                    <i :class="data.icon"></i>
+                    <span>{{node.label}}</span>
+                </span>
+        </el-tree>
+    </el-form-item>
+</el-form>
+
+<!--引入脚部JS-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/delegate_select.js"></script>
+</body>
+
+</html>

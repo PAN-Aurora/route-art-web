@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>装备管理信息系统</title>
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/portal.css">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+
+    <!--引入弹窗组件-->
+    <link type="text/css" rel="stylesheet" href="../../../plugins/fhdrag/style.css"/>
+
+    <!--日历组件-->
+    <link rel="stylesheet" href="../../../plugins/calendar/calendar.css">
+
+    <link rel="stylesheet" prePath="../../../plugins/tab/" type="text/css" id="skin"/>
+    <script type="text/javascript" charset="utf-8" src="../../../plugins/tab/js/tab.js"></script>
+
+    <!-- elementUI -->
+    <link rel="stylesheet" href="/assets/element/index.css">
+    <!-- 车辆样式Css -->
+    <link rel="stylesheet" href="../../../assets/css/dgreen_style.css">
+    <!-- 黄山样式Css -->
+    <!-- <link rel="stylesheet" href="../../../assets/css/ygreen_style.css"> -->
+    <!-- vue -->
+    <script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+
+    <style type="text/css">
+        .pcoded-header .collapse .navbar-nav li {
+            font-size: 1.8vh;
+        }
+
+        .col-xl-12 {
+            height: 100%;
+        }
+
+        .row {
+            margin: 0px !important
+        }
+    </style>
+</head>
+
+<body id="FHSKIN3" class="" style="height: 100%;width: 100%;">
+<div id="app" style="height: 100%;background: rgba(0, 0, 0, 0);">
+
+    <!-- [ 头部 ] start -->
+
+    <header id="FHSKIN2" class="navbar pcoded-header navbar-expand-lg navbar-light ">
+        <div class="collapse navbar-collapse">
+            <span style="color: #001048;font-size: 26px;margin-left: 2%;font-weight: 500;width: 42vh;
+                height: 7.4vh;background: url('/assets/images/cl/header/portal_logo.png') no-repeat scroll center /100%;"></span>
+            <span style="font-size: 2.2vh;line-height: 7.5vh;">(V1.0)</span>
+            <span class="hyy"><span class="v1">欢迎您：{{user_name}}  &nbsp;&nbsp;</span>现在是：{{datetime}}</span>
+            <ul class="navbar-nav ml-auto" style="width: auto;">
+                <li>
+                    <div class="dropdown drp-user">
+                        <a style="cursor:pointer;color: #418175" class="dropdown-toggle" title="系统"
+                           data-toggle="dropdown">
+                            <i class="icon feather icon-settings"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right profile-notification">
+                            <div class="pro-head">
+                                <span>{{user_name}}</span>
+                            </div>
+                            <ul class="pro-body">
+                                <li v-show="systemset" v-on:click="sysSet"><a style="cursor:pointer;"
+                                                                              class="dropdown-item"><i
+                                        class="feather icon-settings"></i> 系统设置</a></li>
+                                <li v-on:click="goEditMyInfo"><a class="dropdown-item" style="cursor:pointer;"><i
+                                        class="feather icon-user"></i> 修改资料</a></li>
+                                <li v-on:click="logout"><a class="dropdown-item" style="cursor:pointer;"><i
+                                        class="feather icon-lock"></i> 退出系统</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </header>
+
+    <!-- [ 头部  ] end -->
+
+    <!-- [ 主内容区 ] start -->
+    <section id="mainFrame" class="pcoded-main-container" style="width: 100%;height:86.8vh;">
+        <div class="pcoded-left-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card" style="height: calc(50% - 1vh);">
+                                <span class="cardtitle">快速入口</span>
+                                <ul style="height:calc(100% - 37px);overflow: auto;">
+                                    <!--<template v-for="menu in menus">-->
+                                        <!--<li><a href="#"-->
+                                               <!--v-on:click="goQui(menu.url,menu.text)">-->
+                                            <!--<i class="feather icon-globe"-->
+                                               <!--style="margin-right: 1vh"></i>{{menu.text}}</a></li>-->
+                                    <!--</template>-->
+                                </ul>
+
+                            </div>
+
+                            <!--时间编辑日历start-->
+                            <div class="card" style="height: 50%;margin-bottom: 0px;">
+                                <div class="hdnr_letlef" style="height: 100%;">
+                                    <div id="myId" class="jalendar" style="height: 100%;">
+                                        <div id="calendar" class="calendar" style="height: 100%;overflow:auto;"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--时间编辑日历end-->
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+
+        </div>
+
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card" style="height: calc(50% - 10px);">
+                                <div id="tab_menu">
+                                    <div id="tab1" class="dbrwtit">
+                                        <div class="dhlef"><a href="#" id="dbrw" class="slt">待办任务</a><a href="#"
+                                                                                                        id="ybrw">已办任务</a>
+                                        </div>
+
+                                        <div class="dhrig">
+                                            <input type="submit" class="dhinp" value=""/>
+                                            <input type="text" class="dhtxt" v-model="KEYWORDS_LC"
+                                                   placeholder="请输入任务名称、申请人查询" @change="kwChange"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div id="page_dbrw" class="card-block table-border-style"
+                                     style="padding-right: 1% !important;">
+                                    <div class="dbrwtop">
+                                        <!--<a href="javascript:void(0);" id="" class="slt">全部</a>-->
+                                        <!--<a href="javascript:void(0);" id="ddcsjh">测试计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="dmzbjcjh">检查计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="hyjh">化验计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="jljh">计量计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="wzbg">物资变更</a>-->
+                                        <!--<a href="javascript:void(0);" id="xjjh">巡检计划</a>-->
+                                    </div>
+                                    <div class="dbrbot" style="height:calc(100% - 5vh);overflow: auto;">
+                                        <ul class="ul-db" style="margin-left: 0px;padding-right: 5%;">
+                                            <template v-for="task1 in ruTaskList">
+                                                <a title="办理"
+                                                   v-on:click="handle(task1.PROC_INST_ID_,task1.ID_,task1.DGRM_RESOURCE_NAME_,task1.PROC_DEF_ID_)"
+                                                   style="cursor:pointer;">
+                                                    <li v-bind:id="task1.ID_" style="font-size: 1.5vh;"><span>> </span>
+                                                        <i class="icon feather icon-mail" style="color: #004400">
+                                                            <span style="font-family: Arial, Helvetica, sans-serif;">  {{task1.PNAME_}}({{task1.INITATOR}}申请)</span></i>
+                                                        <span style="float: right;">{{task1.CREATE_TIME_}}</span>
+                                                    </li>
+                                                </a>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div id="page_ybrw" class="card-block table-border-style"
+                                     style="padding-right: 1% !important;display: none;">
+                                    <div class="dbrwtop">
+                                        <!--<a href="javascript:void(0);" id="" class="slt">全部</a>-->
+                                        <!--<a href="javascript:void(0);" id="ddcsjh">测试计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="dmzbjcjh">检查计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="hyjh">化验计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="jljh">计量计划</a>-->
+                                        <!--<a href="javascript:void(0);" id="wzbg">物资变更</a>-->
+                                        <!--<a href="javascript:void(0);" id="xjjh">巡检计划</a>-->
+                                    </div>
+                                    <div class="dbrbot" style="height:calc(100% - 5vh);overflow: auto;">
+                                        <ul class="ul-db" style="margin-left: 0px;padding-right: 5%;">
+                                            <template v-for="task1 in hiTaskList">
+                                                <a title="已办"
+                                                   v-on:click="view(task1.PROC_INST_ID_,task1.ID_,task1.DGRM_RESOURCE_NAME_)"
+                                                   style="cursor:pointer;">
+                                                    <li v-bind:id="task1.ID_" style="font-size: 1.5vh;"><span>> </span>
+                                                        <i class="icon feather icon-mail" style="color: #004400;">
+                                                            <span style="font-family: Arial, Helvetica, sans-serif;"> {{task1.PNAME_}}({{task1.INITATOR}}申请)</span>
+                                                        </i>
+                                                        <span style="float: right;">{{task1.START_TIME_}}</span>
+                                                    </li>
+                                                </a>
+                                            </template>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card" style="height: 50%;margin-bottom: 0px;">
+                                <span class="cardtitle">告预警</span>
+                                <div class="card-block table-border-style" style="padding-right: 1px !important;">
+                                    <div class="dbrwtop" style="height: 5vh;">
+                                        <a href="javascript:void(0);" class="slt">全部</a>
+                                        <a href="javascript:void(0);">公司页签</a>
+                                        <a href="javascript:void(0);">项目管理</a>
+                                    </div>
+
+                                    <ul class="ul-db"
+                                        style="margin-left: 0px;margin-bottom:0px;height:calc(100% - 5vh);padding-right: 5%;font-size: 1.5vh;color: #004400;">
+                                        <li><span>></span><i>【行政公告】通知</i>（2）<span
+                                                style="float: right;">2020-02-05</span></li>
+                                        <li><span>></span><i>【行政公告】通知</i>（2）<span
+                                                style="float: right;">2020-02-05</span></li>
+                                        <li><span>></span><i>【行政公告】通知</i>（2）<span
+                                                style="float: right;">2020-02-05</span></li>
+                                        <li><span>></span><i>下午15:30在会议室开会，请全体员工准时到达</i>（2）<span
+                                                style="float: right;">2020-02-05</span></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- [ Hover-table ] end -->
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+
+        <div class="pcoded-right-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12" style="height:100%">
+                            <div class="card" style="height: 100%;">
+                                <span class="cardtitle">应用大厅</span>
+                                <div class="yydt" style="height: calc(100% - 4vh);overflow-y: auto;">
+
+                                    <template v-for="group in groups">
+                                        <h2 style="width: 12vh;">{{group.text}}</h2>
+                                        <ul class="ul-yydt" style="overflow: auto;">
+                                            <template v-for="app in group.apps">
+                                                <li><a v-bind:href="app.url"><img
+                                                        v-bind:src="app.img"> </a>
+                                                    <p><a v-bind:href="app.url" style="height: 4vh;line-height: 4vh;">{{app.text}}</a></p></li>
+                                            </template>
+                                        </ul>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Hover-table ] end -->
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+    <!-- [ 主内容区 ] end -->
+    <div class="footer">北京航天长峰科技工业集团版权所有 ©1997-2020</div>
+    <div id="fhsmsobj"><!-- 声音消息提示 --></div>
+</div>
+<!-- Required Js -->
+<script type="text/javascript" src="../../../assets/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../assets/js/pcoded.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+
+<!-- elementUI -->
+<script src="/assets/element/index.js"></script>
+<!--引入弹窗组件start-->
+<script type="text/javascript" src="../../../plugins/fhdrag/drag.js"></script>
+<script type="text/javascript" src="../../../plugins/fhdrag/dialog.js"></script>
+<!--引入弹窗组件end-->
+
+<!--日历组件start-->
+<script type="text/javascript" src="../../../plugins/calendar/calendar.js"></script>
+<!--日历组件end-->
+
+<!-- 提示 -->
+<script type="text/javascript" src="../../../assets/js/jquery.tips.js"></script>
+<!--工具js-->
+<script type="text/javascript" src="/assets/js-v/util/tools.js"></script>
+<script type="text/javascript" src="../../../assets/js-v/sys/portal.js"></script>
+
+</body>
+</html>

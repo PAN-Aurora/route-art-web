@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admins</title>
+	<!--顶部js-->
+	<script src="../../../assets/js-v/header.js"></script>
+
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+							
+										<!-- 检索  -->
+										<input type="hidden" name="TYPE" value="${pd.TYPE}" />
+										<div style="padding-left: 15px;padding-top: 8px;">
+											<table>
+												<tr>
+													<td><span class="searchName">模糊查询：</span>
+														<div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+                                                        	<input class="form-control" type="text" v-model="pd.KEYWORDS" onkeydown="keyDown()" placeholder="请输入关键词" />
+                                                    	</div>
+													</td>
+													<td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;发信时间：从&nbsp;&nbsp;</span>
+														<div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+								                        	<input type="text" class="form-control date" v-model="pd.STRARTTIME" id="STRARTTIME" readonly="readonly" placeholder="开始时间" title="开始时间" style="width:150px;">
+								                        </div>
+													</td>
+													<td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;到&nbsp;&nbsp; </span>
+														<div class="input-group input-group-sm mb-3 adjustMarg" style="float: left;width: auto;">
+								                        	<input type="text" class="form-control date" v-model="pd.ENDTIME" id="ENDTIME" readonly="readonly" placeholder="结束时间" title="结束时间" style="width:150px;">
+								                        </div>
+													</td>
+													<td style="vertical-align:top;padding-left:2px;margin-top: 5px;">
+														<select v-model="pd.STATUS" style="height: 30px;width:43px;padding-left:6px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;" title="状态">
+															<option value="">全部</option>
+															<option value="1">已读</option>
+															<option value="2">未读</option>
+														</select>
+													</td>
+													<td style="vertical-align:top;padding-left:5px;">
+														<a id="key-search" class="btn btn-light btn-sm" v-on:click="getList" style="width: 23px;height:30px;margin-top:1px;" title="检索"><i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-search"></i></a>
+													</td>							
+													<td style="padding-left:20px;vertical-align:top;"><button v-on:click="getListByType(1)" v-bind:class="'btn btn-'+(pd.TYPE != '2'?'secondary':'light')+' btn-sm'">收信箱</button></td>
+													<td style="padding-left:0px;vertical-align:top;"><button v-on:click="getListByType(2)" v-bind:class="'btn btn-'+(pd.TYPE == '2'?'secondary':'light')+' btn-sm'">发信箱</button></td>
+													<td v-show="loading">
+														<!-- [加载状态 ] start -->
+												    	<div class="d-flex justify-content-center" style="margin-top:-10px;">
+				                                            <div class="spinner-grow spinner-grow-sm" role="status">
+				                                                <span class="sr-only">Loading...</span>
+				                                            </div>
+				                                        </div>
+												    	<!-- [ 加载状态  ] End -->
+													</td>
+												</tr>
+											</table>
+										</div>
+										<!-- 检索  -->
+									
+										<div class="card-block table-border-style" style="margin-top: -15px">
+                                       					<div class="table-responsive">
+												<table class="table table-hover">
+													<thead>
+														<tr>
+															<th style="width: 35px;" id="cts">
+									                            <div class="checkbox d-inline">
+		                                                            <input type="checkbox" name="fhcheckbox" id="zcheckbox">
+		                                                            <label  style="max-height: 12px;" for="zcheckbox" class="cr"></label>
+		                                                        </div>
+															</th>
+															<th style="width:35px;">序号</th>
+															<th>发信人</th>
+															<th>收信人</th>
+															<th>发信时间</th>
+															<th>状态</th>
+															<th>操作</th>
+														</tr>
+													</thead>
+																			
+													<tbody>
+														<!-- 开始循环 -->	
+														<template v-for="(data,index) in varList">
+															<tr>
+																<td>
+																  	<div class="checkbox d-inline">
+	                                                            		<input type="checkbox" v-bind:id="'zcheckbox'+index" name='ids' v-bind:title="data.TO_USERNAME=='系统消息'?'admin':data.TO_USERNAME" v-bind:value="data.FHSMS_ID" >
+	                                                            		<label  style="max-height: 12px;" v-bind:for="'zcheckbox'+index" class="cr"></label>
+	                                                        		</div>
+																 </td>
+																<td style="width: 30px;" scope="row" class="boldXh">{{page.showCount*(page.currentPage-1)+index+1}}</td>
+																<template v-if="pd.TYPE != '2'">
+																<td><a v-on:click="viewUser(data.TO_USERNAME)" style="cursor:pointer;">{{data.TO_USERNAME}}</a></td>
+																<td><a v-on:click="viewUser(data.FROM_USERNAME)" style="cursor:pointer;">{{data.FROM_USERNAME}}</a></td>
+																</template>
+																<template v-if="pd.TYPE == '2'">
+																<td><a v-on:click="viewUser(data.FROM_USERNAME)" style="cursor:pointer;">{{data.FROM_USERNAME}}</a></td>
+																<td><a v-on:click="viewUser(data.TO_USERNAME)" style="cursor:pointer;">{{data.TO_USERNAME}}</a></td>
+																</template>
+																<td>{{data.SEND_TIME}}</td>
+																<td v-bind:id="'STATUS'+index+1">
+																	<template v-if="data.STATUS == '2'"><span class="badge badge-warning">未读</span></template>
+																	<template v-if="data.STATUS == '1'"><span class="badge badge-success">已读</span></template>
+																</td>
+																<td class="boldCz">
+																	<a title="查看" v-on:click="viewx('STATUS'+index+1,data.STATUS,pd.TYPE == '2'?'2':'1',data.FHSMS_ID,data.SANME_ID);" style="cursor:pointer;">
+																		<i class="feather icon-search"></i>
+																	</a>
+																	<a title="删除" v-on:click="goDel('STATUS'+index+1,data.STATUS,pd.TYPE == '2'?'2':'1',data.FHSMS_ID,data.SANME_ID);" style="cursor:pointer;">
+																		<i class="feather icon-x"></i>
+																	</a>
+																</td>
+															</tr>
+														</template>
+														<tr v-show="varList.length==0">
+															<td colspan="10">没有相关数据</td>
+														</tr>
+													</tbody>
+												</table>
+												
+												<table style="width:100%;margin-top:15px;">
+													<tr>
+														<td style="vertical-align:top;">
+															<a class="btn btn-light btn-sm" v-on:click="makeAll('确定要删除选中的数据吗?');" title="批量删除" >删除</a>
+														</td>
+														<td style="vertical-align:top;"><div style="float: right;padding-top: 0px;margin-top: 0px;" v-html="page.pageStr"></div></td>
+													</tr>
+												</table>
+											</div>
+										</div>
+															
+									</div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+	<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/fhsms_list.js"></script>
+
+</body>
+</html>

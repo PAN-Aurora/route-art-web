@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>日志管理</title>
+    <!--
+     * Description：日志管理
+     * Author：杨乐天
+     * Date：2020/5/18
+     -->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!--顶部js-->
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--滚动条样式设置-->
+    <link rel="stylesheet" href="/assets/css/page.css">
+</head>
+<body>
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content" style="padding-top: 0px;">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <!-- 检索条件  -->
+                                <div style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
+                                    <table>
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <a class="btn btn-light btn-sm btn-danger"
+                                                   v-on:click="makeAll('确定要删除选中的数据吗?')" title="删除">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-trash-2"></i>删除</a>
+                                            </td>
+                                            <td><span class="searchName">模糊查询：</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: 200px;">
+                                                    <input class="form-control" onkeyup="keyDown()" id="keyWords"
+                                                           type="text" v-model="pd.keyWords" placeholder="请输入用户名、事件查询"/>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;padding-left:5px;">
+                                                <a id="key-search" class="btn btn-light btn-sm" v-on:click="getList"
+                                                   title="检索">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-search"></i>查询</a>
+                                                <a class="btn btn-light btn-sm" v-on:click="rest" title="重置">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-refresh-cw"></i>重置</a>
+                                            </td>
+                                            <td v-show="loading">
+                                                <!-- [加载状态 ] start -->
+                                                <div class="d-flex justify-content-center" style="margin-top:-5px;">
+                                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <!-- [ 加载状态  ] End -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <!-- 检索  -->
+                                </div>
+                                <div class="card-block table-border-style" style="margin-top: -20px">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 35px;" id="cts">
+                                                    <div class="checkbox d-inline">
+                                                        <input type="checkbox" name="fhcheckbox" id="zcheckbox">
+                                                        <label style="max-height: 12px;" for="zcheckbox"
+                                                               class="cr"></label>
+                                                    </div>
+                                                </th>
+                                                <th style="width: 35px;">序号</th>
+                                                <th>用户名</th>
+                                                <th>事件</th>
+                                                <th>操作时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <!-- 开始循环 -->
+                                            <template v-for="(data,index) in varList">
+                                                <tr>
+                                                    <td>
+                                                        <div class="checkbox d-inline">
+                                                            <input type="checkbox" v-bind:id="'zcheckbox'+index"
+                                                                   name='ids' v-bind:value="data.FHLOG_ID">
+                                                            <label style="max-height: 12px;"
+                                                                   v-bind:for="'zcheckbox'+index" class="cr"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td scope="row" class="boldXh">
+                                                        {{page.showCount*(page.currentPage-1)+index+1}}
+                                                    </td>
+                                                    <td>{{data.USERNAME}}</td>
+                                                    <td>{{data.CONTENT}}</td>
+                                                    <td>{{data.CZTIME}}</td>
+                                                    <td class="boldCz">
+                                                        <a v-show="del" title="删除" v-on:click="goDel(data.FHLOG_ID)"
+                                                           style="cursor:pointer;"><i class="feather icon-x"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                            <tr v-show="varList.length==0">
+                                                <td colspan="10">没有相关数据</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <table style="width:100%;margin-top:15px;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                                     v-html="page.pageStr"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Hover-table ] end -->
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<!--js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/fhlog_list.js"></script>
+
+</body>
+</html>

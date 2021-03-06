@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>二维码列表</title>
+    <!--
+    Description：选择装备物资列表页面
+    Author：李可
+    Date：2020/12/18
+    -->
+    <!--引入头js-->
+    <script src="../../../assets/js-v/header.js"></script>
+
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+<div style="margin: 0 0px;" id="app" v-cloak>
+    <table class="table table-hover">
+        <template v-for="(data,index) in imgData">
+            <img v-bind:src="data" >
+        </template>
+    </table>
+</div>
+<!--底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/zcgl/wzdj/wzdj_qrcode.js"></script>
+</body>
+
+</html>

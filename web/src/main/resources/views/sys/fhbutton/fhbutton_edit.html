@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="author" content="FH Admin QQ313596790"/>
+    <!--引入头部js-->
+    <script src="../../../assets/js-v/header.js"></script>
+
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <div style="width: 100%;">
+                            <div id="showform" style="padding-top: 0px;">
+                                <div class="input-group" style="margin-top:-10px;background-color: white">
+							         <span style="width: 100%;height:50px;text-align: center;">
+							            <a class="btn btn-light btn-sm" v-on:click="save">
+											<i style="margin-top:-3px;margin-left: -6px;"
+                                               class="feather icon-check"></i>保存</a>
+                                         <a class="btn btn-light btn-sm btn-danger" onclick="top.Dialog.close()">
+                                             <i style="margin-top:-3px;margin-left: -6px;"
+                                                class="feather icon-x"></i>取消
+                                         </a>
+                                     </span>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top:-10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;">
+                                            <span style="width: 100%;" notnullflag>按钮名称：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="NAME" id="NAME" checknull checkillegal
+                                           checkerror="按钮名称不能为空"
+                                           v-model="pd.NAME" maxlength="20" placeholder="请输入按钮名称" title="按钮名称">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;"><span style="width: 100%;"
+                                                                                                  notnullflag>权限标识：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="SHIRO_KEY" id="SHIRO_KEY" checknull
+                                           checkillegal checkerror="权限标识不能为空"
+                                           v-on:input="changecode(pd.SHIRO_KEY)" v-model="pd.SHIRO_KEY" maxlength="20"
+                                           placeholder="请输入权限标识" title="权限标识">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;"><span style="width: 100%;"
+                                                                                                  notnullflag>备注说明：</span></span>
+                                    </div>
+                                    <input class="form-control" type="text" ref="BZ" id="BZ" checknull
+                                           checkerror="备注说明不能为空"
+                                           v-model="pd.BZ" maxlength="50" placeholder="请输入备注说明" title="备注说明">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 100px;align-items: baseline"><span style="width: 100%;"
+                                                                                                  notnullflag>标签代码：</span></span>
+                                    </div>
+                                    <textarea class="form-control" rows="5" cols="10" id="code" readonly="readonly"
+                                              title="代码区,禁止手动请输入">{{code}}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:50px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+<!--引入脚部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/fhbutton_edit.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html style="height: 100%">
+
+<head>
+    <meta charset="UTF-8">
+    <title>导航菜单代码</title>
+    <!--引用头js-->
+    <script src="/assets/js-v/header.js"></script>
+</head>
+
+<body>
+    <div id="app" style="height: 100%">
+
+        <el-row>
+            <el-menu id="menu" class="el-menu-demo" mode="horizontal" :default-active="activeIndex"> 
+                <template v-for="(item,index) in menujson">
+                    <tab-menu v-bind:menu="item" v-bind:index="index" v-bind:pid="'A'"></tab-menu> 
+                </template>
+            </el-menu>
+
+        </el-row>
+        <el-row style="height: calc(100% - 80px);width: 100%">
+            <iframe name="mainFrame" id="mainFrame" frameborder="0" src="" style="height: 100%;width: 100%"></iframe>
+        </el-row>
+              
+    </div>
+
+    <!--引入底部js-->
+    <script type="text/javascript" src="/assets/js-v/footer.js"></script>
+    <!-- 本页面js -->
+    <script type="text/javascript" src="/assets/js-v/zcgl/homepage/rwgl.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+ * Description：资产管理统计查询
+ * Author：孟凡星
+ * Date：2020/12/31
+-->
+<head>
+    <meta charset="utf-8">
+    <title>资产管理-物资统计查询列表页面</title>
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--滚动条样式设置-->
+    <link rel="stylesheet" href="../../../assets/css/page.css">
+</head>
+<style>
+    .el-table__expanded-cell[class*="cell"] {
+        padding: 10px 15px;
+        border: 1px solid #34A273;
+        z-index: 2;
+    }
+</style>
+<body>
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content" style="padding-top: 0px;">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!-- [ Hover-table ] start -->
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <!-- 检索  -->
+                                <div style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
+                                    <table style="margin-top:5px;">
+                                        <tr>
+                                            <td><span class="searchName">模糊查询：</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: auto;">
+                                                    <input class="form-control" type="text" v-model="keyWords"
+                                                           onkeydown="keyDown()" style="width: 250px"
+                                                           title="请输入物资名称、物资编号查询" placeholder="请输入物资名称、物资编号查询"/>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <span class="searchName">责任人：</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: auto;">
+                                                    <input class="form-control" type="text" v-model="ZRR"
+                                                           v-on:click="getUser()"
+                                                           style="width: 150px"
+                                                           title="请选择责任人" placeholder="请选择责任人"/>
+                                                    <input type="hidden" v-model="ZRRNM"/>
+                                                    <span class="feather icon-user btn-lg"
+                                                          style="margin:-6px 10px 10px 108px;
+                                                            position: absolute;
+                                                            vertical-align: middle;
+                                                            cursor: pointer;
+                                                            z-index: 99;"
+                                                          v-on:click="getUser()"></span>
+                                                </div>
+                                            </td>
+
+                                            <td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;登记时间：从&nbsp;&nbsp;</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: auto;">
+                                                    <input class="span10 date-picker form-control" name="startTime"
+                                                           id="startTime"
+                                                           autocomplete="off" type="text" startDateformat="yyyy-mm-dd"
+                                                           readonly
+                                                           style="width:150px;cursor: pointer" placeholder="开始时间"
+                                                           title="开始时间"/>
+                                                </div>
+                                            </td>
+                                            <td style="padding-left:2px;"><span class="searchName">&nbsp;&nbsp;到&nbsp;&nbsp;</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: auto;">
+                                                    <input class="span10 date-picker form-control" name="endTime"
+                                                           id="endTime" readonly
+                                                           autocomplete="off" type="text" endDateformat="yyyy-mm-dd"
+                                                           style="width:150px;cursor: pointer" placeholder="结束时间"
+                                                           title="结束时间"/>
+                                                </div>
+                                            </td>
+                                            <td style="padding-left:2px;">
+                                                <span class="searchName">&nbsp;&nbsp;物资分类：&nbsp;&nbsp;</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: auto;">
+                                                    <select class="js-example-placeholder-multiple col-sm-12"
+                                                            v-model="WZFLNM" style="width: 100px;"
+                                                            id="WZFLNM" data-placeholder="请选择">
+                                                        <option value=""></option>
+                                                        <template v-for="data in wzfl_options">
+                                                            <option v-bind:value="data.dictionaries_ID">{{data.name}}
+                                                            </option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td style="vertical-align:top;padding-left:5px;">
+                                                <a id="key-search" class="btn btn-light btn-sm" v-on:click="getList"
+                                                   title="检索">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-search"></i>查询</a>
+                                                <a class="btn btn-light btn-sm" v-on:click="rest" title="重置">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-refresh-cw"></i>重置</a>
+
+                                                <a v-show="true" class="btn btn-light btn-sm" v-on:click="goExcel"
+                                                title="导出到excel表格">
+                                                <i style="margin-top:-3px;margin-left: -6px;"
+                                                class="mdi mdi-cloud-download"></i>导出
+                                                </a>
+                                            </td>
+                                            <td v-show="loading">
+                                                <!-- [加载状态 ] start -->
+                                                <div class="d-flex justify-content-center" style="margin-top:-10px;">
+                                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only">Loading...</span>
+                                                    </div>
+                                                </div>
+                                                <!-- [ 加载状态  ] End -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <!-- 注意：el-table 上加一个 ref="table" -->
+                                <div class="card-block table-border-style" style="margin-top: -15px">
+                                    <div class="table-responsive">
+                                        <table id="simple-table" class="table table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 50px;" id="cts">
+                                                    <div class="checkbox d-inline">
+                                                        <input type="checkbox" name="fhcheckbox" id="zcheckbox">
+                                                        <label style="max-height: 12px;" for="zcheckbox"
+                                                               class="cr"></label>
+                                                    </div>
+                                                </th>
+                                                <th style="width:50px;">序号</th>
+                                                <th >物资编号</th>
+                                                <th>物资名称</th>
+                                                <th>物资分类</th>
+                                                <th>生产厂家</th>
+                                                <th>型号</th>
+                                                <th>计量单位</th>
+                                                <th>单价(元)</th>
+                                                <th >责任人</th>
+                                                <th >所属部门</th>
+                                                <th>登记日期</th>
+                                                <th>备注</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <!-- 开始循环 -->
+                                            <template v-for="(data,index) in varList">
+                                                <tr>
+                                                    <td>
+                                                        <div class="checkbox d-inline">
+                                                            <input type="checkbox" v-bind:id="'zcheckbox'+index"
+                                                                   name='ids' v-bind:value="data.WZKC_ID">
+                                                            <label style="max-height: 12px;"
+                                                                   v-bind:for="'zcheckbox'+index"
+                                                                   class="cr"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td scope="row" class="boldXh">
+                                                        {{page.showCount*(page.currentPage-1)+index+1}}
+                                                    </td>
+                                                    <td>{{data.WZBH}}</td>
+                                                    <td>{{data.WZMC}}</td>
+                                                    <td>{{data.WZFL}}</td>
+                                                    <td>{{data.SCCJ}}</td>
+                                                    <td>{{data.XH}}</td>
+                                                    <td>{{data.JLDW}}</td>
+                                                    <td>{{data.DJ}}</td>
+                                                    <td>{{data.ZRR}}</td>
+                                                    <td>{{data.SSBM}}</td>
+                                                    <td>{{data.DJRQ}}</td>
+                                                    <td>{{data.BZ}}</td>
+                                                </tr>
+                                            </template>
+                                            <tr v-show="varList.length==0">
+                                                <td colspan="20">没有相关数据</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="vertical-align:top;">
+                                                <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                                     v-html="page.pageStr"></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- [ Hover-table ] end -->
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="myForm" name="myForm" method="post">
+        <input type="hidden" name="DATA_IDS" v-model="DATA_IDS"/>
+        <input type="hidden" name="keyWords" v-model="keyWords"/>
+        <input type="hidden" name="startTime" v-model="startTime"/>
+        <input type="hidden" name="endTime" v-model="endTime"/>
+        <input type="hidden" name="SSBMNM" v-model="SSBMNM"/>
+        <input type="hidden" name="ZRR" v-model="ZRR"/>
+        <input type="hidden" name="WZFLNM" v-model="WZFLNM"/>
+    </form>
+</div>
+<!-- [ 主内容区 ] end -->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<script type="text/javascript" src="/assets/plugins/layer/layer.js"></script>
+<!-- 本页面js -->
+<script src="../../../assets/js-v/zcgl/tjcx/kccx_list.js"></script>
+</body>
+</html>

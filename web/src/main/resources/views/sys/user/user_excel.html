@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>初始库存</title>
+    <!--/**
+     * Description：
+     * Author：杨乐天
+     * Date：2020/3/13
+     */-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!--css-->
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--前端常量-->
+    <script src="/assets/js-v/znck/common/const.js"></script>
+
+    <style type="text/css">
+        div.costs-uploadfile-div {
+            position: relative;
+            cursor: pointer;
+            margin-left: 2px;
+        }
+
+        div.costs-uploadfile-div #textfield {
+            width: 473px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        div.costs-uploadfile-div #fileField {
+            width: 473px;
+            height: 30px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            filter: alpha(opacity:0);
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app">
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+
+                        <div style="width: 100%;">
+                            <div id="showform">
+                                <div class="input-group" style="margin-top:-10px;background-color: white">
+					            	<span style="width: 100%;text-align: center;">
+					            		<a class="btn btn-light btn-sm" v-on:click="goUpload">导入</a>
+					            		<a class="btn btn-light btn-sm btn-danger" onclick="top.Dialog.close();">取消</a>
+					            		<a class="btn btn-light btn-sm" v-on:click="goDownload">下载模版</a>
+					            	</span>
+                                </div>
+                                <div class="input-group input-group-sm mb-3"  style="background-color: #F2F2F2;margin-top: 10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"
+                                              style="width: 79px;background-color: #F4F7FA;"><span style="width: 100%;font-size: 14px">excel文件：</span></span>
+                                    </div>
+                                    <div class="costs-uploadfile-div">
+                                        <input type="file" id="fileField" onchange="checkFileType(this)"/>
+                                        <input type='text' id="textfield" class="btn btn-light btn-sm"
+                                               value="请选择excel文件"/>
+                                    </div>
+                                </div>
+                                <div id="infoDiv" style="margin-top:10px;background-color: white">
+                                    <table class="table table-striped table-bordered table-hover" style="margin-top: 5px;">
+                                        <thead>
+                                        <tr>
+                                            <th class="center" style="width: 50px">序号</th>
+                                            <th class="center">导入信息</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="info"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:10px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/sys/user_excel.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>物资采购的修改页面</title>
+	<!--
+      * Description：资产管理-物资采购
+      * @Author：陈磊
+      * Date：2020-12-15
+      -->
+	<!--引入顶部js-->
+	<script src="../../../assets/js-v/header.js"></script>
+</head>
+
+<body style="background-color: white">
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+	<div class="loader-bg">
+		<div class="loader-track">
+			<div class="loader-fill"></div>
+		</div>
+	</div>
+	<!-- [ 主内容区 ] start -->
+	<div class="pcoded-wrapper" id="app" v-cloak>
+		<div class="pcoded-content">
+			<div class="pcoded-inner-content">
+				<div class="main-body">
+					<div class="page-wrapper">
+						<!-- [ Main Content ] start -->
+						<div class="row">
+
+							<div style="width: 100%;">
+								<div id="showform">
+									<div class="input-group" style="margin-top:-10px;background-color: white" >
+							            	<span style="width: 100%;height:50px;text-align: center;">
+							            		<a class="btn btn-light btn-sm" v-on:click="save">
+													<i style="margin-top:-3px;margin-left: -6px;"
+													   class="feather icon-check"></i>保存
+												</a>
+												<template v-if="msg == 'edit'">
+							            		    <a class="btn btn-light btn-sm" v-on:click="flowSubmit">
+														<i style="margin-top:-3px;margin-left: -6px;"
+														   class="feather icon-clipboard"></i>提交
+													</a>
+                                        		</template>
+							            		<a class="btn btn-light btn-sm btn-danger" v-on:click="cancel">
+													<i style="margin-top:-3px;margin-left: -6px;"
+													   class="feather icon-x"></i>取消
+												</a>
+							            	</span>
+									</div>
+									<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;"><span style="width: 100%;" notnullflag>采购单号：</span></span>
+										</div>
+										<input type="text" class="form-control" ref="CGDH" id="CGDH"  maxlength="50"
+											   checknull checkerror="不能为空" checkillegal placeholder="请输入采购单号"  title="采购单号" disabled>
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;"><span style="width: 100%;" notnullflag>采购名称：</span></span>
+										</div>
+										<input type="text" class="form-control" ref="CGMC" id="CGMC" maxlength="50"
+											   checknull checkerror="不能为空" checkillegal placeholder="请输入物资名称" title="采购名称">
+									</div>
+									<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;"><span style="width: 100%;">拟制人：</span></span>
+										</div>
+										<input type="text" class="form-control" ref="NZR" id="NZR" v-model="pd.NZR" maxlength="32"
+											   placeholder="请输入拟制人" title="拟制人" disabled>
+
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;"><span style="width: 100%;">采购日期：</span></span>
+										</div>
+										<input type="text" class="span10 date-picker form-control" dateformat="yyyy-mm-dd hh:ii" ref="CGRQ" id="CGRQ" maxlength="32" title="采购日期" >
+									</div>
+									<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;"><span style="width: 100%;">拟制时间：</span></span>
+										</div>
+										<input type="text" class="span10 date-picker form-control" dateformat="yyyy-mm-dd hh:ii" ref="NZSJ" id="NZSJ" maxlength="32" title="拟制时间" disabled>
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;"><span style="width: 100%;" >所属部门：</span></span>
+										</div>
+										<input type="text" class="form-control" ref="SSBM" id="SSBM" v-model="pd.SSBM" maxlength="32"
+											   placeholder="点击选择所属部门" title="所属部门" disabled>
+									</div>
+									<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+										<div class="input-group-prepend">
+											<span class="input-group-text" style="width: 100px;align-items: baseline"><span style="width: 100%;">备注：</span></span>
+										</div>
+										<textarea rows="1" type="text" class="form-control" ref="BZ" id="BZ"
+												  v-model="pd.BZ" maxlength="300" style="height: 80px" placeholder="请输入备注" title="备注"></textarea>
+									</div>
+								</div>
+								<!-- [加载状态 ] start -->
+								<div id="jiazai" style="display:none;margin-top:50px;">
+									<div class="d-flex justify-content-center">
+										<div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+											<span class="sr-only">Loading...</span>
+										</div>
+									</div>
+								</div>
+								    <!-- [ 加载状态  ] End -->
+									<template v-if="msg == 'edit'">
+										<div style="margin-top: 10px;width: 100%;">
+											<iframe name="treeFrame" id="treeFrame" frameborder="0"
+													v-bind:src="'../wzcgmx/wzcgmx_list.html?WZCG_ID='+WZCG_ID"
+													style="margin:0 auto;width:100%;height:466px;;"></iframe>
+										</div>
+									</template>
+								</div>
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+
+	<!--引入底部js-->
+	<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+	<!--本页面js-->
+	<script src="../../../assets/js-v/zcgl/wzcg/wzcg_edit.js"></script>
+
+</body>
+</html>

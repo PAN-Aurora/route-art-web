@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>技术路线图开发工具V1.0</title>
+    <!--
+     * Description：
+     * Author：邹靓
+     * Date：2020/3/17
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+
+    <!-- elementUI -->
+    <link rel="stylesheet" href="/assets/element/index.css">
+    <!-- 车辆样式Css -->
+    <link rel="stylesheet" href="../../../assets/css/dgreen_style.css">
+    <!-- 黄山样式Css -->
+    <!-- <link rel="stylesheet" href="../../../assets/css/ygreen_style.css"> -->
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+
+    <!--引入弹窗组件-->
+    <link type="text/css" rel="stylesheet" href="../../../plugins/fhdrag/style.css"/>
+
+    <!-- vue -->
+    <script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    <style type="text/css">
+        .pcoded-header .collapse .navbar-nav li {
+            font-size: 16px;
+        }
+
+        .pcoded-header .dropdown .dropdown-menu {
+            min-width: 148px;
+        }
+
+        .pcoded-header .dropdown .profile-notification .pro-head {
+            background: #418175 !important;
+        }
+
+        .hyy {
+            position: relative;
+
+        }
+
+        .main_top {
+            background: url(/assets/images/main_top.png) repeat-x;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .main_top .main_top_navi {
+            float: right;
+        }
+
+        .main_top .main_top_navi > span {
+            padding: 0 20px;
+            height: 30px;
+            line-height: 30px;
+            color: #FFF;
+            font-size: 16px;
+            float: left;
+            border-right: 1px solid #497065;
+        }
+
+        [v-cloak] {
+            display: none !important;
+        }
+
+        .ps__thumb-y {
+            background: #ebeef5 !important;
+        }
+
+        .ps__rail-y.ps--clicking .ps__thumb-y, .ps__rail-y:focus > .ps__thumb-y, .ps__rail-y:hover > .ps__thumb-y {
+            background: #ebeef5;
+        }
+    </style>
+</head>
+
+<body id="FHSKIN3" class="">
+<div id="app" style="height: 100%;" v-bind:class="version" v-cloak>
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <!-- [ navigation menu ] start  pcoded-navbar mob-open -->
+    <nav id="FHSKIN1" class="navbar-green pcoded-navbar brand-blue">
+        <div class="navbar-wrapper">
+            <div class="navbar-brand header-logo">
+                <a class="b-brand">
+                    <span class="b-title">{{sysName}}</span>
+                </a>
+                <a class="mobile-menu" id="mobile-collapse" style="cursor:pointer;"><i style="color: #ffffff"
+                                                                                       class="feather icon-chevrons-left"></i></a>
+            </div>
+            <div class="navbar-content scroll-div">
+                <ul class="nav pcoded-inner-navbar" id="fhll">
+                    <!-- 循环构造一级菜单-->
+                    <template v-for="menu1 in menuList">
+                        <!-- 判断此一级菜单是否有权限，并且状态是可视的 -->
+                        <template v-if="menu1.hasMenu && '1' == menu1.menu_STATE">
+                            <!-- 判断是否有二级级菜单 -->
+                            <template v-if="0 != menu1.subMenu.length">
+                                <li class="nav-item pcoded-hasmenu" v-bind:id="'lm'+menu1.menu_ID">
+                                    <a style="cursor:pointer;" class="nav-link"> <span class="pcoded-micon">
+                                                    <i class="feather icon-folder"></i>
+                                                </span><span class="pcoded-mtext">{{menu1.menu_NAME}}</span></a>
+                                    <ul class="pcoded-submenu">
+                                        <!-- 二级菜单循环开始 -->
+                                        <template v-for="menu2 in menu1.subMenu">
+                                            <!-- 判断此二级菜单是否有权限，并且状态是可视的 -->
+                                            <template v-if="menu2.hasMenu && '1' == menu2.menu_STATE">
+                                                <li v-bind:class="0 != menu2.subMenu.length?'pcoded-hasmenu':''"
+                                                    v-bind:id="'z'+menu2.menu_ID">
+                                                    <template v-if="null != menu2.menu_URL && '#' != menu2.menu_URL">
+                                                        <a style="cursor:pointer;" target="mainFrame"
+                                                           v-on:click="siMenu('z'+menu2.menu_ID,'lm'+menu1.menu_ID,menu2.menu_NAME,menu2.menu_URL)">
+                                                            <span class="pcoded-micon">
+                                                    <i class="feather icon-menu"></i>
+                                                        </span><span class="pcoded-mtext">{{menu2.menu_NAME}}</span>
+                                                        </a>
+                                                    </template>
+                                                    <template v-else>
+                                                        <a style="cursor:pointer;">
+                                                         <span class="pcoded-micon">
+                                                             <i class="feather icon-folder"></i>
+                                                         </span>
+                                                            <span class="pcoded-mtext">{{menu2.menu_NAME}}</span>
+                                                        </a>
+                                                    </template>
+                                                    <!-- 判断是否有三级级菜单 -->
+                                                    <template v-if="0 != menu2.subMenu.length">
+                                                        <ul class="pcoded-submenu">
+                                                            <!-- 三级菜单循环开始 -->
+                                                            <template v-for="menu3 in menu2.subMenu">
+                                                                <!-- 判断此三级菜单是否有权限，并且状态是可视的 -->
+                                                                <template
+                                                                        v-if="menu3.hasMenu && '1' == menu3.menu_STATE">
+                                                                    <li v-bind:id="'m'+menu3.menu_ID">
+                                                                        <template
+                                                                                v-if="null != menu3.menu_URL && '#' != menu3.menu_URL">
+                                                                            <a style="cursor:pointer;"
+                                                                               target="mainFrame"
+                                                                               v-on:click="siMenu('m'+menu3.menu_ID,'lm'+menu1.menu_ID,menu3.menu_NAME,menu3.menu_URL)">
+                                                                                <i class="feather icon-menu"></i>
+                                                                                </span><span class="pcoded-mtext">{{menu3.menu_NAME}}</span>
+                                                                            </a>
+                                                                        </template>
+                                                                        <template v-else>
+                                                                            <a style="cursor:pointer;">
+                                                                                <i class="feather icon-circle"></i>
+                                                                                </span><span class="pcoded-mtext">{{menu3.menu_NAME}}</span>
+                                                                            </a>
+                                                                        </template>
+                                                                    </li>
+                                                                </template>
+                                                            </template>
+                                                        </ul>
+                                                    </template>
+                                                </li>
+                                            </template>
+                                        </template>
+                                    </ul>
+                                </li>
+                            </template>
+                            <!-- 没有二级菜单-->
+                            <template v-else>
+                                <template v-if="null != menu1.menu_URL && '#' != menu1.menu_URL">
+                                    <li v-bind:id="'lm'+menu1.menu_ID">
+                                        <a style="cursor:pointer;" target="mainFrame"
+                                           v-on:click="siMenu('z'+menu1.menu_ID,'lm0',menu1.menu_NAME,menu1.menu_URL)">
+                                            <span class="pcoded-micon">
+                                                    <i class="feather icon-menu"></i>
+                                                </span><span class="pcoded-mtext">{{menu1.menu_NAME}}</span>
+                                        </a>
+                                    </li>
+                                </template>
+                            </template>
+                        </template>
+                    </template>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- [ navigation menu ] end -->
+
+    <!-- [ 头部 ] start -->
+
+    <header id="FHSKIN2" class="header-img" v-bind:class="SKIN.split(',')[1]">
+        <div class="m-header">
+            <a class="mobile-menu" id="mobile-collapse1" style="cursor:pointer;"><span></span></a>
+            <a class="b-brand">
+                <div class="b-bg">
+                    <i class="feather icon-trending-up"></i>
+                </div>
+                <span class="b-title">({{sysName}})</span>
+            </a>
+        </div>
+        <a class="mobile-menu" id="mobile-header" style="cursor:pointer;">
+            <i class="feather icon-more-horizontal"></i>
+        </a>
+        <div class="collapse navbar-collapse">
+            <span class="logo"
+                  style="color: rgb(255, 255, 255); font-size: 26px; margin-left: 1%;width:400px;height:70px;">
+               </span>
+        </div>
+    </header>
+    <div class="main_top">
+        <div class="main_top_navi">
+
+              <span class="logout" v-on:click="gohome"><a class="full-screen" style="cursor:pointer;" title="首页"><i
+                      class="feather icon-home"></i> 首页</a></span>
+
+            <span class="hyy"><span class="v1">欢迎您：{{user_name}}  &nbsp;&nbsp;</span>现在是：<span
+                    id="datetime">{{datetime}}</span></span>
+
+            <span class="logout" v-on:click="logout"><a class="full-screen" style="cursor:pointer;" title="退出系统"><i
+                    class="feather icon-lock"></i> 退出系统</a></span>
+        </div>
+    </div>
+    <!-- [ 头部  ] end -->
+    <!-- [ 主内容区 ] start -->
+    <section class="pcoded-main-container">
+        <iframe name="mainFrame" id="mainFrame" frameborder="0" src="tab.html"
+                style="margin:0 auto;width:100%;height:100%;display:block;"></iframe>
+    </section>
+    <!-- [ 主内容区 ] end -->
+    <!-- 右侧菜单设置 (js代码写死了，没法删)-->
+    <div  id="pills-cust-tabContent" style="display: none;">
+    </div>
+    <!-- 右侧菜单设置 -->
+    <div id="fhsmsobj"><!-- 声音消息提示 --></div>
+</div>
+</body>
+<!-- Required Js -->
+<script type="text/javascript" src="../../../assets/js/vendor-all.min.js"></script>
+<script type="text/javascript" src="../../../assets/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../assets/js/pcoded.js"></script>
+<script type="text/javascript" src="../../../assets/js/menu-setting.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<!-- elementUI -->
+<script src="/assets/element/index.js"></script>
+<!--引入弹窗组件start-->
+<script type="text/javascript" src="../../../plugins/fhdrag/drag.js"></script>
+<script type="text/javascript" src="../../../plugins/fhdrag/dialog.js"></script>
+<!--引入弹窗组件end-->
+
+<!-- 提示 -->
+<script type="text/javascript" src="../../../assets/js/jquery.tips.js"></script>
+<!--工具js-->
+<script type="text/javascript" src="/assets/js-v/util/tools.js"></script>
+<script type="text/javascript" src="../../../assets/js-v/sys/index.js"></script>
+
+</body>
+</html>
