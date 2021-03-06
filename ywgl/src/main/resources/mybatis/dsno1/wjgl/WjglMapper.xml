@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.wjgl.WjglMapper">
+	
+	<!--机动装备技术资料表名 -->
+	<sql id="tableName">
+		JSLX_WJGL
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 机动装备技术资料字段 -->
+	<sql id="Field">
+		f.WDBH,	
+		f.WDMC,	
+		f.BBH,	
+		f.LSDWNM,	
+		f.LSDWMC,	
+		f.MJNM,	
+		f.MJMC,	
+		f.BJRMC,
+		DATE_FORMAT(f.BZSJ,"%Y-%m-%d %H:%i") BZSJ,
+		f.CJSJ,	
+		f.CJR,
+		f.XGSJ,
+		f.XGR,
+		f.BZ,
+		f.ZT,	
+		f.JSZL_ID
+	</sql>
+	
+	<!-- 机动装备技术资料字段用于新增 -->
+	<sql id="Field2">
+		WDBH,	
+		WDMC,	
+		BBH,	
+		LSDWNM,	
+		LSDWMC,	
+		MJNM,	
+		MJMC,	
+		BJRMC,
+		BZSJ,
+		CJSJ,	
+		CJR,
+		XGSJ,
+		XGR,
+		BZ,
+		ZT,	
+		JSZL_ID
+	</sql>
+	
+	<!-- 机动装备技术资料字段值 -->
+	<sql id="FieldValue">
+		#{WDBH},	
+		#{WDMC},	
+		#{BBH},	
+		#{LSDWNM},	
+		#{LSDWMC},	
+		#{MJNM},	
+		#{MJMC},	
+		#{BJRMC},
+		#{BZSJ},
+		#{CJSJ},
+		#{CJR},
+		#{XGSJ},
+		#{XGR},
+		#{BZ},
+		#{ZT},	
+		#{JSZL_ID}
+	</sql>
+	
+	<!-- 新增机动装备技术资料-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除机动装备技术资料-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			JSZL_ID = #{JSZL_ID}
+	</delete>
+	
+	<!-- 修改机动装备技术资料 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			WDBH = #{WDBH},
+			WDMC = #{WDMC},
+			BBH = #{BBH},
+			LSDWNM = #{LSDWNM},
+			LSDWMC = #{LSDWMC},
+			MJNM = #{MJNM},
+			MJMC = #{MJMC},
+			BJRMC = #{BJRMC},
+			BZSJ = #{BZSJ},
+			XGSJ = #{XGSJ},
+			XGR = #{XGR},
+			BZ = #{BZ},
+			ZT = #{ZT},
+			JSZL_ID = JSZL_ID
+		where 
+			JSZL_ID = #{JSZL_ID}
+	</update>
+	
+	<!-- 通过ID获取机动装备技术资料数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.JSZL_ID = #{JSZL_ID}
+	</select>
+	
+	<!-- 机动装备技术资料列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			f.WDBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.WDMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.BBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.BZSJ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.BZSJ,"%Y-%m-%d")  <= #{pd.endTime}]]>
+		</if>
+		<!-- 用户权限设置 -->
+		<if test="pd.CJR!=null and pd.CJR!=''">
+			and f.CJR = #{pd.CJR}
+		</if>
+		order by CJSJ desc
+	</select>
+	
+	<!-- 机动装备技术资料列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 根据ID导出 -->
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and
+			f.JSZL_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keyWords != null and keyWords != ''">
+			and
+			(
+			f.WDMC LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.WDBH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.BBH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			)
+		</if>
+		<!-- 使用开始时间检索 -->
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.BZSJ,"%Y-%m-%d")  >= #{startTime}]]>
+		</if>
+		<!-- 使用结束时间检索 -->
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.BZSJ,"%Y-%m-%d") <= #{endTime}]]>
+		</if>
+		<!--&lt;!&ndash; 用户权限设置 &ndash;&gt;-->
+		<if test="CJR!=null and CJR!=''">
+			and f.CJR = #{CJR}
+		</if>
+		order by CJSJ desc
+	</select>
+	
+	<!-- 批量删除机动装备技术资料 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			JSZL_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+</mapper>

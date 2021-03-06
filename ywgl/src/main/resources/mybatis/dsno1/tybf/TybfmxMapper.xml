@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.tybf.TybfmxMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		ZCGL_TYBFMX
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.TYBF_ID,
+		f.WZKC_ID,
+		f.WZBH,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.DJ,
+		f.SL,
+		f.JE,
+		f.ZRR,
+		f.BFYY,
+		date_format(f.BFRQ,"%Y-%m-%d") BFRQ,
+		date_format(f.DJRQ,"%Y-%m-%d %H:%i") DJRQ,
+		f.CJR,
+		f.CJSJ,
+		f.XGR,
+		f.XGSJ,
+		f.BZ,
+		f.TYBFMX_ID
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		TYBF_ID,
+		WZKC_ID,
+		WZBH,
+		WZMC,
+		SCCJ,
+		XH,
+		JLDW,
+		DJ,
+		SL,
+		JE,
+		ZRR,
+		BFYY,
+		BFRQ,
+		DJRQ,
+		CJR,
+		CJSJ,
+		XGR,
+		XGSJ,
+		BZ,
+		TYBFMX_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{TYBF_ID},
+		#{WZKC_ID},
+		#{f.WZBH},
+		#{WZMC},
+		#{SCCJ},
+		#{XH},
+		#{JLDW},
+		#{DJ},
+		#{SL},
+		#{JE},
+		#{ZRR},
+		#{BFYY},
+		#{BFRQ},
+		#{DJRQ},
+		#{CJR},
+		#{CJSJ},
+		#{XGR},
+		#{XGSJ},
+		#{BZ},
+		#{TYBFMX_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			TYBFMX_ID = #{TYBFMX_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			TYBF_ID = #{TYBF_ID},
+            WZKC_ID = #{WZKC_ID},
+			ZBMC = #{ZBMC},
+			WZBH = #{WZBH},
+		    JLDW = #{JLDW},
+		    ZRR = #{ZRR},
+		    BFRQ = #{BFRQ},
+		    DJRQ = #{DJRQ},
+            XGR = #{XGR},
+            XGSJ = #{XGSJ},
+            BZ = #{BZ},
+			TYBFMX_ID = TYBFMX_ID
+		where 
+			TYBFMX_ID = #{TYBFMX_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.TYBFMX_ID = #{TYBFMX_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+				(
+                f.ZBMC LIKE CONCAT(CONCAT('%', #{pd.KEYWORDS}),'%')
+				)
+		</if>
+		 and f.TYBF_ID = #{pd.TYBF_ID}
+        order  by f.CJSJ desc
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAllForWord" parameterType="pd" resultType="map">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where f.TYBF_ID = #{TYBF_ID}
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<if test="TYBF_ID != null and TYBF_ID != ''">
+			AND f.TYBF_ID = #{TYBF_ID}
+		</if>
+	</select>
+
+	<!-- 批量保存资产管理-明细数据（选择保存） -->
+    <insert id="insertTybfmxBatch" parameterType="java.util.List">
+        replace into
+        <include refid="tableName"></include>
+        (
+		WZKC_ID,
+		TYBF_ID,
+		WZBH,
+		WZMC,
+		SCCJ,
+		XH,
+		JLDW,
+		WZFL,
+		WZFLNM,
+		ZRR,
+        DJ,
+        DJRQ,
+		TYBFMX_ID
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+			#{item.WZKC_ID},
+			#{item.JHID},
+            #{item.WZBH},
+            #{item.WZMC},
+            #{item.SCCJ},
+            #{item.XH},
+            #{item.JLDW},
+            #{item.WZFL},
+            #{item.WZFLNM},
+            #{item.ZRR},
+			#{item.DJ},
+            #{item.DJRQ},
+            REPLACE(UUID(),'-','')
+            )
+        </foreach>
+    </insert>
+
+	<!-- 更新退役报废明细 -->
+	<update id="updateRow" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="WZBH != null and WZBH != ''">WZBH = #{WZBH},</if>
+		<if test="WZMC != null and WZMC != ''">WZMC = #{WZMC},</if>
+		<if test="JLDW != null and JLDW != ''">JLDW = #{JLDW},</if>
+		<if test="ZRR != null and ZRR != ''">ZRR = #{ZRR},</if>
+		<!--<if test="BFYY != null and BFYY != ''">BFYY = #{BFYY},</if>-->
+		<if test="BFRQ != null ">BFRQ = #{BFRQ},</if>
+		<if test="DJRQ != null ">DJRQ = #{DJRQ},</if>
+		<if test="XGR != null and XGR != ''">XGR = #{XGR},</if>
+		<if test="XGSJ != null ">XGSJ = #{XGSJ},</if>
+		<if test="TYBFMX_ID != null and TYBFMX_ID != ''">TYBFMX_ID = #{TYBFMX_ID}</if>
+		where
+		TYBFMX_ID = #{TYBFMX_ID}
+	</update>
+
+	<!-- 删除资产管理-物资采购明细 连删-->
+	<delete id="deleteByXljhID" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		TYBF_ID = #{TYBF_ID}
+	</delete>
+
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		TYBFMX_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+</mapper>

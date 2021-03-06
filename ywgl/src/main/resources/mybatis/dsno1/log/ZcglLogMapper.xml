@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.log.ZcglLogMapper">
+	
+	<!--日志记录表名 -->
+	<sql id="tableName">
+		ZCGL_LOG
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		f.LOG_ID,
+		f.DATA_ID,
+		f.USERNAME,
+		f.USER_ID,
+		f.CONTENT,
+		DATE_FORMAT(f.CZSJ,"%Y-%m-%d %H:%i") CZSJ
+	</sql>
+
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		LOG_ID,
+		DATA_ID,
+		USERNAME,
+		USER_ID,
+		CONTENT,
+		CZSJ
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{LOG_ID},
+		#{DATA_ID},
+		#{USERNAME},
+		#{USER_ID},
+		#{CONTENT},
+		#{CZSJ}
+	</sql>
+
+	<!-- 物资历史数据列表-->
+	<select id="getList" parameterType="page" resultType="pd">
+		select k.*,	<include refid="Field"></include> from
+		<include refid="tableName"></include> f
+		left join zcgl_wzkc k on f.DATA_ID = k.WZKC_ID
+		where f.DATA_ID = #{pd.DATA_ID}
+		order by f.CZSJ
+		limit ${pd.page},${pd.pageSize}
+	</select>
+
+	 <!--新增资产管理-保存物资登记日志记录-->
+	<insert id="batchSave" parameterType="java.util.List">
+		insert into
+		<include refid="tableName"></include>
+		(<include refid="Field2"></include>) values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			md5(UUID()),
+			#{item.DATA_ID},
+			#{item.USERNAME},
+			#{item.USER_ID},
+			#{item.CONTENT},
+			#{item.CZSJ}
+			)
+		</foreach>
+	</insert>
+
+	<!--讲已登记的物资数据插入到库存表-->
+	<insert id="batchInsertWzdj" parameterType="pd">
+		INSERT INTO <include refid="tableName"></include>
+		( LOG_ID, DATA_ID, USER_ID, USERNAME, CZSJ, CONTENT )
+		( SELECT md5( uuid( ) ), wzkc_id, #{CJR},#{CJRMC},
+		djrq, '登记完成。' FROM zcgl_wzkc WHERE WZCG_ID = #{WZCG_ID}
+		);
+	</insert>
+
+</mapper>

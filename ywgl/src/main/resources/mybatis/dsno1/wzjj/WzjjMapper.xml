@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.wzjj.WzjjMapper">
+
+	<!-- 物资交接表名 -->
+	<sql id="tableName">
+		ZCGL_WZJJ
+	</sql>
+	
+	<!-- 数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 物资交接字段 -->
+	<sql id="Field">
+		f.JJDH,
+		date_format(f.SQSJ,"%Y-%m-%d %H:%i") SQSJ,
+		f.SSBM,
+		f.SSBMNM,
+		f.JJYY,
+		f.CJR,
+		date_format(f.CJSJ,"%Y-%m-%d %H:%i") CJSJ,
+		f.XGR,
+		date_format(f.XGSJ,"%Y-%m-%d %H:%i") XGSJ,
+		f.BZ,
+		f.ZT,
+		f.WZJJ_ID
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		JJDH,
+		SQSJ,
+		SSBM,
+		SSBMNM,
+		JJYY,
+		CJR,	
+		CJSJ,	
+		XGR,	
+		XGSJ,	
+		BZ,
+		ZT,
+		WZJJ_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{JJDH},
+		#{SQSJ},
+		#{SSBM},
+		#{SSBMNM},
+		#{JJYY},
+		#{CJR},	
+		#{CJSJ},	
+		#{XGR},	
+		#{XGSJ},	
+		#{BZ},
+		#{ZT},
+		#{WZJJ_ID}
+	</sql>
+	
+	<!-- 新增 -->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			WZJJ_ID = #{WZJJ_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set 
+			JJDH = #{JJDH},
+			SQSJ = #{SQSJ},
+			SSBM = #{SSBM},
+			SSBMNM = #{SSBMNM},
+			JJYY = #{JJYY},
+			XGR = #{XGR},
+			XGSJ = #{XGSJ},
+			BZ = #{BZ},
+			ZT = #{ZT},
+			WZJJ_ID = WZJJ_ID
+		where 
+			WZJJ_ID = #{WZJJ_ID}
+	</update>
+
+	<!-- 物资交接审核通过后更新物资库存表责任人 -->
+	<update id="updateZrr" parameterType="pd">
+		UPDATE zcgl_wzkc a,
+		(select WZKC_ID,JJZRR,JJZRRNM,JJSSBM,JJSSBMNM FROM  zcgl_wzjjmx  where WZJJ_ID = #{WZJJ_ID} )  b
+		set a.ZRR= b.JJZRR,a.ZRRNM = b.JJZRRNM,a.SSBM=b.JJSSBM,a.SSBMNM=b.JJSSBMNM
+		where a.WZKC_ID = b.WZKC_ID
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.WZJJ_ID = #{WZJJ_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<if test="pd.keyWords != null and pd.keyWords != ''"><!-- 关键词检索 -->
+			and
+				(
+				f.JJDH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+				or
+				f.SSBM LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+				or
+				f.JJYY LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+				)
+		</if>
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<!-- 用户权限设置 -->
+		<if test="pd.CJR !=null and pd.CJR !=''">
+			and f.CJR = #{pd.CJR}
+		</if>
+		<!-- 状态 -->
+		<if test="pd.ZT !=null and pd.ZT !=''">
+			and f.ZT = #{pd.ZT}
+		</if>
+		order by f.CJSJ desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		     where 1=1
+		<!-- 根据ID导出 -->
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and
+			f.WZJJ_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keyWords != null and keyWords != ''">
+			and
+			(
+			f.JJDH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.SSBM LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.JJYY LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			)
+		</if>
+		<!-- 使用开始时间检索 -->
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") >= #{startTime}]]>
+		</if>
+		<!-- 使用结束时间检索 -->
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") <= #{endTime}]]>
+		</if>
+		<if test="ZT != null and ZT != ''">
+			and f.ZT = #{ZT}
+		</if>
+		<!-- 用户权限设置 -->
+		<if test="CJR !=null and CJR !=''">
+			and f.CJR = #{CJR}
+		</if>
+		order by f.CJSJ desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			WZJJ_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+	<!--修改审批完成后的物资状态为待交接-->
+    <update id="editWzkcZt" parameterType="pd">
+	update
+	  zcgl_wzkc
+    set ZT=1,
+		WZKC_ID=WZKC_ID
+    where
+        WZKC_ID = #{WZKC_ID}
+    </update>
+</mapper>

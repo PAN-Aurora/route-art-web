@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.tybf.TybfMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		ZCGL_TYBF
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.SQDH,
+		f.SSBM,
+		f.SSBMNM,
+		f.SQR,
+		DATE_FORMAT(f.SQRQ,"%Y-%m-%d %H:%i") SQRQ,
+		f.BFYY,
+		f.CJR,
+		f.CJSJ,
+		f.XGR,
+		f.XGSJ,
+		f.ZT,
+        f.BZ,
+		f.TYBF_ID
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		SQDH,
+		SSBM,
+		SSBMNM,
+		SQR,
+		SQRQ,
+		BFYY,
+		CJR,
+		CJSJ,
+		XGR,
+		XGSJ,
+		ZT,
+		BZ,
+		TYBF_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{SQDH},
+		#{SSBM},
+		#{SSBMNM},
+		#{SQR},
+		#{SQRQ},
+		#{BFYY},
+		#{CJR},	
+		#{CJSJ},	
+		#{XGR},	
+		#{XGSJ},
+		#{ZT},
+		#{BZ},
+		#{TYBF_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			TYBF_ID = #{TYBF_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="SQDH != null ">SQDH = #{SQDH},</if>
+		<if test="SSBM != null ">SSBM = #{SSBM},</if>
+		<if test="SSBMNM != null ">SSBMNM = #{SSBMNM},</if>
+		<if test="SQR != null ">SQR = #{SQR},</if>
+		<if test="SQRQ != null ">SQRQ = #{SQRQ},</if>
+		<if test="BFYY != null ">BFYY = #{BFYY},</if>
+		<if test="XGR != null ">XGR = #{XGR},</if>
+		<if test="XGSJ != null ">XGSJ = #{XGSJ},</if>
+		<if test="ZT != null ">ZT = #{ZT},</if>
+		<if test="BZ != null ">BZ = #{BZ},</if>
+		<if test="BFYY != null ">BFYY = #{BFYY},</if>
+		<if test="TYBF_ID != null ">TYBF_ID = TYBF_ID</if>
+		where 
+		TYBF_ID = #{TYBF_ID}
+	</update>
+
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.TYBF_ID = #{TYBF_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<if test="pd.keyWords != null and pd.keyWords != ''"><!-- 关键词检索 -->
+			and
+				(
+				f.SQDH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+				or
+				f.BFYY LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+				)
+		</if>
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<if test="pd.ZT != null and pd.ZT != ''">
+			and f.ZT = #{pd.ZT}
+		</if>
+		<!-- 用户权限设置 -->
+		<if test="pd.CJR !=null and pd.CJR !=''">
+			and f.CJR = #{pd.CJR}
+		</if>
+		order by f.CJSJ desc
+	</select>
+	
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		     where 1=1
+		<!-- 根据ID导出 -->
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and
+			f.TYBF_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keyWords != null and keyWords != ''">
+			and
+			(
+			f.SQDH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.BFYY LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			)
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") >= #{startTime}]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") <= #{endTime}]]>
+		</if>
+		<if test="ZT != null and ZT != ''">
+			and f.ZT = #{ZT}
+		</if>
+		<!-- 用户权限设置 -->
+		<if test="CJR !=null and CJR !=''">
+			and f.CJR = #{CJR}
+		</if>
+		order by f.CJSJ desc
+	</select>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			TYBF_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	<!-- 获取当前登录用户所属单位 -->
+	<select id="getDeptName" parameterType="page" resultType="pd">
+		SELECT
+			DEPT_NAME
+		FROM
+			SYS_USER
+		WHERE
+			USER_ID = #{USER_ID}
+	</select>
+
+    <!-- 修改库存表状态 -->
+    <update id="updateKcwzzt" parameterType="pd">
+		update zcgl_wzkc set zt = #{WZZT}  where WZKC_ID in (select WZKC_ID from zcgl_tybfmx  where TYBF_ID = #{TYBF_ID})
+    </update>
+
+</mapper>

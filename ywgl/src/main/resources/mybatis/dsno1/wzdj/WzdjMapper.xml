@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.wzdj.WzdjMapper">
+	
+	<!--物资登记表名 -->
+	<sql id="tableName">
+		ZCGL_WZDJ
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.WZCGMX_ID,
+		f.WZBH,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.DJ,
+		f.ZRR,
+		f.ZRRNM,
+		f.SSBM,
+		f.SSBMNM,
+		DATE_FORMAT(f.DJRQ,"%Y-%m-%d %H:%i") DJRQ,
+		f.CJR,
+		DATE_FORMAT(f.CJSJ,"%Y-%m-%d %H:%i") CJSJ,
+		f.XGR,
+		DATE_FORMAT(f.XGSJ,"%Y-%m-%d %H:%i") XGSJ,
+		f.BZ,
+		f.ZT,
+		f.WZDJ_ID
+	</sql>
+
+	<!-- 批量保存字段 -->
+	<sql id="Field1">
+		WZCGMX_ID,
+		WZCG_ID,
+		WZMC,
+		SCCJ,
+		XH,
+		JLDW,
+		WZFL,
+		WZFLNM,
+		DJ,
+		CJR,
+		CJSJ,
+		ZT
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		WZCGMX_ID,
+		WZCG_ID,
+		WZBH,
+		WZMC,
+		SCCJ,
+		XH,
+		JLDW,
+		DJ,
+		ZRR,
+		ZRRNM,
+		SSBM,
+		SSBMNM,
+		DJRQ,
+		CJR,
+		CJSJ,
+		XGR,
+		XGSJ,
+		BZ,
+		ZT,
+		WZDJ_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{WZCGMX_ID},
+		#{WZBH},
+		#{WZMC},
+		#{SCCJ},
+		#{XH},
+		#{JLDW},
+		#{DJ},
+		#{ZRR},
+		#{ZRRNM},
+		#{f.SSBM},
+		#{f.SSBMNM},
+		#{DJRQ},
+		#{CJR},
+		#{CJSJ},
+		#{XGR},
+		#{XGSJ},
+		#{BZ},
+		#{ZT},
+		#{WZDJ_ID}
+	</sql>
+
+	<!-- 物资登记的数据列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1  and f.WZCG_ID = #{pd.WZCG_ID}
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			f.WZBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.ZRR LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<!-- 物资分类 -->
+		<if test="pd.WZFLNM!=null and pd.WZFLNM!=''">
+			and f.WZFLNM = #{pd.WZFLNM}
+		</if>
+		order by f.ZT,f.CJSJ desc
+	</select>
+	
+	<!-- 物资登记数据列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 根据ID导出 -->
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and
+			f.WZDJ_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keyWords != null and keyWords != ''">
+			and
+			(
+			f.WZBH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.WZMC LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.ZRR LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			)
+		</if>
+		<!-- 使用创建时间检索 -->
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") >= #{startTime}]]>
+		</if>
+		<!-- 使用创建时间检索 -->
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") <= #{endTime}]]>
+		</if>
+		<!--&lt;!&ndash; 用户权限设置 &ndash;&gt;-->
+		<if test="CJR!=null and CJR!=''">
+			and f.CJR = #{CJR}
+		</if>
+		<!-- 物资分类 -->
+		<if test="WZFLNM!=null and WZFLNM!=''">
+			and f.WZFLNM = #{WZFLNM}
+		</if>
+		order by f.ZT,f.CJSJ desc
+	</select>
+
+	<!-- 获取已审批的采购单 -->
+	<select id="getCgdhlistPage" parameterType="page" resultType="pd">
+		SELECT
+			WZCG_ID,
+			CGDH,
+			CGMC,
+			SSBM,
+			CGRQ,
+			NZR,
+			NZSJ
+		FROM
+			(
+				SELECT DISTINCT
+					f.WZCG_ID,
+					f.CGDH,
+					f.CGMC,
+					f.SSBM,
+					DATE_FORMAT(f.CGRQ,"%Y-%m-%d %H:%i") CGRQ,
+					f.NZR,
+					DATE_FORMAT(f.NZSJ,"%Y-%m-%d %H:%i") NZSJ,
+					sum( mx.zt = '0' ) sl
+				FROM
+					ZCGL_WZCG f
+						LEFT JOIN zcgl_wzcgmx mx ON mx.WZCG_ID = f.WZCG_ID
+				WHERE
+					f.ZT = 2
+				GROUP BY
+					f.CGDH
+				ORDER BY
+					f.CJSJ
+			) k
+		WHERE
+			k.sl > 0
+	</select>
+
+	<!-- 根据采购单号获取采购数据明细列表 -->
+	<select id="wzcglistPage" parameterType="page" resultType="pd">
+		SELECT
+			mx.WZCGMX_ID,
+			mx.WZCG_ID,
+			mx.WZMC,
+			mx.SCCJ,
+			mx.XH,
+			mx.JLDW,
+			mx.DJ,
+			mx.SL,
+			mx.JE,
+			mx.ZT
+		FROM
+			ZCGL_WZCG f LEFT JOIN zcgl_wzcgmx mx on mx.WZCG_ID=f.WZCG_ID
+		WHERE
+			f.CGDH = #{pd.CGDH}
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			mx.WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			mx.SCCJ LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			mx.XH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		order by mx.cjsj desc
+	</select>
+
+	<!-- 根据添加选取的WZCGMX_ID查询数据 -->
+	<select id="findByIds" parameterType="pd" resultType="pd">
+		select
+		WZCGMX_ID,
+		WZCG_ID,
+		WZMC,SCCJ,XH,
+		JLDW,WZFL,WZFLNM,DJ,SL,JE,
+		#{CJR} CJR,
+		#{CJSJ} CJSJ
+		from
+		ZCGL_WZCGMX
+		where
+		WZCG_ID = #{WZCG_ID}
+	</select>
+
+	<!-- 根据WZDJ_ID查询数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		md5(UUID()) as WZKC_ID,
+		WZBH,
+		WZMC,
+		SCCJ,
+		XH,
+		JLDW,
+		ZRR,
+		ZRRNM,
+		SSBM,
+		SSBMNM,
+		DJ,
+		DJRQ,
+		BZ,
+		#{CJR} CJR,
+		#{CJSJ} CJSJ
+		from
+		ZCGL_WZDJ
+		where
+		1=1
+		<if test="WZDJ_ID != null and WZDJ_ID != ''">
+			and WZDJ_ID = #{WZDJ_ID}
+		</if>
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and WZDJ_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</select>
+
+	<!--批量插入物资数据-->
+	<insert id="insertWzBatch" parameterType="java.util.List">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field1"></include>
+		) values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+			#{item.WZCGMX_ID},
+			#{item.WZCG_ID},
+			#{item.WZMC},
+			#{item.SCCJ},
+			#{item.XH},
+			#{item.JLDW},
+			#{item.WZFL},
+			#{item.WZFLNM},
+			#{item.DJ},
+			#{item.CJR},
+			#{item.CJSJ},
+			0
+			)
+		</foreach>
+	</insert>
+
+	<!-- 更改已插入到物资登记表中的数据在物资采购明细表的状态 -->
+	<update id="updateWzcgmxZt" parameterType="pd">
+		update
+		ZCGL_WZCGMX
+		set
+		ZT = 1,
+		WZCGMX_ID = WZCGMX_ID
+		where
+		1=1
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and WZCGMX_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+
+	<!-- 批量更新 -->
+	<update id="editAll" parameterType="pd">
+		update
+		ZCGL_WZDJ
+		set
+		ZRR=#{ZRR},
+		ZRRNM=#{ZRRNM},
+		SSBM=#{SSBM},
+		SSBMNM=#{SSBMNM}
+		where WZDJ_ID in
+		<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+		  #{item}
+		</foreach>
+
+	</update>
+
+	<!-- 修改物资登记数据 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		ZRR = #{ZRR},
+		ZRRNM = #{ZRRNM},
+		SSBM = #{SSBM},
+		SSBMNM = #{SSBMNM},
+		BZ = #{BZ},
+		XGR = #{XGR},
+		XGSJ = #{XGSJ},
+		WZDJ_ID = WZDJ_ID
+		where
+		WZDJ_ID = #{WZDJ_ID}
+	</update>
+
+	<!-- 修改物资登记表中的状态 -->
+	<update id="updateZt" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		DJRQ = #{DJRQ},
+		ZT = #{ZT},
+		WZDJ_ID = WZDJ_ID
+		where
+		1=1
+		<if test="WZDJ_ID != null and WZDJ_ID != ''">
+			and	WZDJ_ID = #{WZDJ_ID}
+		</if>
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and WZDJ_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+	</update>
+
+	<!--讲已登记的物资数据插入到库存表-->
+	<insert id="insertKcBatch" parameterType="pd">
+		INSERT INTO ZCGL_WZKC (
+			WZKC_ID,
+			WZCG_ID,
+			WZBH,
+			WZMC,
+			SCCJ,
+			XH,
+			JLDW,
+			WZFL,
+			WZFLNM,
+			ZRR,
+			ZRRNM,
+			SSBM,
+			SSBMNM,
+			DJ,
+			DJRQ,
+			BZ,
+			ZT,
+			CJR,
+			CJSJ
+		) (
+			SELECT
+				md5( uuid( ) ),
+				WZCG_ID,
+				WZBH,
+				WZMC,
+				SCCJ,
+				XH,
+				JLDW,
+				WZFL,
+				WZFLNM,
+				ZRR,
+				ZRRNM,
+				SSBM,
+				SSBMNM,
+				DJ,
+				#{DJRQ},
+				BZ,
+				#{ZT},
+				#{CJR} AS CJR,
+				SYSDATE()
+			FROM
+				ZCGL_WZDJ
+			WHERE
+				WZCG_ID = #{WZCG_ID}
+		)
+	</insert>
+
+	<!-- 列表  用于弹出选择物资数据-->
+	<select id="wzkcList" parameterType="page" resultType="pd">
+		select
+		f.WZKC_ID,
+		f.WZBH,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.ZRR,
+		f.ZRRNM,
+		f.SSBM,
+		f.SSBMNM,
+		f.DJ,
+		DATE_FORMAT(f.DJRQ,"%Y-%m-%d %H:%i") DJRQ,
+		f.ZT,
+		f.CJR,
+		f.CJSJ
+		from
+		ZCGL_WZKC f
+		where f.ZT = 0
+		<if test="pd.keyWords != null and pd.keyWords != ''"><!-- 关键词检索 -->
+			and
+			(
+			f.WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.WZBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.ZRR LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<if test="pd.WZKCIDS != null and pd.WZKCIDS != ''">
+			and !FIND_IN_SET(f.WZKC_ID,#{pd.WZKCIDS})
+		</if>
+		<if test="pd.CJR != null and pd.CJR != ''">
+			and f.ZRRNM = #{pd.CJR}
+		</if>
+		limit ${pd.page},${pd.pageSize}
+	</select>
+
+	<!-- 根据选取的物资id查询物资数据  选择物资时 -->
+	<select id="findWzkcByIds" parameterType="pd" resultType="pd">
+		select
+		f.WZKC_ID,
+		f.WZBH,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.ZRR,
+		f.ZRRNM,
+        f.SSBM,
+        f.SSBMNM,
+		f.DJ,
+		f.DJRQ,
+		#{JHID} JHID
+		from
+		ZCGL_WZKC f
+		where
+		f.WZKC_ID in
+		<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!--批量插入二维码物资采购明细数据-->
+	<update id="updateWzdj" parameterType="pd">
+		update
+		ZCGL_WZDJ
+		set
+		WZBH = #{WZBH}
+		where  WZDJ_ID = #{WZDJ_ID} and ZT=0
+	</update>
+
+	<!-- 物资登记明细数据校验 -->
+	<select id="validateData" parameterType="pd" resultType="java.lang.Integer">
+		SELECT
+			COUNT( 1 )
+		FROM
+			ZCGL_WZDJ
+		WHERE
+			WZCG_ID = #{WZCG_ID}
+		  AND (
+				WZBH IS NULL
+				OR WZBH = ''
+				OR ZRR IS NULL
+				OR ZRR = ''
+				OR SSBM IS NULL
+				OR SSBM = ''
+			)
+	</select>
+
+	<!--批量插入二维码物资采购明细数据-->
+	<update id="updateDjrq" parameterType="pd">
+		update
+			ZCGL_WZDJ
+		set
+			DJRQ = #{DJRQ}
+		where  WZCG_ID = #{WZCG_ID}
+	</update>
+
+</mapper>

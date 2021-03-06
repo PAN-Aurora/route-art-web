@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.tjcx.TjcxMapper">
+
+	<!--物资登记表名 -->
+	<sql id="tableName">
+		ZCGL_WZKC
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		f.WZKC_ID,
+		f.WZCG_ID,
+		f.WZBH,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.ZRR,
+		f.ZRRNM,
+		f.SSBM,
+		f.SSBMNM,
+		f.DJ,
+		DATE_FORMAT( f.DJRQ, "%Y-%m-%d %H:%i" ) DJRQ,
+		f.ZT,
+		f.CJR,
+		f.CJSJ,
+		f.XGR,
+		f.XGSJ,
+		f.BZ
+	</sql>
+
+	<!-- 汇总查询数据列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select md5(uuid()) as id,WZFL,WZMC,count(1) SL,sum(DJ) as JE,'' as children from zcgl_wzkc where  ZT!=3
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			WZBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(DJRQ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(DJRQ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<!-- 责任人 -->
+		<if test="pd.ZRR != null and pd.ZRR != ''">
+			and
+			ZRR LIKE CONCAT(CONCAT('%', #{pd.ZRR}),'%')
+		</if>
+		<!-- 所属部门 -->
+		<if test="pd.SSBMNM != null and pd.SSBMNM != ''">
+			and SSBMNM in(
+			select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{pd.SSBMNM}) as dp
+			where PATH like concat(dp.pa, '%') or PATH = dp.pa
+			)
+		</if>
+		<!-- 物资分类 -->
+		<if test="pd.WZFLNM!=null and pd.WZFLNM!=''">
+			and WZFLNM = #{pd.WZFLNM}
+		</if>
+		<!-- 普通用户数据过滤 只查询责任人是自己的 -->
+		<if test="pd.ISCOMMON">
+			and ZRR=#{pd.CJRMC}
+		</if>
+		group by WZFL order by DJRQ DESC
+</select>
+
+<!-- 汇总明细数据列表 -->
+	<select id="getKcmx" parameterType="page" resultType="pd">
+		SELECT
+		WZKC_ID,
+		WZBH,
+		WZMC,
+		SCCJ,
+		XH,
+		JLDW,
+		ZRR,
+		SSBM,
+		DJ,
+		DATE_FORMAT(DJRQ,"%Y-%m-%d %H:%i") DJRQ,
+		case when ZT ='3' then '退役报废' else '' end as ZT,
+		BZ
+		FROM
+		zcgl_wzkc
+		WHERE
+		WZFL = #{pd.WZFL}  and ZT!=3
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			WZBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(DJRQ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(DJRQ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<!-- 责任人 -->
+		<if test="pd.ZRR != null and pd.ZRR != ''">
+			and
+			ZRR LIKE CONCAT(CONCAT('%', #{pd.ZRR}),'%')
+		</if>
+		<!-- 所属部门 -->
+        <if test="pd.SSBMNM != null and pd.SSBMNM != ''">
+            and SSBMNM in(
+            select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{pd.SSBMNM}) as dp
+            where PATH like concat(dp.pa, '%') or PATH = dp.pa
+            )
+        </if>
+		<!-- 物资分类 -->
+		<if test="pd.WZFLNM!=null and pd.WZFLNM!=''">
+			and WZFLNM = #{pd.WZFLNM}
+		</if>
+		<!-- 普通用户数据过滤 只查询责任人是自己的 -->
+		<if test="pd.ISCOMMON">
+			and ZRR=#{pd.CJRMC}
+		</if>
+		order by DJRQ DESC,WZKC_ID desc
+	</select>
+
+	<!-- 库存数据列表 (库存个退役报废)-->
+	<select id="kclistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		      <choose>
+				  <when test="pd.BS != null and pd.BS != '' and pd.BS=='TYBF'">
+					  f.ZT=3
+				  </when>
+				  <otherwise>
+					  f.ZT!=3
+				  </otherwise>
+			  </choose>
+
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			f.WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.WZBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+
+		<!-- 责任人 -->
+		<if test="pd.ZRR != null and pd.ZRR != ''">
+			and f.ZRR LIKE CONCAT(CONCAT('%', #{pd.ZRR}),'%')
+		</if>
+		<!-- 所属部门 -->
+		<if test="pd.SSBMNM != null and pd.SSBMNM != ''">
+			and f.SSBMNM in(
+			select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{pd.SSBMNM}) as dp
+			where PATH like concat(dp.pa, '%') or PATH = dp.pa
+			)
+		</if>
+		<!-- 物资分类 -->
+		<if test="pd.WZFLNM != null and pd.WZFLNM != ''">
+			and f.WZFLNM=#{pd.WZFLNM}
+		</if>
+		<!-- 普通用户数据过滤 只查询责任人是自己的 -->
+		<if test="pd.ISCOMMON">
+			and f.ZRR=#{pd.CJRMC}
+		</if>
+		order by f.DJRQ DESC,f.WZKC_ID desc
+	</select>
+
+	<!-- 物资库存数据列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		<choose>
+			<when test="BS != null and BS != '' and BS=='TYBF'">
+				f.ZT=3
+			</when>
+			<otherwise>
+				f.ZT!=3
+			</otherwise>
+		</choose>
+
+		<choose>
+			 <!-- 根据ID导出 -->
+			 <when test="arrDataIds != null and arrDataIds != ''">
+				 and f.WZKC_ID in
+				 <foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+					 #{item}
+				 </foreach>
+				 order by f.DJRQ DESC,f.WZKC_ID desc
+			 </when>
+
+		      <otherwise>
+				  <!-- 关键词检索 -->
+				  <if test="keyWords != null and keyWords != ''">
+					  and
+					  (
+					  f.WZMC LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+					  or
+					  f.WZBH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+					  )
+				  </if>
+				  <!-- 登记日期检索 -->
+				  <if test="startTime!=null and startTime!=''">
+					  <![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") >= #{startTime}]]>
+				  </if>
+				  <!-- 登记日期检索 -->
+				  <if test="endTime!=null and endTime!=''">
+					  <![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") <= #{endTime}]]>
+				  </if>
+				  <!-- 责任人 -->
+				  <if test="ZRR != null and ZRR != ''">
+					  and f.ZRR LIKE CONCAT(CONCAT('%', #{ZRR}),'%')
+				  </if>
+				  <!-- 所属部门 -->
+				  <if test="SSBMNM != null and SSBMNM != ''">
+					  and f.SSBMNM in(
+					  select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{SSBMNM}) as dp
+					  where PATH like concat(dp.pa, '%') or PATH = dp.pa
+					  )
+				  </if>
+				  <!-- 物资分类 -->
+				  <if test="WZFLNM != null and WZFLNM != ''">
+					  and f.WZFLNM=#{WZFLNM}
+				  </if>
+				  <!-- 普通用户数据过滤 只查询责任人是自己的 -->
+				  <if test="ISCOMMON">
+					  and f.ZRR=#{CJRMC}
+				  </if>
+			  order by f.DJRQ DESC,f.WZKC_ID desc
+			  </otherwise>
+		</choose>
+	</select>
+
+	<!-- 物资交接数据列表 -->
+	<select id="wzjjjllistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where f.ZT!=3
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			f.WZMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.WZBH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<!-- 登记日期检索 -->
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.DJRQ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<!-- 责任人 -->
+		<if test="pd.ZRR != null and pd.ZRR != ''">
+			and f.ZRR LIKE CONCAT(CONCAT('%', #{pd.ZRR}),'%')
+		</if>
+		<!-- 物资分类 -->
+		<if test="pd.WZFLNM != null and pd.WZFLNM != ''">
+			and f.WZFLNM=#{pd.WZFLNM}
+		</if>
+
+		<!-- 普通用户数据过滤 查询交接人或者接收人是自己的 -->
+		  <choose>
+			  <when test="pd.ISCOMMON">
+				  AND f.WZKC_ID in(select distinct wzkc_id from  zcgl_wzjj jh left join zcgl_wzjjmx mx  on jh.WZJJ_ID = mx.WZJJ_ID   where jh.cjr = #{pd.CJR} and jh.ZT=2)
+			  </when>
+		  <otherwise>
+			  AND f.WZKC_ID in(select distinct wzkc_id from  zcgl_wzjj jh left join zcgl_wzjjmx mx  on jh.WZJJ_ID = mx.WZJJ_ID   where jh.ZT=2
+			  and SSBMNM in(
+			  select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{pd.SSBMNM}) as dp
+			  where PATH like concat(dp.pa, '%') or PATH = dp.pa
+			  ))
+		  </otherwise>
+		  </choose>
+		order by f.DJRQ DESC,f.WZKC_ID desc
+	</select>
+
+</mapper>

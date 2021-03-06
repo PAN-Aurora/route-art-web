@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.wzcg.WzcgMxMapper">
+
+	<!--资产管理-物资采购明细的表名 -->
+	<sql id="tableName">
+		ZCGL_WZCGMX
+	</sql>
+
+	<!-- 资产管理—物资采购明细字段 -->
+	<sql id="Field">
+		f.WZCG_ID,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.DJ,
+		f.SL,
+		f.JE,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+        f.CJR,
+		f.CJSJ,
+        f.XGR,
+		f.XGSJ,
+		f.ZT,
+		f.WZCGMX_ID
+	</sql>
+
+	<!-- 资产管理-物资采购明细的字段用于新增 -->
+	<sql id="Field2">
+		WZCG_ID,
+		WZMC,
+		SCCJ,
+		XH,
+		DJ,
+		SL,
+		JE,
+		JLDW,
+		WZFL,
+		WZFLNM,
+		CJR,
+		CJSJ,
+		XGR,
+		XGSJ,
+		ZT,
+		WZCGMX_ID
+	</sql>
+
+	<!-- 资产管理-物资采购明细的字段值 -->
+	<sql id="FieldValue">
+		#{WZCG_ID},
+		#{WZMC},
+		#{SCCJ},
+		#{XH},
+		#{DJ},
+		#{SL},
+		#{JE},
+		#{JLDW},
+		#{WZFL},
+		#{WZFLNM},
+		#{CJR},
+		#{CJSJ},
+		#{XGR},
+		#{XGSJ},
+		#{ZT},
+		#{WZCGMX_ID}
+	</sql>
+
+	<!-- 资产管理-新增物资采购明细数据-->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field2"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 资产管理-删除物资采购明细数据-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		WZCGMX_ID = #{WZCGMX_ID}
+	</delete>
+
+	<!-- 资产管理装备-修改物资采购明细数据 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		WZMC = #{WZMC},
+		DJ = #{DJ},
+		SL = #{SL},
+		JE = #{JE},
+		JLDW = #{JLDW},
+		WZFL = #{WZFL},
+		WZFLNM = #{WZFLNM},
+		CJR = #{CJR},
+		CJSJ = #{CJSJ},
+		XGR = #{XGR},
+		XGSJ = #{XGSJ},
+		where
+		WZCGMX_ID = #{WZCGMX_ID}
+	</update>
+
+	<!-- 通过资产管理-物资采购明细ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.WZCGMX_ID = #{WZCGMX_ID}
+	</select>
+
+	<!-- 资产管理-根据物资采购id获取明细数据列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.WZCG_ID = #{pd.WZCG_ID} order by f.cjsj desc
+
+	</select>
+
+	<!-- 资产管理-根据物资采购id获取明细数据列表 -->
+	<select id="listMx" parameterType="String" resultType="pd">
+		select f.WZCGMX_ID,f.WZMC,f.SL from
+		<include refid="tableName"></include> f
+		where
+		f.WZCG_ID = #{pd.WZCG_ID}
+	</select>
+
+	<!-- 批量删除资产管理-物资采购明细数据 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		WZCGMX_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 删除资产管理-物资采购明细 连删-->
+	<delete id="deleteByXljhID" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		WZCG_ID = #{WZCG_ID}
+	</delete>
+
+	<!-- 资产管理-物资采购明细数据列表(全部) -->
+	<select id="listAllForWord" parameterType="pd" resultType="map">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where f.WZCG_ID = #{WZCG_ID} order by f.cjsj desc
+	</select>
+
+	<!--通过ID获取指定物资采购明细数据-->
+	<select id="findByMxId" parameterType="page" resultType="pd">
+		select
+		f.WZMC,
+		f.DJ,
+		f.SL,
+		f.JE,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.CJR,
+		f.CJSJ,
+		f.ZT,
+		f.XGR,
+		f.XGSJ
+		from
+		<include refid="tableName"></include> f
+		where
+		f.WZCG_ID = #{pd.WZCG_ID}
+	</select>
+
+
+	<!-- 更新物资采购明细 -->
+	<update id="updateRow" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		WZMC = #{WZMC},
+		SCCJ = #{SCCJ},
+		XH = #{XH},
+		SL = #{SL},
+		<if test="JE != null and JE != ''">JE = #{JE},</if>
+		<if test="DJ != null and DJ != ''">DJ = #{DJ},</if>
+		<if test="XGR != null and XGR != ''">XGR = #{XGR},</if>
+		<if test="JLDW != null and JLDW != ''">JLDW = #{JLDW},</if>
+		<if test="WZFL != null and WZFL != ''">WZFL = #{WZFL},</if>
+		<if test="WZFLNM != null and WZFLNM != ''">WZFLNM = #{WZFLNM},</if>
+		<if test="XGSJ != null ">XGSJ = #{XGSJ},</if>
+		<if test="WZCGMX_ID != null and WZCGMX_ID != ''">WZCGMX_ID = #{WZCGMX_ID}</if>
+		where
+		WZCGMX_ID = #{WZCGMX_ID}
+	</update>
+</mapper>

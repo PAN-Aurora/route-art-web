@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.wzjj.WzjjmxMapper">
+	
+	<!-- 物资交接明细表名 -->
+	<sql id="tableName">
+		ZCGL_WZJJMX
+	</sql>
+	
+	<!--数据字典表名 -->
+	<sql id="dicTableName">
+		SYS_DICTIONARIES
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		f.WZJJ_ID,
+		f.WZKC_ID,
+		f.WZBH,
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.JLDW,
+		f.WZFL,
+		f.WZFLNM,
+		f.DQZRR,
+		f.DQZRRNM,
+		f.DQSSBM,
+		f.DQSSBMNM,
+		f.JJSSBM,
+		f.JJSSBMNM,
+		f.JJZRR,
+		f.JJZRRNM,
+		date_format(f.JJRQ,"%Y-%m-%d") JJRQ,
+		f.DJ,
+		f.SL,
+		f.JE,
+		date_format(f.DJRQ,"%Y-%m-%d %H:%i") DJRQ,
+		f.CJR,
+		date_format(f.CJSJ,"%Y-%m-%d %H:%i") CJSJ,
+		f.XGR,
+		date_format(f.XGSJ,"%Y-%m-%d %H:%i") XGSJ,
+		f.BZ,
+		f.WZJJMX_ID
+	</sql>
+	
+	<!-- 字段用于新增 -->
+	<sql id="Field2">
+		WZJJ_ID,
+        WZKC_ID,
+		WZBH,
+		WZMC,
+		SCCJ,
+		XH,
+		DQZRR,
+		DQZRRNM,
+		JJZRR,
+		JJZRRNM,
+		JJRQ,
+		DJ,
+		SL,
+		JE,
+		DJRQ,
+		CJR,
+		CJSJ,
+		XGR,
+		XGSJ,
+		BZ,
+		WZJJMX_ID
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{WZJJ_ID},
+		#{WZKC_ID},
+		#{WZBH},
+		#{WZMC},
+		#{SCCJ},
+		#{XH},
+		#{DQZRR},
+		#{DQZRRNM},
+		#{JJZRR},
+		#{JJZRRNM},
+		#{JJRQ},
+		#{DJ},
+		#{SL},
+		#{JE},
+		#{DJRQ},
+		#{CJR},
+		#{CJSJ},
+		#{XGR},
+		#{XGSJ},
+		#{BZ},
+		#{WZJJMX_ID}
+	</sql>
+	
+	<!-- 新增-->
+	<insert id="save" parameterType="pd">
+		insert into 
+	<include refid="tableName"></include>
+		(
+	<include refid="Field2"></include>
+		) values (
+	<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			WZJJMX_ID = #{WZJJMX_ID}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+            JJZZR = #{JJZRR},
+            JJZZR = #{JJZRRNM},
+			DQSSBM = #{DQSSBM},
+			DQSSBMNM = #{DQSSBMNM},
+            JJRQ = #{JJRQ},
+			XGR = #{XGR},
+			XGSJ = #{XGSJ},
+			BZ = #{BZ},
+			WZJJMX_ID = WZJJMX_ID
+		where
+			WZJJMX_ID = #{WZJJMX_ID}
+	</update>
+	
+	<!-- 通过ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select 
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 
+			f.WZJJMX_ID = #{WZJJMX_ID}
+	</select>
+	
+	<!-- 列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		where 1=1
+		 and f.WZJJ_ID = #{pd.WZJJ_ID}
+        order  by f.CJSJ desc
+	</select>
+
+	<!-- 列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from 
+		<include refid="tableName"></include> f
+		WHERE 1=1
+		<if test="WZJJ_ID != null and WZJJ_ID != ''">
+			AND f.WZJJ_ID = #{WZJJ_ID}
+		</if>
+	</select>
+
+	<!--通过ID获取指定物资交接明细数据-->
+	<select id="findByMxId" parameterType="page" resultType="pd">
+		select
+		f.WZMC,
+		f.SCCJ,
+		f.XH,
+		f.WZBH,
+		f.JLDW,
+		f.ZRR,
+		f.DQZRR,
+		f.DQZRRNM,
+		f.JJZRR,
+		f.JJZRRNM
+		from
+		<include refid="tableName"></include> f
+		LEFT JOIN ZCGL_WZJJMX mx on mx.WZJJ_ID = f.WZJJ_ID
+		LEFT JOIN ZCGL_WZKC kc  on  kc.WZCL_WZKC = f.WZKC_ID
+		where
+		f.WZJJ_ID = #{pd.WZJJ_ID}
+	</select>
+
+	<!-- 批量保存资产管理-物资交接明细数据（选择物资保存） -->
+    <insert id="insertWzjjBatch" parameterType="java.util.List">
+        replace into
+        <include refid="tableName"></include>
+        (
+			WZKC_ID,
+			WZJJ_ID,
+			WZBH,
+			WZMC,
+			SCCJ,
+			XH,
+			DJ,
+			JLDW,
+			WZFL,
+			WZFLNM,
+			DJRQ,
+			DQZRR,
+			DQZRRNM,
+			DQSSBM,
+			DQSSBMNM,
+			WZJJMX_ID
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+			#{item.WZKC_ID},
+			#{item.JHID},
+			#{item.WZBH},
+			#{item.WZMC},
+			#{item.SCCJ},
+			#{item.XH},
+			#{item.DJ},
+			#{item.JLDW},
+			#{item.WZFL},
+			#{item.WZFLNM},
+			#{item.DJRQ},
+			#{item.ZRR},
+			#{item.ZRRNM},
+			#{item.SSBM},
+			#{item.SSBMNM},
+			REPLACE(UUID(),'-','')
+			)
+        </foreach>
+    </insert>
+	
+	<!-- 批量删除 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where 
+			WZJJMX_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                 #{item}
+		</foreach>
+	</delete>
+
+	<!-- 更新物资交接明细行 -->
+	<update id="updateRow" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		<if test="JJZRR != null ">JJZRR = #{JJZRR},</if>
+		<if test="JJZRRNM != null ">JJZRRNM = #{JJZRRNM},</if>
+		<if test="JJSSBM != null ">JJSSBM = #{JJSSBM},</if>
+		<if test="JJSSBMNM != null ">JJSSBMNM = #{JJSSBMNM},</if>
+		<if test="JJRQ != null ">JJRQ = #{JJRQ},</if>
+		<if test="XGR != null and XGR != ''">XGR = #{XGR},</if>
+		<if test="XGSJ != null ">XGSJ = #{XGSJ},</if>
+		<if test="WZJJMX_ID != null and WZJJMX_ID != ''">WZJJMX_ID = #{WZJJMX_ID}</if>
+		where
+		WZJJMX_ID = #{WZJJMX_ID}
+	</update>
+
+	<!-- 资产管理-物资交接明细数据列表(导出Word) -->
+	<select id="listAllForWord" parameterType="pd" resultType="map">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where f.WZJJ_ID = #{WZJJ_ID}
+	</select>
+</mapper>

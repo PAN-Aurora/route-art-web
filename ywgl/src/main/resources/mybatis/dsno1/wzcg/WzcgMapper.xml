@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.wzcg.WzcgMapper">
+
+	<!--物资采购表名 -->
+	<sql id="tableName">
+     ZCGL_WZCG
+	</sql>
+
+	<!-- 物资采购的字段 -->
+	<sql id="Field">
+		f.CGDH,
+		f.CGMC,
+		f.SSBM,
+		f.SSBMNM,
+		(SELECT sum( sl ) FROM zcgl_wzcgmx mx WHERE mx.WZCG_ID = f.WZCG_ID ) AS CGSL,
+		(SELECT sum( je ) FROM zcgl_wzcgmx mx WHERE mx.WZCG_ID = f.WZCG_ID ) AS CGJE,
+        DATE_FORMAT(f.CGRQ,"%Y-%m-%d %H:%i") CGRQ,
+        f.NZR,
+        DATE_FORMAT(f.NZSJ,"%Y-%m-%d %H:%i") NZSJ,
+		f.CJR,
+		f.CJSJ,
+		f.XGR,
+        f.XGSJ,
+		f.ZT,
+		f.DJZT,
+		f.BZ,
+		f.WZCG_ID
+	</sql>
+
+	<!-- 物资采购用于新增 -->
+	<sql id="Field2">
+        CGDH,
+        CGMC,
+        SSBM,
+        SSBMNM,
+        CGSL,
+        CGJE,
+		CGRQ,
+        NZR,
+        NZSJ,
+        CJR,
+        CJSJ,
+		XGR,
+		XGSJ,
+        ZT,
+        DJZT,
+        BZ,
+        WZCG_ID
+	</sql>
+
+	<!-- 物资采购的字段值 -->
+	<sql id="FieldValue">
+        #{CGDH},
+        #{CGMC},
+        #{SSBM},
+        #{SSBMNM},
+        #{CGSL},
+        #{CGJE},
+		#{CGRQ},
+        #{NZR},
+        #{NZSJ},
+        #{CJR},
+		#{CJSJ},
+		#{XGR},
+		#{XGSJ},
+		#{ZT},
+		#{DJZT},
+		#{BZ},
+        #{WZCG_ID}
+	</sql>
+
+	<!-- 新增资产管理-物资采购数据-->
+	<insert id="save" parameterType="pd">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field2"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+
+	<!-- 删除资产管理-物资采购数据-->
+	<delete id="delete" parameterType="pd">
+		delete from
+		<include refid="tableName"></include>
+		where
+		WZCG_ID = #{WZCG_ID}
+	</delete>
+
+	<!-- 修改机资产管理-物资采购数据 -->
+	<update id="edit" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		CGJE = #{CGJE},
+		CGSL = #{CGSL},
+		XGR = #{XGR},
+		CGMC = #{CGMC},
+		XGSJ = #{XGSJ},
+		<if test="CGRQ != null and CGRQ != ''">CGRQ = #{CGRQ},</if>
+        BZ = #{BZ},
+		ZT = #{ZT}
+		where
+		WZCG_ID = #{WZCG_ID}
+	</update>
+
+
+	<!-- 通过资产管理-物资采购ID获取数据 -->
+	<select id="findById" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where
+		f.WZCG_ID = #{WZCG_ID}
+	</select>
+
+	<!-- 资产管理-物资采购数据列表 -->
+	<select id="datalistPage" parameterType="page" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 关键词检索 -->
+		<if test="pd.keyWords != null and pd.keyWords != ''">
+			and
+			(
+			f.CGDH LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.CGMC LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			or
+			f.NZR LIKE CONCAT(CONCAT('%', #{pd.keyWords}),'%')
+			)
+		</if>
+		<if test="pd.startTime!=null and pd.startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.NZSJ,"%Y-%m-%d") >= #{pd.startTime}]]>
+		</if>
+		<if test="pd.endTime!=null and pd.endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.NZSJ,"%Y-%m-%d") <= #{pd.endTime}]]>
+		</if>
+		<if test="pd.ZT != null and pd.ZT != ''">
+			and f.ZT = #{pd.ZT}
+		</if>
+
+		<choose>
+			<!-- 物资采购菜单 -->
+		   <when test="pd.BS == null or pd.BS == ''">
+			   and f.CJR = #{pd.CJR}
+		   </when>
+			<!-- 物资登记菜单 -->
+			<otherwise>
+				  <choose>
+					<!-- 注册用户过滤 -->
+					<when test="pd.ROLE_ID != null and pd.ROLE_ID != ''and pd.ROLE_ID=='${@com.dyx.util.Const@ZCGL_ZCYH_ROLEID}'">
+						and f.CJR = #{pd.CJR}
+					</when>
+				  <!-- 主管用户过滤 针对物资登记 -->
+				  <otherwise>
+						and  (f.CJR = #{pd.CJR}
+					  or f.SSBMNM in(
+					  select DEPT_ID from sys_dept,(select PATH as pa from sys_dept where DEPT_ID = #{pd.DEPT_ID}) as dp
+					  where PATH like concat(dp.pa, '%') or PATH = dp.pa
+					  ))
+				  </otherwise>
+				  </choose>
+
+				<!-- 登记状态过滤 -->
+				<if test="pd.DJZT != null and pd.DJZT != '' and  pd.DJZT=='false'">
+					and f.DJZT != '2'
+				</if>
+				<if test="pd.DJZT != null and pd.DJZT != '' and  pd.DJZT=='true'">
+					and f.DJZT = '2'
+				</if>
+			</otherwise>
+		</choose>
+		order by f.CJSJ desc
+	</select>
+
+	<!-- 资产管理-物资采购数据列表(全部) -->
+	<select id="listAll" parameterType="pd" resultType="pd">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include> f
+		where 1=1
+		<!-- 根据ID导出 -->
+		<if test="arrDataIds != null and arrDataIds != ''">
+			and
+			f.WZCG_ID in
+			<foreach item="item" index="index" collection="arrDataIds" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!-- 关键词检索 -->
+		<if test="keyWords != null and keyWords != ''">
+			and
+			(
+			f.CGDH LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.CGMC LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			or
+			f.NZR LIKE CONCAT(CONCAT('%', #{keyWords}),'%')
+			)
+		</if>
+		<!-- 使用开始时间检索 -->
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") >= #{startTime}]]>
+		</if>
+		<!-- 使用结束时间检索 -->
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[ and DATE_FORMAT(f.CJSJ,"%Y-%m-%d") <= #{endTime}]]>
+		</if>
+		<!--&lt;!&ndash; 用户权限设置 &ndash;&gt;-->
+		<if test="CJR !=null and CJR !=''">
+			and f.CJR = #{CJR}
+		</if>
+		<if test="ZT != null and ZT != ''">
+			and f.ZT = #{ZT}
+		</if>
+		order by f.CJSJ desc
+	</select>
+
+	<!-- 批量删除资产管理-物资采购数据 -->
+	<delete id="deleteAll" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where
+		WZCG_ID in
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<!-- 获取当前登录用户所属单位 -->
+	<select id="getDeptName" parameterType="page" resultType="pd">
+		SELECT
+			DEPT_NAME
+		FROM
+			SYS_USER
+		WHERE
+			USER_ID = #{USER_ID}
+	</select>
+
+	<!-- 物资采购明细数据校验 -->
+	<select id="validateData" parameterType="pd" resultType="java.lang.Integer">
+		select COUNT(1) from ZCGL_WZCGMX where WZCG_ID =#{WZCG_ID}
+		    AND
+			(WZMC IS NULL OR WZMC =''
+				or DJ IS NULL OR DJ =''
+				or SL IS NULL OR SL =''
+				or JLDW IS NULL OR JLDW ='')
+	</select>
+
+	<!-- 修改机资产管理-物资采购数据 -->
+	<update id="updateCgZt" parameterType="pd">
+		update
+		<include refid="tableName"></include>
+		set
+		DJZT = #{DJZT}
+		where
+		WZCG_ID = #{WZCG_ID}
+	</update>
+</mapper>
