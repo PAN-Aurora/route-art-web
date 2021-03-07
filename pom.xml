@@ -311,6 +311,8 @@
             <artifactId>jna-platform</artifactId>
             <version>${jna.version}</version>
         </dependency>
+
+
     </dependencies>
 
     <!-- 若想引用modbus4j需要引入下列repository id:ias-snapshots id:ias-releases 两个 -->

@@ -25,9 +25,9 @@ var vm = new Vue({
         nowIndex: 0,
         //条码管理id
         menujson: [
-            {title: "领域技术现状分析", url: "/views/demo_list.html"},
-            {title: "国内外差距对比", url: "/views/demo_list.html"},
-            {title: "需求要素分析", url: "/views/demo_list.html"},
+            {title: "领域技术现状分析", url: "/views/jslx/fzxq/status_analysis_list.html"},
+            {title: "国内外差距对比", url: "/views/jslx/fzxq/status_analysis_list.html"},
+            {title: "需求要素分析", url: "/views/jslx/fzxq/status_analysis_list.html"},
 
         ]
     },
@@ -36,7 +36,7 @@ var vm = new Vue({
         //初始执行
         init() {
             setTimeout(function () {
-                gotoCdTwo('/views/demo_list.html');
+                gotoCdTwo('/views/jslx/fzxq/status_analysis_list.html');
             }, 200);
         },
     },
