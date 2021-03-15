@@ -1,8 +1,20 @@
 package com.dyx.controller.system;
 
+import com.alibaba.fastjson.JSONObject;
 import com.dyx.controller.base.BaseController;
+import com.dyx.service.es.EsService;
 import com.dyx.service.system.FilelibService;
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.io.RandomAccessRead;
+import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.POIXMLDocument;
+import org.apache.poi.POIXMLTextExtractor;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+
 import com.dyx.entity.PageData;
 import com.dyx.util.Const;
 import com.dyx.util.FileUpload;
@@ -19,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +49,11 @@ public class FilelibController extends BaseController {
 
     @Autowired
     private FilelibService filelibService;
+    
+    @Autowired
+    private EsService esService;
+    
+    WordExtractor wordExtractor;
 
     /**
      * 实现文件上传
@@ -59,6 +77,8 @@ public class FilelibController extends BaseController {
                     pd.put("FILE", bytes);
                     pd.put("BIZID", bizid);
                     filelibService.save(pd);
+                    
+                   
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -71,6 +91,70 @@ public class FilelibController extends BaseController {
         map.put("result", errInfo);                //返回结果
         return map;
     }
+    
+    /**
+     * 获取文件内容 支持word 和 pdf
+     * @param filePath
+     * @return
+     */
+ 	public StringBuilder getTextFromWordOrPdf(String filePath) {
+ 		StringBuilder buffer = new StringBuilder();
+ 		InputStream is  = null;
+ 		PDDocument document = null; 
+         try {
+             if (filePath.endsWith(".doc")) {
+                 is = new FileInputStream(new File(filePath));
+                 WordExtractor ex = new WordExtractor(is);
+                 buffer.append(ex.getText());
+                 ex.close();
+             } else if (filePath.endsWith("docx")) {
+                 OPCPackage opcPackage = POIXMLDocument.openPackage(filePath);
+                 POIXMLTextExtractor extractor = new XWPFWordExtractor(opcPackage);
+                 buffer.append(extractor.getText());
+                 extractor.close();
+             } else if (filePath.endsWith("pdf")) {
+            	 File file = new File(filePath);
+            	 PDFTextStripper pdfStripper = new PDFTextStripper();
+            	 document = PDDocument.load(file);
+            	 //获取pdf总共多少页 
+            	int pageNum =  document.getNumberOfPages();
+            	System.out.println("pdf读取一共"+pageNum+"页");
+            	for(int i=0;i<pageNum;i++) {
+            		System.out.println("pdf读取：第"+(i+1)+"页开始");
+            	   pdfStripper.setStartPage(i);
+            	   pdfStripper.setEndPage(i+1);
+            	   System.out.println("pdf读取：第"+(i+1)+"页结束");
+            	//   System.out.println(pdfStripper.getText(document));
+            	   buffer.append(pdfStripper.getText(document).toString());
+            	   //System.out.println(buffer.toString());
+            	}
+                 //buffer.append(pdfStripper.getText(document)); 
+            	
+             } else {
+                 System.out.println("上传文件格式仅为pdf,dox.docx结尾！");
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+         } finally { 
+        	 if(is!=null) {
+        		 try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	 }
+        	 if(document !=null ) {
+        		 try {
+					document.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+        	 }
+         }
+
+         return buffer;
+ 	}
+  
 
     @RequestMapping(value = "/upload")
     @ResponseBody
@@ -94,6 +178,36 @@ public class FilelibController extends BaseController {
             pd.put("BIZTYPE", biztype); //业务类别
             pd.put("CREATETIME",new Date());
             filelibService.save(pd);
+            
+            String path = filePath+fileName;
+            //获取文件 读取文件内容 
+            StringBuilder  buffer = this.getTextFromWordOrPdf(path);
+            System.out.println(buffer.toString().replaceAll("\r\t", ""));
+            System.out.println(buffer.toString().length());
+            
+            if(buffer.toString().length()>0) {
+            	String type ="doc";
+                if (path.endsWith(".doc")) {
+                	type ="doc";
+                } else if (path.endsWith("docx")) {
+                	type ="docx";
+                } else if (path.endsWith("pdf")) {
+                	type ="pdf";
+               	}
+                //调用elasticsearch保存
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("file_id", fileid);
+                jsonObject.put("file_name", file.getOriginalFilename());
+                jsonObject.put("file_title", fileName);
+                jsonObject.put("file_type", type);
+                jsonObject.put("file_url", path);
+                jsonObject.put("file_content", buffer.toString().replaceAll("\r\t", ""));
+                
+                DateFormat date = DateFormat.getDateTimeInstance(); 
+                jsonObject.put("created_time", date.format(new Date()));
+                esService.addData(jsonObject, "route_art_web", "file_art_type");
+            }
+            
             map.put("file",pd);
         }
         else {

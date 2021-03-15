@@ -44,12 +44,19 @@
                                                         class="feather icon-plus"></i>新增
                                                 </a>
                                             </td>
+                                            <td style="vertical-align:top;">
+                                                <a v-show="true" class="btn btn-light btn-sm"
+                                                   v-on:click="makeReport(MENU_ID,'add');"><i
+                                                        style="margin-top:-3px;margin-left: -6px;"
+                                                        class="feather icon-plus"></i>评论
+                                                </a>
+                                            </td>
                                             <td><span class="searchName">模糊查询：</span>
                                                 <div class="input-group input-group-sm mb-3 adjustMarg"
                                                      style="float: left;width: auto;">
                                                     <input class="form-control" type="text" v-model="keyWords"
                                                            onkeydown="keyDown()" style="width: 250px"
-                                                           title="请输入文档名称、文档标题等查询" placeholder="请输入文档名称、文档标题等查询"/>
+                                                           title="请输入文档内容描述信息" placeholder="请输入文档内容描述信息"/>
                                                 </div>
                                             </td>
 
@@ -98,14 +105,10 @@
                                                 <th>文档编号</th>
                                                 <th>文档名称</th>
                                                 <th>文档摘要</th>
+                                                <th>文档类型</th>
                                                 <th>版本号</th>
                                                 <th>编制时间</th>
-                                                <th>字段6</th>
-                                                <th>字段7</th>
-                                                <th>字段8</th>
-                                                <th>字段9</th>
-                                                <!--                                                <th>登记日期</th>-->
-                                                <!--                                                <th>备注</th>-->
+                                                <th>操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -124,17 +127,19 @@
                                                     <td scope="row" class="boldXh">
                                                         {{page.showCount*(page.currentPage-1)+index+1}}
                                                     </td>
-                                                    <td>{{data.WZBH}}</td>
-                                                    <td>{{data.WZMC}}</td>
-                                                    <td>{{data.WZFL}}</td>
-                                                    <td>{{data.SCCJ}}</td>
-                                                    <td>{{data.XH}}</td>
-                                                    <td>{{data.JLDW}}</td>
-                                                    <td>{{data.DJ}}</td>
-                                                    <td>{{data.ZRR}}</td>
-                                                    <td>{{data.SSBM}}</td>
-                                                    <!--                                                    <td>{{data.DJRQ}}</td>-->
-                                                    <!--                                                    <td>{{data.BZ}}</td>-->
+                                                    <td>{{data.file_title}}</td>
+                                                    <td>{{data.file_name}}</td>
+                                                    <td>{{data.file_name}}</td>
+                                                    <td>{{data.file_type}}</td>
+                                                    <td>{{data.file_type}}</td>
+                                                    <td>{{data.created_time}}</td>
+                                                     <td class="boldCz">
+                                                        <a title="下载" v-on:click="showFile(data)"
+                                                           style="cursor:pointer;"><i
+                                                                class="feather icon-edit-2"></i></a>
+                                                        <a  title="删除" v-on:click="goDel(data)"
+                                                           style="cursor:pointer;"><i class="feather icon-x"></i></a>
+                                                    </td>
                                                 </tr>
                                             </template>
                                             <tr v-show="varList.length==0">
@@ -175,6 +180,6 @@
 <script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
 <script type="text/javascript" src="/assets/plugins/layer/layer.js"></script>
 <!-- 本页面js -->
-<script src="../assets/js-v/jslx/fzxq/status_analysis_list.js"></script>
+<script src="../../../assets/js-v/jslx/fzxq/status_analysis_list.js"></script>
 </body>
 </html>

@@ -32,5 +32,6 @@ document.write('' +
     '<script src="/assets/js-vue/vue.js"></script>\n' +
     '<!--全局配置-->\n' +
     '<script src="/assets/js-v/config.js"></script>\n' +
+    '<script src="/assets/js-v/common.js"></script>\n' +
     '');
 document.write('<!-----------  公共js和css end----------->');

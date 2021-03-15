@@ -91,6 +91,7 @@
 			JSZL_ID = #{JSZL_ID}
 	</delete>
 	
+	
 	<!-- 修改机动装备技术资料 -->
 	<update id="edit" parameterType="pd">
 		update

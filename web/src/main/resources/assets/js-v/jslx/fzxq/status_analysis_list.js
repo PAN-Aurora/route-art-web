@@ -1,4 +1,4 @@
-/*资产管理-物资登记URL*/
+/*领域技术现状分析*/
 
 //创建vue对象
 var vm = new Vue({
@@ -88,12 +88,13 @@ var vm = new Vue({
             this.WZFLNM = $("#WZFLNM").val();
             //加载状态变为true
             this.loading = true;
+            
             $.ajax({
                 xhrFields: {
                     withCredentials: true
                 },
                 type: "POST",
-                url: httpurl + 'tjcx/kclist?showCount=' + this.showCount + '&currentPage=' + this.currentPage,
+                url: httpurl + 'statusAnalysis/list?showCount=' + this.showCount + '&currentPage=' + this.currentPage,
                 data: {
                     WZFLNM:this.WZFLNM,
                     keyWords: this.keyWords,
@@ -123,14 +124,14 @@ var vm = new Vue({
                         $("input[id='zcheckbox']").prop("checked", false);
                     } else if ("exception" == data.result) {
                         //显示异常
-                        showException("资产管理-统计查询", data.exception);
+                        showException("领域技术现状分析-统计查询", data.exception);
                     }
                 }
             }).done().fail(function () {
                 message('warning', '请求服务器无响应，稍后再试!', 1000);
-                setTimeout(function () {
-                    window.location.href = "../../login.html";
-                }, 2000);
+//                setTimeout(function () {
+//                    window.location.href = "../../login.html";
+//                }, 2000);
             });
         },
 
@@ -295,6 +296,61 @@ var vm = new Vue({
             var exportForm = document.getElementById("myForm");
             exportForm.action = httpurl + 'tjcx/excel';
             exportForm.submit();
+        },
+        //在线预览功能
+        showFile: function(data) {
+        	if(data.file_url && data.file_url!=""){
+        		//window.open("<%=basePath%>Laws/devDoc.do?id="+id,"_blank","top=100,left=100,height=600,width=1000,status=yes,toolbar=1,menubar=no,location=no,scrollbas=yes");
+        	}
+        },
+        //选择几条数据制造评论信息
+        makeReport:function(){
+        	 if (vm.varList.length == 0) {
+                 return  message('warning', '请选择数据!', 1000);
+             }
+             var str = '';
+             for (var i = 0; i < document.getElementsByName('ids').length; i++) {
+                 if (document.getElementsByName('ids')[i].checked) {
+                     if (str == '') str += document.getElementsByName('ids')[i].value;
+                     else str += ',' + document.getElementsByName('ids')[i].value;
+                 }
+             }
+             
+             
+        },
+        //删除
+        goDel: function(data){
+        	 //加载状态变为true
+            this.loading = true;
+            $.ajax({
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: "POST",
+                url: httpurl + 'statusAnalysis/delete',
+                data: {
+                    JSZL_ID:data.file_id,
+                    fileId:data.id
+                },
+                dataType: "json",
+                success: function (data) {
+                    if ("success" == data.result) {
+                    	vm.getList();
+                        //判断按钮权限，用于是否显示按钮
+                        vm.hasButton();
+                        //加载状态
+                        vm.loading = false;
+                        $("input[name='ids']").prop("checked", false);
+                        $("input[id='zcheckbox']").prop("checked", false);
+                        
+                    } else if ("exception" == data.result) {
+                        //显示异常
+                        showException("操作失败", data.exception);
+                    }
+                }
+            }).done().fail(function () {
+                message('warning', '请求服务器无响应，稍后再试!', 1000);
+            });
         },
 
         //-----分页必用----start
