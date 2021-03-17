@@ -10,7 +10,7 @@ public interface ProjectMapper {
 
 
 
-    List<TblProject> selectListPage(Page page);
+    List<TblProject> listPageData(Page page);
 
 
 }

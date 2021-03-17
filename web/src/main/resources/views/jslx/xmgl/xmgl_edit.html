@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%;overflow: hidden" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>项目管理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <script src="../../../assets/js-v/header.js"></script>
+</head>
+
+<body style="background-color: white">
+
+<!-- [加载状态 ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ 加载状态  ] End -->
+
+<!-- [ 主内容区 ] start -->
+<div class="pcoded-wrapper" id="app" v-cloak style="height: 100%">
+    <div class="pcoded-content" style="height: 100%">
+        <div class="pcoded-inner-content" style="height: 100%">
+            <div class="main-body" style="height: 100%">
+                <div class="page-wrapper" style="height: 100%">
+                    <!-- [ Main Content ] start -->
+                    <div class="row" style="height: 100%">
+
+                        <div style="width: 100%;height: 100%">
+                            <div id="showform2" class="input-group" style="margin-top:-10px;background-color: white">
+												<span style="width: 100%;height:50px;text-align: center;">
+												   <a class="btn btn-light btn-sm" v-on:click="save">
+													   <i style="margin-top:-3px;margin-left: -6px;"
+                                                          class="feather icon-check"></i>保存</a>
+												   <a class="btn btn-light btn-sm btn-danger" v-on:click="cancel">
+													   <i style="margin-top:-3px;margin-left: -6px;"
+                                                          class="feather icon-x"></i>取消</a>
+												</span>
+                            </div>
+                            <div id="showform" style="height: 100%;overflow: auto">
+                                <div class="input-group input-group-sm mb-3" style="margin-top: 1px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;">项目编号：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="WDBH" id="WDBH" checknull
+                                           checkerror="项目编号不能为空" checkillegal
+                                           v-model="pd.WDBH" maxlength="25" placeholder="请输入文档编号" title="文档编号" disabled>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
+                                                                                                   notnullflag>项目名称：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="WDMC" id="WDMC" checknull
+                                           checkerror="项目名称不能为空" checkillegal
+                                           v-model="pd.WDMC" maxlength="25" placeholder="请输入项目名称" title="文档名称">
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
+                                       notnullflag>项目主题：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="WDMC" id="xmzt" checknull
+                                           checkerror="项目主题不能为空" checkillegal
+                                           v-model="pd.WDMC" maxlength="25" placeholder="请输入项目主题" title="项目主题">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
+                                                                                                   notnullflag>发起单位：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="LSDWMC" id="LSDWMC" v-model="pd.LSDWMC"
+                                           checknull
+                                           maxlength="200" placeholder="请点击发起单位" title="发起单位" style="cursor: pointer"
+                                           checkerror="请选择生发起单位"
+                                           v-on:click="selectScdw()" readonly="readonly">
+                                    <div>
+                                    <span class="feather icon-list btn-lg" style="margin:-4px 10px 10px -50px;
+                                        position: absolute;
+                                        vertical-align: middle;
+                                        cursor: pointer;
+                                        z-index: 99;" v-on:click="selectScdw()"></span>
+                                    </div>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
+                                                                                                   notnullflag>密级名称：</span></span>
+                                    </div>
+                                    <select class="xlk" v-model="pd.MJNM" id="MJNM" ref="MJNM" placeholder="请选择密级名称"
+                                            checknull checkerror="请选择密级名称"
+                                            title="密级名称">
+                                        <option v-for="data in mjmc_options" :value="data.name">
+                                            {{data.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span
+                                                style="width: 100%;padding-left: 14px">技术资料文件：（最多上传5个文件）</span></span>
+                                    </div>
+                                    <iframe id="jdzbFile" src="" frameborder="0" width="100%"></iframe>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
+                                                                                                   notnullflag>编辑人：</span></span>
+                                    </div>
+                                    <input type="text" class="form-control" ref="BJRMC" id="BJRMC" checknull
+                                           checkerror="请输入中文名称" checkillegal checktype="chinese"
+                                           v-model="pd.BJRMC" maxlength="20" placeholder="请输入编辑人" title="编辑人">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
+                                                                                                   notnullflag>编制时间：</span></span>
+                                    </div>
+                                    <input class="span10 date-picker form-control" name="BZSJ" id="BZSJ" checknull
+                                           checkerror="请选择编制时间" style="cursor: pointer"
+                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii" readonly
+                                           placeholder="请点击选择编制时间" title="编制时间"/>
+                                </div>
+                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width: 120px; align-items: baseline"><span
+                                                style="width: 100%;">备注：</span></span>
+                                    </div>
+                                    <textarea rows="1" type="text" class="form-control" ref="BZ" id="BZ" v-model="pd.BZ"
+                                              maxlength="300" style="height: 80px" placeholder="请输入备注"
+                                              title="备注"></textarea>
+                                </div>
+                            </div>
+                            <!-- [加载状态 ] start -->
+                            <div id="jiazai" style="display:none;margin-top:50px;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- [ 加载状态  ] End -->
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ 主内容区 ] end -->
+
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/jslx/xmgl/xmgl_edit.js"></script>
+
+
+</body>
+</html>

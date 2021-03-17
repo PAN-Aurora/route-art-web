@@ -171,7 +171,46 @@ var vm = new Vue({
         },
         //新增
         goAdd: function(){
+            window.location.href = '../../jslx/xmgl/xmgl_edit.html';
+        },
+        /**
+         * 修改
+         * @param id
+         */
+        goEdit: function(id){
+            window.location.href = '../../jslx/xmgl/xmgl_edit.html?FID='+id+'&type=edit';
+        },
 
+        /**
+         * 删除机
+         * @param id
+         */
+        goDel: function (id){
+            this.$confirm('确定要删除吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                cancelButtonClass: 'el-button--info',
+            }).then(() => {
+                this.loading = true;
+                $.ajax({
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type: "POST",
+                    url: httpurl+'project/delete',
+                    data: {projectId:id,tm:new Date().getTime()},
+                    dataType:'json',
+                    success: function(data){
+                        if("success" == data.result){
+                            message('success', '已经从列表中删除!', 1000);
+                        }
+                        vm.getList();
+                    }
+                });
+        }).catch(() => {
+
+            });
         },
         //选择办理人
         getUser: function (){

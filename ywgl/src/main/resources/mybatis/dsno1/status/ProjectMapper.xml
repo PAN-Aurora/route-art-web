@@ -25,7 +25,7 @@
     </sql>
 
     <!--获取项目集合-->
-   <select id="selectListPage"  parameterType="page"  resultMap="projectResultMap">
+   <select id="listPageData"  parameterType="page"  resultMap="projectResultMap">
        select
        <include refid="Base_Column_List" />
        from tbl_project

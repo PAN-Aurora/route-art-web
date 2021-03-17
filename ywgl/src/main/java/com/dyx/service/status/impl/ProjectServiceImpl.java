@@ -19,6 +19,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<TblProject> selectPorjectList(Page page) {
-        return routeArtMapper.selectListPage(page);
+        return routeArtMapper.listPageData(page);
     }
 }
