@@ -93,7 +93,7 @@ var vm = new Vue({
                     withCredentials: true
                 },
                 type: "POST",
-                url: httpurl + 'tjcx/kclist?showCount=' + this.showCount + '&currentPage=' + this.currentPage,
+                url: httpurl + 'project/list?showCount=' + this.showCount + '&currentPage=' + this.currentPage,
                 data: {
                     WZFLNM:this.WZFLNM,
                     keyWords: this.keyWords,
@@ -133,7 +133,46 @@ var vm = new Vue({
                 }, 2000);
             });
         },
+        //生成路线图
+        makerRouteFile: function(data){
+            this.loading = true;
+        	$.ajax({
+                xhrFields: {
+                    withCredentials: true
+                },
+                type: "POST",
+                url: httpurl + 'project/markRouteXmind',
+                data: {
+                    keyWords: data.WZKC_ID
+                },
+                dataType: "json",
+                /**
+                 * 成功回调函数
+                 * @param data 返回数据
+                 */
+                success: function (data) {
+                    if ("success" == data.result) {
+                        //物资统计查询数据
+                        message('info', '生成路线图成功!', 1000);
+                        //判断按钮权限，用于是否显示按钮
+                        vm.hasButton();
+                        //加载状态
+                        vm.loading = false;
+                        $("input[name='ids']").prop("checked", false);
+                        $("input[id='zcheckbox']").prop("checked", false);
+                    } else if ("exception" == data.result) {
+                        //显示异常
+                        showException("项目管理-生成技术路线图", data.exception);
+                    }
+                }
+            }).done().fail(function () {
+                message('warning', '请求服务器无响应，稍后再试!', 1000);
+            });
+        },
+        //新增
+        goAdd: function(){
 
+        },
         //选择办理人
         getUser: function (){
             var diag = new top.Dialog();

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dyx.mapper.dsno1.status.ProjectMapper">
+
+    <resultMap id="projectResultMap" type="com.dyx.entity.TblProject" >
+        <id column="PROJECT_ID" property="projectId" jdbcType="INTEGER" />
+        <result column="PROJECT_NO" property="projectNo" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="projectName" jdbcType="VARCHAR" />
+        <result column="PROJECT_THEME" property="projectTheme" jdbcType="VARCHAR" />
+        <result column="PROJECT_DESC" property="projectDesc" jdbcType="VARCHAR" />
+        <result column="PROJECT_SPONSOR" property="projectSponsor" jdbcType="VARCHAR" />
+        <result column="START_TIME" property="startTime" jdbcType="DATE" />
+        <result column="END_TIME" property="endTime" jdbcType="DATE" />
+        <result column="STATUS" property="status" jdbcType="INTEGER" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+        <result column="FILE_PATH" property="filePath" jdbcType="VARCHAR" />
+        <result column="IS_MAKER" property="isMaker" jdbcType="INTEGER" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+        PROJECT_ID, PROJECT_NO, PROJECT_NAME, PROJECT_THEME, PROJECT_DESC, PROJECT_SPONSOR,
+        START_TIME, END_TIME, STATUS, CREATE_TIME, USER_ID, FILE_PATH, IS_MAKER
+    </sql>
+
+    <!--获取项目集合-->
+   <select id="selectListPage"  parameterType="page"  resultMap="projectResultMap">
+       select
+       <include refid="Base_Column_List" />
+       from tbl_project
+   </select>
+
+
+    <select id="selectByPrimaryKey" resultMap="projectResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from tbl_project
+        where PROJECT_ID = #{projectId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from tbl_project
+        where PROJECT_ID = #{projectId,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.dyx.entity.TblProject" >
+        insert into tbl_project (PROJECT_ID, PROJECT_NO, PROJECT_NAME,
+        PROJECT_THEME, PROJECT_DESC, PROJECT_SPONSOR,
+        START_TIME, END_TIME, STATUS,
+        CREATE_TIME, USER_ID, FILE_PATH,
+        IS_MAKER)
+        values (#{projectId,jdbcType=INTEGER}, #{projectNo,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR},
+        #{projectTheme,jdbcType=VARCHAR}, #{projectDesc,jdbcType=VARCHAR}, #{projectSponsor,jdbcType=VARCHAR},
+        #{startTime,jdbcType=DATE}, #{endTime,jdbcType=DATE}, #{status,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR},
+        #{isMaker,jdbcType=INTEGER})
+    </insert>
+
+
+
+    <update id="updateByPrimaryKey" parameterType="com.dyx.entity.TblProject" >
+        update tbl_project
+        set PROJECT_NO = #{projectNo,jdbcType=VARCHAR},
+        PROJECT_NAME = #{projectName,jdbcType=VARCHAR},
+        PROJECT_THEME = #{projectTheme,jdbcType=VARCHAR},
+        PROJECT_DESC = #{projectDesc,jdbcType=VARCHAR},
+        PROJECT_SPONSOR = #{projectSponsor,jdbcType=VARCHAR},
+        START_TIME = #{startTime,jdbcType=DATE},
+        END_TIME = #{endTime,jdbcType=DATE},
+        STATUS = #{status,jdbcType=INTEGER},
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+        USER_ID = #{userId,jdbcType=VARCHAR},
+        FILE_PATH = #{filePath,jdbcType=VARCHAR},
+        IS_MAKER = #{isMaker,jdbcType=INTEGER}
+        where PROJECT_ID = #{projectId,jdbcType=INTEGER}
+    </update>
+</mapper>

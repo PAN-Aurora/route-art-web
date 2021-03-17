@@ -70,9 +70,8 @@ public class StatusAnalysisController extends BaseController {
 		//返回参数
 		String errInfo = "success";
 		//创建pd对象
-		PageData pd = new PageData();
+		PageData pd = this.getPageData();
 		//获取前台传来的pd数据
-		pd = this.getPageData();
 		//获取Session
 		Session session = Jurisdiction.getSession();
 		//获取当前登录用户
@@ -128,14 +127,13 @@ public class StatusAnalysisController extends BaseController {
 	@ResponseBody
 	public Object delete() throws Exception{
 		//创建HashMap对象
-		Map<String,String> map = new HashMap<String,String>(16);
+		Map<String,String> map = new HashMap<String,String>();
 		//返回参数
 		String errInfo = "success";
 		//创建pd对象
-		PageData pd = new PageData();
+		PageData pd = this.getPageData();
 		//获取前台传来的pd数据
-		pd = this.getPageData();
-		
+
 		if(!StringUtil.isNullOrEmptyOrNULLString(pd.getString("JSZL_ID"))) {
 			//技术资料删除方法
 			wjglService.delete(pd);
@@ -145,8 +143,6 @@ public class StatusAnalysisController extends BaseController {
 			fileEsService.deleteDataById( fileIndex
 					,fileType, pd.getString("fileId"));
 		}
-		
-		
 		//返回结果
 		map.put("result", errInfo);
 		return map;

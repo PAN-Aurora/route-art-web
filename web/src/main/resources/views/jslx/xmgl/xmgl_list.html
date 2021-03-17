@@ -42,6 +42,16 @@
                                 <div style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
                                     <table style="margin-top:5px;">
                                         <tr>
+                                            <td style="vertical-align:top;">
+                                                <a v-show="true" class="btn btn-light btn-sm" v-on:click="goAdd"
+                                                   title="新增"><i style="margin-top:-3px;margin-left: -6px;"
+                                                                 class="feather icon-plus"></i>新增</a>
+
+                                                <a v-show="del" class="btn btn-light btn-sm btn-danger"
+                                                   v-on:click="makeAll('确定要删除选中的数据吗?')" title="删除">
+                                                    <i style="margin-top:-3px;margin-left: -6px;"
+                                                       class="feather icon-trash-2"></i>删除</a>
+                                            </td>
                                             <td><span class="searchName">模糊查询：</span>
                                                 <div class="input-group input-group-sm mb-3 adjustMarg"
                                                      style="float: left;width: auto;">
@@ -92,12 +102,16 @@
                                                     </div>
                                                 </th>
                                                 <th style="width:50px;">序号</th>
-                                                <th>项目代号</th>
+                                                <th>项目编号</th>
                                                 <th>项目名称</th>
-                                                <th>拟制人</th>
-                                                <th>拟制单位</th>
+                                                <th>项目主题</th>
+                                                <th>发起人/机构</th>
+                                                <th>开始时间</th>
+                                                <th>结束时间</th>
+                                                <th>项目状态</th>
+                                                <th>项目描述</th>
                                                 <th>拟制时间</th>
-                                                <th>备注</th>
+                                                <th>操作</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -116,12 +130,19 @@
                                                     <td scope="row" class="boldXh">
                                                         {{page.showCount*(page.currentPage-1)+index+1}}
                                                     </td>
-                                                    <td>{{data.WZBH}}</td>
-                                                    <td>{{data.WZMC}}</td>
-                                                    <td>{{data.ZRR}}</td>
-                                                    <td>{{data.SSBM}}</td>
-                                                    <td>{{data.DJRQ}}</td>
-                                                    <td>{{data.BZ}}</td>
+                                                    <td>{{data.projectNo}}</td>
+                                                    <td>{{data.projectName}}</td>
+                                                    <td>{{data.projectTheme}}</td>
+                                                    <td>{{data.projectSponsor}}</td>
+                                                    <td>{{data.startTime}}</td>
+                                                    <td>{{data.endTime}}</td>
+                                                    <td>{{data.status}}</td>
+                                                    <td>{{data.projectDesc}}</td>
+                                                    <td>{{data.createTime}}</td>
+                                                    <td class="boldCz">
+                                                      <a title="生成路线图" v-on:click="makerRouteFile(data)"
+                                                           style="cursor:pointer;"><i
+                                                                class="feather icon-edit-2"></i></a>                                                     </td>
                                                 </tr>
                                             </template>
                                             <tr v-show="varList.length==0">
