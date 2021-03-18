@@ -20,13 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.dyx.service.status.ProjectService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xmind.core.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/project")
@@ -160,6 +158,89 @@ public class ProjectController extends BaseController {
 		//返回结果
 		map.put("result", errInfo);
 
+		return map;
+	}
+
+	/**保存
+	 * @param
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/save")
+	@ResponseBody
+	public Object save(TblProject tblProject) throws Exception{
+		//创建HashMap对象
+		Map<String,Object> map = new HashMap<String,Object>(16);
+		//返回参数
+		String errInfo = "success";
+		//创建pd对象
+		PageData pd = new PageData();
+		//获取前台传来的pd数据
+		pd = this.getPageData();
+		//获取session
+		Session session = Jurisdiction.getSession();
+		//获取当前登录用户
+		User user = (User)session.getAttribute(Const.SESSION_USER);
+		//创建人内码
+		pd.put("userId", user.getUSER_ID());
+		//创建时间
+		pd.put("createTime",new Date());
+		//技术资料保存方法
+		projectService.save(tblProject);
+		//返回结果
+		map.put("result", errInfo);
+		return map;
+	}
+
+
+	/**删除
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/delete")
+	@ResponseBody
+	public Object delete(@RequestParam("projectId") Integer projectId) throws Exception{
+		//创建HashMap对象
+		Map<String,String> map = new HashMap<String,String>(16);
+		//返回参数
+		String errInfo = "success";
+		projectService.deleteByPrimaryKey(projectId);
+		//返回结果
+		map.put("result", errInfo);
+		return map;
+	}
+
+	/**删除
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/edit")
+	@ResponseBody
+	public Object edit(TblProject tblProject) throws Exception{
+		//创建HashMap对象
+		Map<String,Object> map = new HashMap<String,Object>();
+		//返回参数
+		String errInfo = "success";
+
+		projectService.updateByPrimaryKey(tblProject);
+		//返回结果
+		map.put("result", errInfo);
+
+		return map;
+	}
+
+	/**删除
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/goEdit")
+	@ResponseBody
+	public Object goEdit(@RequestParam("projectId") Integer projectId) throws Exception{
+		//创建HashMap对象
+		Map<String,Object> map = new HashMap<String,Object>();
+		//返回参数
+		String errInfo = "success";
+
+		TblProject tblProject =  projectService.selectByPrimaryKey(projectId);
+		//返回结果
+		map.put("result", errInfo);
+		map.put("pd",  tblProject);
 		return map;
 	}
 

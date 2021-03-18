@@ -1,6 +1,7 @@
 package com.dyx.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,9 +19,11 @@ public class TblProject {
     private String projectSponsor;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern ="yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     private Integer status;

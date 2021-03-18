@@ -43,87 +43,62 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;">项目编号：</span></span>
                                     </div>
-                                    <input type="text" class="form-control" ref="WDBH" id="WDBH" checknull
+                                    <input type="text" class="form-control" ref="projectNo" id="projectNo" checknull
                                            checkerror="项目编号不能为空" checkillegal
-                                           v-model="pd.WDBH" maxlength="25" placeholder="请输入文档编号" title="文档编号" disabled>
+                                           v-model="pd.projectNo" maxlength="25" placeholder="请输入文档编号" title="文档编号" disabled>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
                                                                                                    notnullflag>项目名称：</span></span>
                                     </div>
-                                    <input type="text" class="form-control" ref="WDMC" id="WDMC" checknull
+                                    <input type="text" class="form-control" ref="projectName" id="projectName" checknull
                                            checkerror="项目名称不能为空" checkillegal
-                                           v-model="pd.WDMC" maxlength="25" placeholder="请输入项目名称" title="文档名称">
+                                           v-model="pd.projectName" maxlength="25" placeholder="请输入项目名称" title="文档名称">
                                 </div>
                                 <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
                                        notnullflag>项目主题：</span></span>
                                     </div>
-                                    <input type="text" class="form-control" ref="WDMC" id="xmzt" checknull
+                                    <input type="text" class="form-control" ref="projectTheme" id="projectTheme" checknull
                                            checkerror="项目主题不能为空" checkillegal
-                                           v-model="pd.WDMC" maxlength="25" placeholder="请输入项目主题" title="项目主题">
+                                           v-model="pd.projectTheme" maxlength="25" placeholder="请输入项目主题" title="项目主题">
+
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
                                                                                                    notnullflag>发起单位：</span></span>
                                     </div>
-                                    <input type="text" class="form-control" ref="LSDWMC" id="LSDWMC" v-model="pd.LSDWMC"
-                                           checknull
-                                           maxlength="200" placeholder="请点击发起单位" title="发起单位" style="cursor: pointer"
-                                           checkerror="请选择生发起单位"
-                                           v-on:click="selectScdw()" readonly="readonly">
-                                    <div>
-                                    <span class="feather icon-list btn-lg" style="margin:-4px 10px 10px -50px;
-                                        position: absolute;
-                                        vertical-align: middle;
-                                        cursor: pointer;
-                                        z-index: 99;" v-on:click="selectScdw()"></span>
-                                    </div>
+                                    <input type="text" class="form-control" ref="projectSponsor" id="projectSponsor" checknull
+                                           checkerror="发起单位不能为空" checkillegal
+                                           v-model="pd.projectSponsor" maxlength="25" placeholder="请输入发起单位" title="发起单位">
                                 </div>
                                 <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
-                                                                                                   notnullflag>密级名称：</span></span>
+                                                                                                   notnullflag>开始时间：</span></span>
                                     </div>
-                                    <select class="xlk" v-model="pd.MJNM" id="MJNM" ref="MJNM" placeholder="请选择密级名称"
-                                            checknull checkerror="请选择密级名称"
-                                            title="密级名称">
-                                        <option v-for="data in mjmc_options" :value="data.name">
-                                            {{data.name}}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width: 120px;"><span
-                                                style="width: 100%;padding-left: 14px">技术资料文件：（最多上传5个文件）</span></span>
-                                    </div>
-                                    <iframe id="jdzbFile" src="" frameborder="0" width="100%"></iframe>
-                                </div>
-                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+                                    <input class="span10 date-picker form-control" name="starttime" id="starttime" checknull
+                                           checkerror="请选择开始时间" style="cursor: pointer"
+                                           v-model="pd.startTime"
+                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii"
+                                           placeholder="请点击选择开始时间" title="开始时间"/>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
-                                                                                                   notnullflag>编辑人：</span></span>
+                                                     notnullflag>结束时间：</span></span>
                                     </div>
-                                    <input type="text" class="form-control" ref="BJRMC" id="BJRMC" checknull
-                                           checkerror="请输入中文名称" checkillegal checktype="chinese"
-                                           v-model="pd.BJRMC" maxlength="20" placeholder="请输入编辑人" title="编辑人">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
-                                                                                                   notnullflag>编制时间：</span></span>
-                                    </div>
-                                    <input class="span10 date-picker form-control" name="BZSJ" id="BZSJ" checknull
-                                           checkerror="请选择编制时间" style="cursor: pointer"
-                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii" readonly
-                                           placeholder="请点击选择编制时间" title="编制时间"/>
+                                    <input class="span10 date-picker form-control" name="endTime" id="endTime" checknull
+                                           checkerror="请选择结束时间" style="cursor: pointer"
+                                           v-model="pd.endTime"
+                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii"
+                                           placeholder="请点击选择结束时间" title="结束时间"/>
                                 </div>
                                 <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px; align-items: baseline"><span
-                                                style="width: 100%;">备注：</span></span>
+                                                style="width: 100%;">项目描述：</span></span>
                                     </div>
-                                    <textarea rows="1" type="text" class="form-control" ref="BZ" id="BZ" v-model="pd.BZ"
-                                              maxlength="300" style="height: 80px" placeholder="请输入备注"
-                                              title="备注"></textarea>
+                                    <textarea rows="1" type="text" class="form-control" ref="projectDesc" id="projectDesc" v-model="pd.projectDesc"
+                                              maxlength="300" style="height: 80px" placeholder="请输入项目描述"
+                                              title="项目描述"></textarea>
                                 </div>
                             </div>
                             <!-- [加载状态 ] start -->

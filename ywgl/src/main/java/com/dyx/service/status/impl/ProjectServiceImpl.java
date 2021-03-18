@@ -21,4 +21,24 @@ public class ProjectServiceImpl implements ProjectService {
     public List<TblProject> selectPorjectList(Page page) {
         return routeArtMapper.listPageData(page);
     }
+
+    @Override
+    public void save(TblProject tblProject) throws Exception {
+        routeArtMapper.save(tblProject);
+    }
+
+    @Override
+    public void deleteByPrimaryKey(Integer projectId) {
+        routeArtMapper.deleteByPrimaryKey(projectId);
+    }
+
+    @Override
+    public TblProject selectByPrimaryKey(Integer projectId) {
+        return routeArtMapper.selectByPrimaryKey(projectId);
+    }
+
+    @Override
+    public void updateByPrimaryKey(TblProject tblProject) throws Exception {
+          routeArtMapper.updateByPrimaryKey(tblProject);
+    }
 }

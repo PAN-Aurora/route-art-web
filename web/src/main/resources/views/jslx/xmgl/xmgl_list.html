@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<!--
- * Description：资产管理统计查询
- * Author：孟凡星
- * Date：2020/12/31
--->
 <head>
     <meta charset="utf-8">
-    <title>资产管理-物资统计查询列表页面</title>
+    <title>项目管理-查询列表页面</title>
     <script src="../../../assets/js-v/header.js"></script>
     <!--滚动条样式设置-->
     <link rel="stylesheet" href="../../../assets/css/page.css">
@@ -121,7 +116,7 @@
                                                     <td>
                                                         <div class="checkbox d-inline">
                                                             <input type="checkbox" v-bind:id="'zcheckbox'+index"
-                                                                   name='ids' v-bind:value="data.WZKC_ID">
+                                                                   name='ids' v-bind:value="data.projectId">
                                                             <label style="max-height: 12px;"
                                                                    v-bind:for="'zcheckbox'+index"
                                                                    class="cr"></label>
@@ -140,9 +135,15 @@
                                                     <td>{{data.projectDesc}}</td>
                                                     <td>{{data.createTime}}</td>
                                                     <td class="boldCz">
-                                                      <a title="生成路线图" v-on:click="makerRouteFile(data)"
+                                                       <a  title="生成路线图" v-on:click="makerRouteFile(data)"
                                                            style="cursor:pointer;"><i
-                                                                class="feather icon-edit-2"></i></a>                                                     </td>
+                                                                class="feather icon-edit-2"></i></a>
+                                                        <a  title="修改" v-on:click="goEdit(data.projectId)"
+                                                           style="cursor:pointer;"><i
+                                                                class="feather icon-edit-2"></i></a>
+                                                        <a  title="删除" v-on:click="goDel(data.projectId)"
+                                                           style="cursor:pointer;"><i class="feather icon-x"></i></a>
+                                                    </td>
                                                 </tr>
                                             </template>
                                             <tr v-show="varList.length==0">
