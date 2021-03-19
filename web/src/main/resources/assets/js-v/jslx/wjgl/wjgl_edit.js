@@ -34,7 +34,7 @@ var vm = new Vue({
             //接收list页面传来的type参数来判断是view还是edit
             var type = getUrlKey('type');
             //传递文件上传方法
-            fileurl = '../../../../views/sys/com/fileupload.html?biz=jdzb_filelib&type=jdzbFile&id=' + this.JSZL_ID + '&viewFlag=' + type;
+            fileurl = '../../../../views/sys/com/fileupload.html?biz=jdzb_filelib&type=jdzbFile&id=' + this.JSZL_ID + '&viewFlag=' + type+'&fileNo='+this.pd.WDBH;
             $("#jdzbFile").attr("src", fileurl);
 
             //字典方法

@@ -1,10 +1,9 @@
-
 var vm = new Vue({
     el: '#app',
     data: {
         //主键ID
-        pd: {},
-        projectId:'',
+        pd: {"projectNo":1,"starttime":''},
+        projectId: '',
         method: 'save',
         mjmc_options: []
     },
@@ -19,11 +18,14 @@ var vm = new Vue({
                 this.getData();
             } else {
                 //初始化ID
-                this.projectId = newGuid32();
+                //this.projectId = newGuid32();
                 //自动生成文档编号
-                $("#projectNo").val('PM' + jhhDateTime());
-                //默认当前时间
-                $("#starttime").val(initDateTime());
+                this.pd.projectNo = 'PM' + jhhDateTime();
+
+                //开始时间 默认当前时间
+                $("#startTime").val(initDateTime());
+                //结束时间 默认当前时间
+                $("#endTime").val(initDateTime());
 
             }
         },
@@ -53,6 +55,10 @@ var vm = new Vue({
             $("#showform").hide();
             $("#showform2").hide();
             $("#jiazai").show();
+            //开始时间赋值
+            this.pd.startTime = $("#startTime").val();
+            //结束时间赋值
+            this.pd.endTime = $("#endTime").val();
 
             //发送 post 请求提交保存
             $.ajax({
@@ -114,13 +120,14 @@ var vm = new Vue({
                     if ("success" == data.result) {
                         //参数map
                         vm.pd = data.pd;
-                        $("#BZSJ").val(data.pd.BZSJ);
-                        $("#CJSJ").val(data.pd.CJSJ);
-                        $("#XGSJ").val(data.pd.XGSJ);
+                        //开始时间 默认当前时间
+                        $("#startTime").val(data.pd.startTime);
+                        //结束时间 默认当前时间
+                        $("#endTime").val(data.pd.endTime);
 
                     } else if ("exception" == data.result) {
                         //显示异常
-                        showException("项目管理", data.exception);
+                        showException("项目管理失败", data.exception);
                         $("#showform").show();
                         $("#jiazai").hide();
                     }
@@ -138,4 +145,4 @@ var vm = new Vue({
     mounted() {
         this.init();
     }
-})
+});

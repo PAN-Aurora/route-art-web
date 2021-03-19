@@ -48,6 +48,7 @@
             biztype: '',
             //业务名称
             bizname: '',
+            fileNo: '',
             //判断是否是视图或edit
             viewFlag:'',
             //用来设置属性默认false
@@ -72,6 +73,7 @@
                 this.bizid = getUrlKey('id');
                 this.biztype = getUrlKey('type');
                 this.bizname = getUrlKey('biz');
+                this.fileNo = getUrlKey('fileNo');
 
                 if (!isEmpty(this.bizid) && !isEmpty(this.biztype)) {
                     //根据id查询文件列表
@@ -155,6 +157,7 @@
                 fd.append('bizid', this.bizid);
                 fd.append('biztype', this.biztype);
                 fd.append('bizname', this.bizname);
+                fd.append('fileNo', this.fileNo);
                 //异步 跨域 上传文件
                 $.ajax({
                     xhrFields: {

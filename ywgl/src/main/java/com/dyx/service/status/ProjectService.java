@@ -27,6 +27,8 @@ public interface ProjectService {
      */
     public void updateByPrimaryKey(TblProject tblProject)throws Exception;
 
+    public void updateProjectById(TblProject tblProject)throws Exception;
+
     /**
      * 删除
      * @param projectId

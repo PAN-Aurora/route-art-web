@@ -8,9 +8,7 @@ import com.dyx.entity.Page;
 import com.dyx.entity.PageData;
 import com.dyx.entity.TblProject;
 import com.dyx.entity.system.User;
-import com.dyx.util.Const;
-import com.dyx.util.Jurisdiction;
-import com.dyx.util.Tools;
+import com.dyx.util.*;
 import com.google.common.collect.Lists;
 import org.apache.shiro.session.Session;
 import org.slf4j.Logger;
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.xmind.core.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Controller
@@ -49,21 +48,16 @@ public class ProjectController extends BaseController {
 	 * 生成 路线图 xmind格式
 	 * @throws Exception
 	 */
-	@RequestMapping(value="/markRouteXmind")
+	@RequestMapping(value="/markRouteFile")
 	@ResponseBody
-	public Object markRouteXmind(){
+	public Object markRouteFile(@RequestParam("projectId") Integer projectId){
 		//创建HashMap对象
 		Map<String,String> map = new HashMap<String,String>();
 		//返回参数
 		String errInfo = "success";
 		String filePath = "";
 		try{
-			//创建pd对象
-			PageData pd = this.getPageData();
-			//获取前台传来的pd数据
 			// 读取目录
-			String bookName = "技术发展路线";
-
 			String[]  pathList = new  String[]{"1.发展需求","2.建设目标","3.发展重点","4.技术路径","5.保障支撑"};
 			// 创建思维导图的工作空间
 			IWorkbookBuilder workbookBuilder = Core.getWorkbookBuilder();
@@ -100,19 +94,51 @@ public class ProjectController extends BaseController {
 				rootTopic.add(topicRoot);
 			}
 
-			filePath = CLASS_PATH + FILE_SEPARATOR + bookName + ".xmind";
+			TblProject tblProject =  projectService.selectByPrimaryKey(projectId);
+
+			filePath = CLASS_PATH +"/xmind/"+ FILE_SEPARATOR + tblProject.getProjectNo() + ".xmind";
 			// 保存
 			workbook.save(filePath);
 
 			logger.info("########生成xmind文件成功######文件路径："+filePath);
 
+			//执行保存
+			if(filePath.length()>0){
+				tblProject = new TblProject();
+				tblProject.setProjectId(projectId);
+				tblProject.setIsMaker(1);
+				tblProject.setFilePath(filePath);
+				projectService.updateByPrimaryKey(tblProject);
+
+			}
 		}catch (Exception e){
 			e.printStackTrace();
 			logger.info("########生成xmind文件异常######");
-			errInfo = "error";
-			filePath = "";
-		}finally {
-			//执行保存
+			errInfo = "exception";
+		}
+		//返回结果
+		map.put("result", errInfo);
+		return map;
+	}
+	/**
+	 * 下载路线图 xmind格式
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/downRouteFile")
+	@ResponseBody
+	public Object downRouteFile(@RequestParam("projectId") Integer projectId,HttpServletResponse response){
+		//创建HashMap对象
+		Map<String,String> map = new HashMap<String,String>();
+		//返回参数
+		String errInfo = "success";
+		try{
+		    TblProject project  =  projectService.selectByPrimaryKey(projectId);
+			FileDownload.fileDownload(response,project.getFilePath(),project.getProjectNo()+".xmind");
+			//获取前台传来的pd数据
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.info("########下载文件异常######");
+			errInfo = "exception";
 		}
 		//返回结果
 		map.put("result", errInfo);
@@ -128,7 +154,7 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Object list(Page page) throws Exception{
 		//创建HashMap对象
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String,Object> map = new HashMap<String,Object>();
 		//返回参数
 		String errInfo = "success";
 		//创建pd对象
@@ -169,21 +195,16 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Object save(TblProject tblProject) throws Exception{
 		//创建HashMap对象
-		Map<String,Object> map = new HashMap<String,Object>(16);
+		Map<String,Object> map = new HashMap<String,Object>();
 		//返回参数
 		String errInfo = "success";
-		//创建pd对象
-		PageData pd = new PageData();
-		//获取前台传来的pd数据
-		pd = this.getPageData();
 		//获取session
 		Session session = Jurisdiction.getSession();
 		//获取当前登录用户
 		User user = (User)session.getAttribute(Const.SESSION_USER);
-		//创建人内码
-		pd.put("userId", user.getUSER_ID());
-		//创建时间
-		pd.put("createTime",new Date());
+
+		tblProject.setUserId(user.getUSER_ID());
+		tblProject.setCreateTime(new Date());
 		//技术资料保存方法
 		projectService.save(tblProject);
 		//返回结果
@@ -199,10 +220,31 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public Object delete(@RequestParam("projectId") Integer projectId) throws Exception{
 		//创建HashMap对象
-		Map<String,String> map = new HashMap<String,String>(16);
+		Map<String,String> map = new HashMap<String,String>();
 		//返回参数
 		String errInfo = "success";
 		projectService.deleteByPrimaryKey(projectId);
+		//返回结果
+		map.put("result", errInfo);
+		return map;
+	}
+
+	/**删除
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/deleteBatch")
+	@ResponseBody
+	public Object deleteBatch(@RequestParam("projectIds") String projectIds) throws Exception{
+		//创建HashMap对象
+		Map<String,String> map = new HashMap<String,String>();
+		//返回参数
+		String errInfo = "success";
+		if(!StringUtil.isNullOrEmptyOrNULLString(projectIds)){
+			String[] ids = projectIds.split(",");
+			for(String id:ids){
+				projectService.deleteByPrimaryKey(Integer.parseInt(id));
+			}
+		}
 		//返回结果
 		map.put("result", errInfo);
 		return map;
@@ -219,7 +261,7 @@ public class ProjectController extends BaseController {
 		//返回参数
 		String errInfo = "success";
 
-		projectService.updateByPrimaryKey(tblProject);
+		projectService.updateProjectById(tblProject);
 		//返回结果
 		map.put("result", errInfo);
 
@@ -241,6 +283,7 @@ public class ProjectController extends BaseController {
 		//返回结果
 		map.put("result", errInfo);
 		map.put("pd",  tblProject);
+
 		return map;
 	}
 

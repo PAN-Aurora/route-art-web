@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dyx.util.*;
 import org.apache.shiro.session.Session;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dyx.controller.base.BaseController;
@@ -26,11 +28,9 @@ import com.dyx.entity.system.User;
 import com.dyx.service.es.FileEsService;
 import com.dyx.service.status.StatusAnalysisService;
 import com.dyx.service.wjgl.WjglService;
-import com.dyx.util.Const;
-import com.dyx.util.Jurisdiction;
-import com.dyx.util.PathUtil;
-import com.dyx.util.StringUtil;
-import com.dyx.util.Tools;
+
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 发展需求  国际现状分析
  *
@@ -39,9 +39,9 @@ import com.dyx.util.Tools;
 @RequestMapping("/statusAnalysis")
 public class StatusAnalysisController extends BaseController {
 	
-    private static final Logger LOGGER = LoggerFactory.getLogger(StatusAnalysisController.class);
-   
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(StatusAnalysisController.class);
+
+	@Autowired
     StatusAnalysisService statusAnalysisService;
     
     @Autowired
@@ -95,6 +95,7 @@ public class StatusAnalysisController extends BaseController {
 		int size = Integer.parseInt(pd.getString("showCount"))==-1?10:Integer.parseInt(pd.getString("showCount"));
 		int from = (Integer.parseInt(pd.getString("currentPage"))-1) * size;
 
+		 String fileds = "id,file_id,file_name,file_no,file_type,file_url,created_time";
 		 //从es中分页查询出数据
 		 EsPageModel pageModel =   fileEsService.searchDataPage(
 			 fileIndex
@@ -102,6 +103,7 @@ public class StatusAnalysisController extends BaseController {
 		    ,from
 		    ,size
 		    ,matchQuery
+				 ,fileds,"",""
 		   );
 	    //将返回参数填充到相关返回参数中
 		page.setCurrentPage(pageModel.getCurrentPage());
@@ -147,7 +149,30 @@ public class StatusAnalysisController extends BaseController {
 		map.put("result", errInfo);
 		return map;
 	}
-    
-    
+
+	/**
+	 * 下载
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/downFile")
+	@ResponseBody
+	public Object downFile(@RequestParam("file_id") String fileId, HttpServletResponse response){
+		//创建HashMap对象
+		Map<String,String> map = new HashMap<String,String>();
+		//返回参数
+		String errInfo = "success";
+		try{
+			Map<String, Object> mapEs  =  fileEsService.searchDataById( fileIndex,fileType,fileId,null);
+			FileDownload.fileDownload(response,mapEs.get("file_url").toString(),mapEs.get("file_name").toString()+".xmind");
+			//获取前台传来的pd数据
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.info("########下载文件异常######");
+			errInfo = "exception";
+		}
+		//返回结果
+		map.put("result", errInfo);
+		return map;
+	}
 
 }

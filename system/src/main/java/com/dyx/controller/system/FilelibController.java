@@ -158,7 +158,9 @@ public class FilelibController extends BaseController {
 
     @RequestMapping(value = "/upload")
     @ResponseBody
-    public Object upload(@RequestParam(value = "file", required = true) MultipartFile file, @RequestParam(value = "bizid", required = true) String bizid,@RequestParam(value = "biztype", required = true) String biztype,@RequestParam(value = "bizname", required = true) String bizname) throws Exception {
+    public Object upload(@RequestParam(value = "file", required = true) MultipartFile file, @RequestParam(value = "bizid", required = true) String bizid,@RequestParam(value = "biztype", required = true) String biztype,@RequestParam(value = "bizname", required = true) String bizname
+            ,@RequestParam(value = "fileNo") String fileNo
+    ) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         String errInfo = "success";
         if (file != null&& !file.isEmpty()&&Tools.notEmpty(biztype)&&Tools.notEmpty(bizid)&&Tools.notEmpty(bizname)) {
@@ -198,6 +200,7 @@ public class FilelibController extends BaseController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("file_id", fileid);
                 jsonObject.put("file_name", file.getOriginalFilename());
+                jsonObject.put("file_no", fileNo);
                 jsonObject.put("file_title", fileName);
                 jsonObject.put("file_type", type);
                 jsonObject.put("file_url", path);

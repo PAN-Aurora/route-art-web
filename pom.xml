@@ -29,6 +29,7 @@
         <poi.version>3.17</poi.version>
         <velocity.version>1.7</velocity.version>
         <jna.version>5.5.0</jna.version>
+        <elasticSearch.version>6.4.2</elasticSearch.version>
     </properties>
 
     <!-- 声明父模块 -->
@@ -320,21 +321,23 @@
 
 		<!--集成elasticsearch-->
         <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>transport</artifactId>
-            <version>6.4.2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.elasticsearch</groupId>
-                    <artifactId>elasticsearch</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticSearch.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
+            <version>${elasticSearch.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>transport-netty4-client</artifactId>
+            <version>${elasticSearch.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!-- 若想引用modbus4j需要引入下列repository id:ias-snapshots id:ias-releases 两个 -->

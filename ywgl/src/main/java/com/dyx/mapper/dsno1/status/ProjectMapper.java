@@ -13,6 +13,8 @@ public interface ProjectMapper {
 
     public void updateByPrimaryKey(TblProject tblProject);
 
+    public void updateProjectById(TblProject tblProject);
+
     public void deleteByPrimaryKey(@Param("projectId") Integer projectId);
 
     public TblProject selectByPrimaryKey(@Param("projectId") Integer projectId);

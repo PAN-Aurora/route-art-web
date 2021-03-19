@@ -43,7 +43,7 @@
                                                                  class="feather icon-plus"></i>新增</a>
 
                                                 <a v-show="true" class="btn btn-light btn-sm btn-danger"
-                                                   v-on:click="makeAll('确定要删除选中的数据吗?')" title="删除">
+                                                   v-on:click="deleteBatch('确定要删除选中的数据吗?')" title="删除">
                                                     <i style="margin-top:-3px;margin-left: -6px;"
                                                        class="feather icon-trash-2"></i>删除</a>
                                             </td>
@@ -106,6 +106,7 @@
                                                 <th>项目状态</th>
                                                 <th>项目描述</th>
                                                 <th>拟制时间</th>
+                                                <th>是否生成路线图</th>
                                                 <th>操作</th>
                                             </tr>
                                             </thead>
@@ -134,13 +135,21 @@
                                                     <td>{{data.status}}</td>
                                                     <td>{{data.projectDesc}}</td>
                                                     <td>{{data.createTime}}</td>
+                                                    <td>{{data.isMaker==1?'已生成':'未生成'}}</td>
+
                                                     <td class="boldCz">
                                                        <a  title="生成路线图" v-on:click="makerRouteFile(data)"
                                                            style="cursor:pointer;"><i
-                                                                class="feather icon-edit-2"></i></a>
+                                                                class="feather icon-play"></i></a>
+
+                                                       <a v-if="data.isMaker==1" title="下载路线图" v-on:click="downRouteFile(data)"
+                                                           style="cursor:pointer;"><i
+                                                                class="mdi mdi-cloud-download"></i></a>
+
                                                         <a  title="修改" v-on:click="goEdit(data.projectId)"
                                                            style="cursor:pointer;"><i
                                                                 class="feather icon-edit-2"></i></a>
+
                                                         <a  title="删除" v-on:click="goDel(data.projectId)"
                                                            style="cursor:pointer;"><i class="feather icon-x"></i></a>
                                                     </td>

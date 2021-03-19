@@ -41,4 +41,9 @@ public class ProjectServiceImpl implements ProjectService {
     public void updateByPrimaryKey(TblProject tblProject) throws Exception {
           routeArtMapper.updateByPrimaryKey(tblProject);
     }
+
+    @Override
+    public void updateProjectById(TblProject tblProject) throws Exception {
+          routeArtMapper.updateProjectById(tblProject);
+    }
 }

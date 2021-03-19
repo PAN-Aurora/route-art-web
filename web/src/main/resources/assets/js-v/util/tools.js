@@ -56,7 +56,7 @@ function initDate() {
  * 初始化时间
  */
 function initDateTime() {
-    return formatDateUtil(new Date(), "yyyy-MM-dd hh:mm");
+    return formatDateUtil(new Date(), "yyyy-MM-dd hh:mm:ss");
 }
 
 /**

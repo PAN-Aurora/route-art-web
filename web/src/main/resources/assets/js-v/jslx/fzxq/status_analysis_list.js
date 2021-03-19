@@ -134,7 +134,18 @@ var vm = new Vue({
 //                }, 2000);
             });
         },
+        downFile: function(data){
+            this.$confirm('确定要下载路线图文件吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                cancelButtonClass: 'el-button--info',
+            }).then(() => {
+                window.location.href = httpurl + 'statusAnalysis/downFile?file_id='+data.file_id;
+        }).catch(() => {
 
+            });
+        },
         //选择办理人
         getUser: function (){
             var diag = new top.Dialog();

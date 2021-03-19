@@ -57,7 +57,7 @@
                                 <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
-                                       notnullflag>项目主题：</span></span>
+                                                                                                   notnullflag>项目主题：</span></span>
                                     </div>
                                     <input type="text" class="form-control" ref="projectTheme" id="projectTheme" checknull
                                            checkerror="项目主题不能为空" checkillegal
@@ -76,19 +76,17 @@
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
                                                                                                    notnullflag>开始时间：</span></span>
                                     </div>
-                                    <input class="span10 date-picker form-control" name="starttime" id="starttime" checknull
+                                    <input class="span10 date-picker form-control" name="startTime" id="startTime" checknull
                                            checkerror="请选择开始时间" style="cursor: pointer"
-                                           v-model="pd.startTime"
-                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii"
+                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii:ss"
                                            placeholder="请点击选择开始时间" title="开始时间"/>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" style="width: 120px;"><span style="width: 100%;"
-                                                     notnullflag>结束时间：</span></span>
+                                                                                                   notnullflag>结束时间：</span></span>
                                     </div>
                                     <input class="span10 date-picker form-control" name="endTime" id="endTime" checknull
                                            checkerror="请选择结束时间" style="cursor: pointer"
-                                           v-model="pd.endTime"
-                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii"
+                                           autocomplete="off" type="text" dateformat="yyyy-mm-dd hh:ii:ss"
                                            placeholder="请点击选择结束时间" title="结束时间"/>
                                 </div>
                                 <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">

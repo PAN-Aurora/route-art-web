@@ -141,9 +141,9 @@ var vm = new Vue({
                     withCredentials: true
                 },
                 type: "POST",
-                url: httpurl + 'project/markRouteXmind',
+                url: httpurl + 'project/markRouteFile',
                 data: {
-                    keyWords: data.WZKC_ID
+                    projectId: data.projectId
                 },
                 dataType: "json",
                 /**
@@ -155,7 +155,7 @@ var vm = new Vue({
                         //物资统计查询数据
                         message('info', '生成路线图成功!', 1000);
                         //判断按钮权限，用于是否显示按钮
-                        vm.hasButton();
+                        vm.getList();
                         //加载状态
                         vm.loading = false;
                         $("input[name='ids']").prop("checked", false);
@@ -167,6 +167,19 @@ var vm = new Vue({
                 }
             }).done().fail(function () {
                 message('warning', '请求服务器无响应，稍后再试!', 1000);
+            });
+        },
+        //下载路线图
+        downRouteFile: function(data){
+            this.$confirm('确定要下载路线图文件吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                cancelButtonClass: 'el-button--info',
+            }).then(() => {
+                window.location.href = httpurl + 'project/downRouteFile?projectId='+data.projectId;
+            }).catch(() => {
+
             });
         },
         //新增
@@ -200,6 +213,54 @@ var vm = new Vue({
                     type: "POST",
                     url: httpurl+'project/delete',
                     data: {projectId:id,tm:new Date().getTime()},
+                    dataType:'json',
+                    success: function(data){
+                        if("success" == data.result){
+                            message('success', '已经从列表中删除!', 1000);
+                        }
+                        vm.getList();
+                    }
+                });
+        }).catch(() => {
+
+            });
+        },
+        /**
+         * 批量删除
+         * @param id
+         */
+        deleteBatch: function (){
+
+
+            if (vm.varList.length == 0) {
+                return  message('warning', '无数据!', 1000);
+            }
+            var str = '';
+            for (var i = 0; i < document.getElementsByName('ids').length; i++) {
+                if (document.getElementsByName('ids')[i].checked) {
+                    if (str == '') str += document.getElementsByName('ids')[i].value;
+                    else str += ',' + document.getElementsByName('ids')[i].value;
+                }
+            }
+            this.DATA_IDS = str;
+
+            if(str == ""){
+                 return  message('success', '请选择需要删除的数据!', 1000);
+            }
+            this.$confirm('确定要删除吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                cancelButtonClass: 'el-button--info',
+            }).then(() => {
+                this.loading = true;
+                $.ajax({
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type: "POST",
+                    url: httpurl+'project/deleteBatch',
+                    data: {projectIds:this.DATA_IDS,tm:new Date().getTime()},
                     dataType:'json',
                     success: function(data){
                         if("success" == data.result){
