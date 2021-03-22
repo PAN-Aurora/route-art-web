@@ -202,14 +202,14 @@ var vm = new Vue({
         },
 
         /**
-         * 查看历史数据
+         * 文件分析
          */
-        goView: function (row) {
+        goView: function () {
             //创建物资IDS数组
             var diag = new top.Dialog();
             diag.Drag=true;
-            diag.Title ="选择物资";
-            diag.URL = '../../zcgl/tjcx/zcgl_wzlog.html?WZKC_ID=' + row.WZKC_ID;
+            diag.Title ="文件分析";
+            diag.URL = '../../jslx/fzxq/status_serach.html';
             diag.Width = 1200;
             diag.Height = 695;
             //有无遮罩窗口
@@ -332,7 +332,14 @@ var vm = new Vue({
         //删除
         goDel: function(data){
         	 //加载状态变为true
-            this.loading = true;
+
+            this.$confirm('确定要导出所有数据吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                cancelButtonClass: 'el-button--info',
+            }).then(() => {
+                vm.loading = true;
             $.ajax({
                 xhrFields: {
                     withCredentials: true
@@ -346,22 +353,25 @@ var vm = new Vue({
                 dataType: "json",
                 success: function (data) {
                     if ("success" == data.result) {
-                    	vm.getList();
-                        //判断按钮权限，用于是否显示按钮
-                        vm.hasButton();
-                        //加载状态
-                        vm.loading = false;
-                        $("input[name='ids']").prop("checked", false);
-                        $("input[id='zcheckbox']").prop("checked", false);
-                        
-                    } else if ("exception" == data.result) {
-                        //显示异常
-                        showException("操作失败", data.exception);
-                    }
-                }
-            }).done().fail(function () {
-                message('warning', '请求服务器无响应，稍后再试!', 1000);
-            });
+                                vm.getList();
+                                //判断按钮权限，用于是否显示按钮
+                                vm.hasButton();
+                                //加载状态
+                                vm.loading = false;
+                                $("input[name='ids']").prop("checked", false);
+                                $("input[id='zcheckbox']").prop("checked", false);
+
+                            } else if ("exception" == data.result) {
+                                //显示异常
+                                showException("操作失败", data.exception);
+                            }
+                        }
+                    }).done().fail(function () {
+                        message('warning', '请求服务器无响应，稍后再试!', 1000);
+                    });
+
+                  }).catch(() => {});
+
         },
 
         //-----分页必用----start

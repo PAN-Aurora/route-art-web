@@ -32,16 +32,16 @@
                     <div class="row">
                         <!-- [ Hover-table ] start -->
                         <div class="col-xl-12">
-                            <div class="card">
+                            <div class="card" >
                                 <!-- 检索  -->
                                 <div style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
                                     <table style="margin-top:5px;">
                                         <tr>
                                             <td style="vertical-align:top;">
                                                 <a v-show="true" class="btn btn-light btn-sm"
-                                                   v-on:click="editMenu(MENU_ID,'add');"><i
+                                                   v-on:click="goView();"><i
                                                         style="margin-top:-3px;margin-left: -6px;"
-                                                        class="feather icon-plus"></i>新增
+                                                        class="feather icon-plus"></i>文件分析
                                                 </a>
                                             </td>
                                             <td style="vertical-align:top;">
@@ -105,6 +105,7 @@
                                                 <th>文档编号</th>
                                                 <th>文档名称</th>
                                                 <th>文档类型</th>
+                                                <th>文档大小</th>
                                                 <th>编制时间</th>
                                                 <th>操作</th>
                                             </tr>
@@ -116,7 +117,7 @@
                                                     <td>
                                                         <div class="checkbox d-inline">
                                                             <input type="checkbox" v-bind:id="'zcheckbox'+index"
-                                                                   name='ids' v-bind:value="data.WZKC_ID">
+                                                                   name='ids' v-bind:value="data.file_id">
                                                             <label style="max-height: 12px;"
                                                                    v-bind:for="'zcheckbox'+index"
                                                                    class="cr"></label>
@@ -126,11 +127,12 @@
                                                         {{page.showCount*(page.currentPage-1)+index+1}}
                                                     </td>
                                                     <td>{{data.file_no}}</td>
-                                                    <td>{{data.file_name}}</td>
+                                                    <td><a v-bind:href="data.url" target="_blank">{{data.file_name}}</a></td>
                                                     <td>{{data.file_type}}</td>
+                                                    <td>{{data.file_size}}</td>
                                                     <td>{{data.created_time}}</td>
                                                      <td class="boldCz">
-                                                         <a  title="下载路线图" v-on:click="downFile(data)"
+                                                         <a  title="下载源文件" v-on:click="downFile(data)"
                                                             style="cursor:pointer;"><i
                                                                  class="mdi mdi-cloud-download"></i></a>
                                                         <a  title="删除" v-on:click="goDel(data)"

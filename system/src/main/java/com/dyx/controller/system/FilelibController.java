@@ -196,11 +196,16 @@ public class FilelibController extends BaseController {
                 } else if (path.endsWith("pdf")) {
                 	type ="pdf";
                	}
+               	//获取文件大小 M
+                String size  = String.valueOf(file.getSize());
+                double  fileSize =  Double.valueOf(size)/1024/1024;
+                java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00");
                 //调用elasticsearch保存
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("file_id", fileid);
                 jsonObject.put("file_name", file.getOriginalFilename());
                 jsonObject.put("file_no", fileNo);
+                jsonObject.put("file_size", df.format(fileSize));
                 jsonObject.put("file_title", fileName);
                 jsonObject.put("file_type", type);
                 jsonObject.put("file_url", path);

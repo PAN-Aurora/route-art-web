@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>选择物资</title>
+    <!--引入头js-->
+    <script src="../../../assets/js-v/header.js"></script>
+    <!--滚动条样式设置-->
+    <link rel="stylesheet" href="../../../assets/css/page.css">
+    <style type="text/css">
+    </style>
+</head>
+
+<body>
+<div style="margin: 0 0px;" id="app" v-cloak>
+    <template>
+        <div class="row">
+            <!-- [ Hover-table ] start -->
+            <div class="col-xl-12">
+                <div class="card" >
+                    <!-- 检索  -->
+                    <div style="padding-left: 15px;padding-top: 5px;" class="queryLayout">
+                        <table style="margin-top:5px;">
+                            <tr>
+                                <td style="vertical-align:top;margin-left:5px;">
+                                    <a v-show="true" class="btn btn-light btn-sm"
+                                       v-on:click="makeStatusResult();"><i
+                                            style="margin-top:-3px;margin-left: -6px;"
+                                            class="feather icon-plus"></i>生成需求分析
+                                    </a>
+                                </td>
+                                <td><span class="searchName">模糊查询：</span>
+                                    <div class="input-group input-group-sm mb-3 adjustMarg"
+                                         style="float: left;width: auto;">
+                                        <input class="form-control" type="text" v-model="keyWords"
+                                               onkeydown="keyDown()" style="width: 250px"
+                                               title="请输入文档内容描述信息" placeholder="请输入文档内容描述信息"/>
+                                    </div>
+                                </td>
+
+                                <td style="vertical-align:top;padding-left:5px;">
+                                    <a id="key-search" class="btn btn-light btn-sm" v-on:click="getList"
+                                       title="检索">
+                                        <i style="margin-top:-3px;margin-left: -6px;"
+                                           class="feather icon-search"></i>查询</a>
+                                    <a class="btn btn-light btn-sm" v-on:click="rest" title="重置">
+                                        <i style="margin-top:-3px;margin-left: -6px;"
+                                           class="feather icon-refresh-cw"></i>重置</a>
+                                    </a>
+                                </td>
+                                <td v-show="loading">
+                                    <!-- [加载状态 ] start -->
+                                    <div class="d-flex justify-content-center" style="margin-top:-10px;">
+                                        <div class="spinner-grow spinner-grow-sm" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    <!-- [ 加载状态  ] End -->
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- 注意：el-table 上加一个 ref="table" -->
+                    <div class="card-block table-border-style" style="margin-top: -15px">
+                        <div class="table-responsive">
+                            <table id="simple-table" class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th style="width: 50px;" id="cts">
+                                        <div class="checkbox d-inline">
+                                            <input type="checkbox" name="fhcheckbox" id="zcheckbox">
+                                            <label style="max-height: 12px;" for="zcheckbox"
+                                                   class="cr"></label>
+                                        </div>
+                                    </th>
+                                    <th style="width:50px;">序号</th>
+                                    <th>文档编号</th>
+                                    <th>文档名称</th>
+                                    <th>文档类型</th>
+                                    <th>文档大小（M）</th>
+                                    <th>编制时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- 开始循环 -->
+                                <template v-for="(data,index) in varList">
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox d-inline">
+                                                <input type="checkbox" v-bind:id="'zcheckbox'+index"
+                                                       name='ids' v-bind:value="data.file_id">
+                                                <label style="max-height: 12px;"
+                                                       v-bind:for="'zcheckbox'+index"
+                                                       class="cr"></label>
+                                            </div>
+                                        </td>
+                                        <td scope="row" class="boldXh">
+                                            {{page.showCount*(page.currentPage-1)+index+1}}
+                                        </td>
+                                        <td>{{data.file_no}}</td>
+                                        <td><a href="javascript:void(0);" v-on:click="goView(data)">{{data.file_name}}</a></td>
+                                        <td>{{data.file_type}}</td>
+                                        <td>{{data.file_size}}</td>
+                                        <td>{{data.created_time}}</td>
+                                        <td class="boldCz">
+                                            <a  title="下载源文件" v-on:click="downFile(data)"
+                                                style="cursor:pointer;"><i
+                                                    class="mdi mdi-cloud-download"></i></a>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <tr v-show="varList.length==0">
+                                    <td colspan="20">没有相关数据</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="vertical-align:top;">
+                                    <div style="float: right;padding-top: 0px;margin-top: 0px;"
+                                         v-html="page.pageStr"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- [ Hover-table ] end -->
+        </div>
+        <!-- [ Main Content ] end -->
+    </template>
+
+</div>
+<!--底部js-->
+<script type="text/javascript" src="../../../assets/js-v/footer.js"></script>
+<script type="text/javascript" src="/assets/plugins/layer/layer.js"></script>
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/jslx/fzxq/status_serach.js"></script>
+</body>
+
+</html>

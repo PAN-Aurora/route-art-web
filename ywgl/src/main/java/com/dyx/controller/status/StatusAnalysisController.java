@@ -95,7 +95,7 @@ public class StatusAnalysisController extends BaseController {
 		int size = Integer.parseInt(pd.getString("showCount"))==-1?10:Integer.parseInt(pd.getString("showCount"));
 		int from = (Integer.parseInt(pd.getString("currentPage"))-1) * size;
 
-		 String fileds = "id,file_id,file_name,file_no,file_type,file_url,created_time";
+		 String fileds = "id,file_id,file_name,file_no,file_type,file_url,file_size,created_time";
 		 //从es中分页查询出数据
 		 EsPageModel pageModel =   fileEsService.searchDataPage(
 			 fileIndex
@@ -163,7 +163,7 @@ public class StatusAnalysisController extends BaseController {
 		String errInfo = "success";
 		try{
 			Map<String, Object> mapEs  =  fileEsService.searchDataById( fileIndex,fileType,fileId,null);
-			FileDownload.fileDownload(response,mapEs.get("file_url").toString(),mapEs.get("file_name").toString()+".xmind");
+			FileDownload.fileDownload(response,mapEs.get("file_url").toString(),mapEs.get("file_name").toString());
 			//获取前台传来的pd数据
 		}catch (Exception e){
 			e.printStackTrace();
