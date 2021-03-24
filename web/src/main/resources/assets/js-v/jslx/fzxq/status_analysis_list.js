@@ -215,6 +215,12 @@ var vm = new Vue({
             };
             diag.show();
         },
+        /**
+         * 预览文件
+         * @param data
+         * @param index
+         * @returns {*}
+         */
         showFile(data,index){
             var fileId = data.analysisBase.split(',');
             if(data!=null && data!=''){
@@ -248,14 +254,8 @@ var vm = new Vue({
          * 重置检索条件方法
          */
         rest: function () {
-            //关键词清空
-            vm.ZRR = '';
-            vm.ZRRNM = '';
-            $("#startTime").val('');
-            $("#endTime").val('');
-            $("#startTime").datepicker('setEndDate', null);
-            $("#endTime").datepicker('setStartDate', null);
-            $("#WZFLNM").val(null).trigger("change");
+            this.analysisResult = '';
+            this.projectName = '';
             //分页跳转至第一页;
             this.nextPage(1);
             //遍历全部数据

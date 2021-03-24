@@ -44,7 +44,7 @@
             AND t.type  = #{pd.type}
         </if>
         <if test=" pd.analysisResult != null and pd.analysisResult !='' ">
-            AND t.ANALYSIS_BASE_NAME  = #{pd.analysisResult}
+            AND t.ANALYSIS_BASE_NAME  like  '%${pd.analysisResult}%'
         </if>
         <if test=" pd.projectName != null and pd.projectName !='' ">
             AND t1.PROJECT_NAME  = #{pd.projectName}
