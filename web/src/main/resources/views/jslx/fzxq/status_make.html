@@ -46,10 +46,10 @@
                             <div id="showform" style="margin-left: 6px;margin-top: -10px">
                                 <div class="input-group input-group-sm mb-3" style="max-width: 378px;">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width: 90px;"><span style="width: 100%;"notnullflag>项目分类：</span></span>
+                                        <span class="input-group-text" style="width: 100%;"><span style="width: 100%;"notnullflag>项目分类：</span></span>
                                     </div>
                                     <select ref="category" id="category" v-model="category" title="项目分类" readonly
-                                            style="width:298px;padding-left:10px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;cursor: pointer"></select>
+                                            style="width:298px;padding-left:10px;border: 1px solid #CED4DA;transparent; appearance:none;-moz-appearance:none;-webkit-appearance:none;cursor: pointer"></select>
                                     <div>
                                     <span class="feather icon-list btn-lg" style="margin:-4px 10px 10px -50px;
                                         position: absolute;
@@ -63,7 +63,7 @@
                                         <span class="input-group-text" style="width: 120px; align-items: baseline"><span
                                                 style="width: 100%;">分析结论：</span></span>
                                     </div>
-                                    <textarea rows="1" type="text" class="form-control"  id="conclusion" v-model="conclusion"
+                                    <textarea rows="1" type="text" class="form-control"  id="conclusion" v-model="pd.analysisResult"
                                               maxlength="300" style="height: 80px" placeholder="请输入分析结论"
                                               title="分析结论"></textarea>
                                 </div>

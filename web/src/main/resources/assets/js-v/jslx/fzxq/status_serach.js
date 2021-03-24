@@ -92,10 +92,10 @@ var vm = new Vue({
             }
             var diag = new top.Dialog();
             diag.Drag = true;
-            diag.Title = "修改类型";
+            diag.Title = "分析结论";
             diag.URL = '../../jslx/fzxq/status_make.html?ID_=' + str;
             diag.Width = 400;
-            diag.Height = 150;
+            diag.Height = 400;
             diag.Modal = true;
             diag.ShowMaxButton = false;
             diag.ShowMinButton = false;
@@ -122,9 +122,13 @@ var vm = new Vue({
         },
         //预览
         goView(data){
-            alert(data.url);
-            window.location.href = data.url;
-           // window.open (data.url)
+            //var url="../../../uploadFiles/file/Spring Cloud微服务实战.pdf";
+            if(data.id!=null && data.id !=''){
+                window.open("../../../plugins/pdfjs/web/viewer.html?file="+httpurl + "statusAnalysis/showFile/"+data.id);
+            }else{
+                return  message('warning', '无法预览!', 1000);
+            }
+
         },
         //下载文件
         downFile: function(data){
@@ -134,7 +138,7 @@ var vm = new Vue({
                 type: 'warning',
                 cancelButtonClass: 'el-button--info',
             }).then(() => {
-                window.location.href = httpurl + 'statusAnalysis/downFile?file_id='+data.id;
+                window.location.href = httpurl + 'statusAnalysis/downFile/'+data.id;
         }).catch(() => {
 
             });

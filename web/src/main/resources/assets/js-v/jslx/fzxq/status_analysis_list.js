@@ -11,7 +11,8 @@ var vm = new Vue({
         //分页类
         page: [],
         //检索条件,关键词
-        keyWords: '',
+        analysisResult: '',
+        projectName: '',
         //每页显示条数(这个是系统设置里面配置的，初始为-1即可，固定此写法)
         showCount: -1,
         //当前页码
@@ -76,16 +77,10 @@ var vm = new Vue({
         },
 
         /**
-         * 获取物资登记列表
+         * 获取列表
          */
         getList: function () {
 
-            //开始时间赋值
-            this.startTime = $("#startTime").val();
-            //结束时间赋值
-            this.endTime = $("#endTime").val();
-            //物资分类
-            this.WZFLNM = $("#WZFLNM").val();
             //加载状态变为true
             this.loading = true;
             
@@ -94,15 +89,10 @@ var vm = new Vue({
                     withCredentials: true
                 },
                 type: "POST",
-                url: httpurl + 'statusAnalysis/list?showCount=' + this.showCount + '&currentPage=' + this.currentPage,
+                url: httpurl + 'statusAnalysis/getDatalist?showCount=' + this.showCount + '&currentPage=' + this.currentPage,
                 data: {
-                    WZFLNM:this.WZFLNM,
-                    keyWords: this.keyWords,
-                    SSBMNM: this.SSBMNM,
-                    ZRR: this.ZRR,
-                    ZRRNM: this.ZRRNM,
-                    startTime: this.startTime,
-                    endTime: this.endTime,
+                    analysisResult: this.analysisResult,
+                    projectName: this.projectName,
                     tm: new Date().getTime()
                 },
                 dataType: "json",
@@ -221,10 +211,18 @@ var vm = new Vue({
             //关闭事件
             diag.CancelEvent = function(){
                 diag.close();
+                vm.getList();
             };
             diag.show();
         },
-
+        showFile(data,index){
+            var fileId = data.analysisBase.split(',');
+            if(data!=null && data!=''){
+                window.open("../../../plugins/pdfjs/web/viewer.html?file="+httpurl + "statusAnalysis/showFile/"+fileId[index]);
+            }else{
+                return  message('warning', '无法预览!', 1000);
+            }
+        },
         /**
          * 鼠标悬浮事件 显示项目名称和所属岗位保养内容完整信息
          * @param XX 项目名称保养内容所属岗位
@@ -251,7 +249,6 @@ var vm = new Vue({
          */
         rest: function () {
             //关键词清空
-            vm.keyWords = '';
             vm.ZRR = '';
             vm.ZRRNM = '';
             $("#startTime").val('');
@@ -308,12 +305,6 @@ var vm = new Vue({
             exportForm.action = httpurl + 'tjcx/excel';
             exportForm.submit();
         },
-        //在线预览功能
-        showFile: function(data) {
-        	if(data.file_url && data.file_url!=""){
-        		//window.open("<%=basePath%>Laws/devDoc.do?id="+id,"_blank","top=100,left=100,height=600,width=1000,status=yes,toolbar=1,menubar=no,location=no,scrollbas=yes");
-        	}
-        },
         //选择几条数据制造评论信息
         makeReport:function(){
         	 if (vm.varList.length == 0) {
@@ -333,44 +324,42 @@ var vm = new Vue({
         goDel: function(data){
         	 //加载状态变为true
 
-            this.$confirm('确定要导出所有数据吗？', '提示', {
+            this.$confirm('确定要删除选择的数据吗？', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
                 cancelButtonClass: 'el-button--info',
             }).then(() => {
+
                 vm.loading = true;
-            $.ajax({
-                xhrFields: {
-                    withCredentials: true
-                },
-                type: "POST",
-                url: httpurl + 'statusAnalysis/delete',
-                data: {
-                    JSZL_ID:data.file_id,
-                    fileId:data.id
-                },
-                dataType: "json",
-                success: function (data) {
-                    if ("success" == data.result) {
-                                vm.getList();
-                                //判断按钮权限，用于是否显示按钮
-                                vm.hasButton();
-                                //加载状态
-                                vm.loading = false;
-                                $("input[name='ids']").prop("checked", false);
-                                $("input[id='zcheckbox']").prop("checked", false);
+                $.ajax({
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    type: "POST",
+                    url: httpurl + 'statusAnalysis/deleteAnalysisById',
+                    data: {
+                        id:data.id
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        if ("success" == data.result) {
+                                    vm.getList();
+                                    //加载状态
+                                    vm.loading = false;
+                                    $("input[name='ids']").prop("checked", false);
+                                    $("input[id='zcheckbox']").prop("checked", false);
 
-                            } else if ("exception" == data.result) {
-                                //显示异常
-                                showException("操作失败", data.exception);
+                                } else if ("exception" == data.result) {
+                                    //显示异常
+                                    showException("操作失败", data.exception);
+                                }
                             }
-                        }
-                    }).done().fail(function () {
-                        message('warning', '请求服务器无响应，稍后再试!', 1000);
-                    });
+                        }).done().fail(function () {
+                            message('warning', '请求服务器无响应，稍后再试!', 1000);
+                        });
 
-                  }).catch(() => {});
+                      }).catch(() => {});
 
         },
 

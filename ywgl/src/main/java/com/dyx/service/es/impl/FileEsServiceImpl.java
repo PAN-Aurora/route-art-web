@@ -4,12 +4,13 @@ import com.dyx.entity.EsPageModel;
 import com.dyx.service.es.FileEsService;
 import com.dyx.util.StringUtil;
 
+import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
-import org.elasticsearch.action.get.GetRequestBuilder;
-import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.get.*;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
@@ -17,6 +18,7 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.text.Text;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
@@ -80,6 +82,26 @@ public class FileEsServiceImpl  implements  FileEsService {
         GetResponse getResponse = getRequestBuilder.execute().actionGet();
 
         return getResponse.getSource();
+    }
+
+    public  List<Map<String, Object>> searchDataByIdBatch(String index, String type, String[] idList) {
+
+        List<Map<String, Object>> List = new ArrayList<Map<String, Object>>();
+
+        MultiGetRequestBuilder builder =  client.prepareMultiGet();
+        if(idList.length>0){
+            for(String id:idList){
+                 builder.add(index,type,id);
+            }
+            MultiGetResponse response =builder.get();
+            for(MultiGetItemResponse item:response){
+                GetResponse gr = item.getResponse();
+                if(gr!=null && gr.isExists()){
+                    List.add(gr.getSource());
+                }
+            }
+        }
+        return List;
     }
 
 

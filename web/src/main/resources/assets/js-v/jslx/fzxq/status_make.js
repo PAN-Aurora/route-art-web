@@ -6,11 +6,12 @@ var vm = new Vue({
 
 	data:{
 		ID_: '',			//主键ID
-		category: ''		//分分类
+		category: '',		//分分类
+        fileId:'',
+        pd: {
+            analysisResult: '', //结论
+        },
      },
-    conclusion:'', //结论
-	fileId:'',
-
 	methods: {
 
         //初始执行
@@ -22,6 +23,7 @@ var vm = new Vue({
         	setTimeout(function(){
         		vm.getProjectList();
             },200);
+            $("#analysisResult").val('');
         },
         //去保存
     	save: function (){
@@ -36,7 +38,6 @@ var vm = new Vue({
     			this.$refs.category.focus();
     			return false;
     		}
-
     		$("#showform").hide();
     		$("#jiazai").show();
 
@@ -46,12 +47,12 @@ var vm = new Vue({
 	                    withCredentials: true
 	                },
 					type: "POST",
-					url: httpurl+'fhmodel/edit',
+					url: httpurl+'statusAnalysis/save',
 			    	data: {
-                         fileId:this.fileId,
-						 category:this.category,
-                         conclusion:this.conclusion
-						,tm:new Date().getTime()},
+                         analysisBase:this.fileId,
+                         projectId:this.category,
+                         analysisResult:this.pd.analysisResult,
+						 tm:new Date().getTime()},
 					dataType:"json",
 					success: function(data){
                         if("success" == data.result){
@@ -63,9 +64,9 @@ var vm = new Vue({
                 	        });
                         	setTimeout(function(){
                         		top.Dialog.close();//关闭弹窗
-                            },1000);
+                             },1000);
                         }else if ("exception" == data.result){
-                        	alert("流程分类"+data.exception);			//显示异常
+                        	alert("项目分类"+data.exception);			//显示异常
                         	$("#showform").show();
                     		$("#jiazai").hide();
                         }
@@ -118,7 +119,7 @@ var vm = new Vue({
     			dataType:'json',
     			success: function(data){
     				 $("#category").append("<option value=''>请选择项目分类</option>");
-    				 $.each(data.list, function(i, dvar){
+    				 $.each(data.varList, function(i, dvar){
     					 if(vm.category == dvar.projectId){
     						 $("#category").append("<option value="+dvar.projectId+" selected='selected'>"+dvar.projectName+"</option>");
     					 }else{

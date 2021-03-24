@@ -2,4 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dyx.mapper.dsno1.status.StatusAnalysisMapper">
 
+    <resultMap id="BaseResultMap" type="com.dyx.entity.TblAnalysis" >
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="PROJECT_ID" property="projectId" jdbcType="INTEGER" />
+        <result column="ANALYSIS_RESULT" property="analysisResult" jdbcType="VARCHAR" />
+        <result column="ANALYSIS_BASE" property="analysisBase" jdbcType="VARCHAR" />
+        <result column="ANALYSIS_BASE_NAME" property="analysisBaseName" jdbcType="VARCHAR" />
+        <result column="TYPE" property="type" jdbcType="INTEGER" />
+        <result column="STATUS" property="status" jdbcType="INTEGER" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="PROJECT_NO" property="projectNo" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="projectName" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+         t.ID, t.PROJECT_ID,  t.ANALYSIS_RESULT,  t.ANALYSIS_BASE, t.ANALYSIS_BASE_NAME, TYPE, t.STATUS, t.CREATE_TIME
+    </sql>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from tbl_analysis
+        where ID = #{id}
+    </delete>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from tbl_analysis t
+        where ID = #{id}
+    </select>
+
+    <!--查询分析列表-->
+    <select id="selectAnalysislistPage" resultMap="BaseResultMap" parameterType="page">
+          select
+        <include refid="Base_Column_List" />
+        ,t1.PROJECT_NO
+        ,t1.PROJECT_NAME
+        from  tbl_analysis t
+        left join  tbl_project t1 on t.PROJECT_ID = t1.PROJECT_ID
+        WHERE t.status = 1
+        <if test=" pd.type != null and pd.type !='' ">
+            AND t.type  = #{pd.type}
+        </if>
+        <if test=" pd.analysisResult != null and pd.analysisResult !='' ">
+            AND t.ANALYSIS_BASE_NAME  = #{pd.analysisResult}
+        </if>
+        <if test=" pd.projectName != null and pd.projectName !='' ">
+            AND t1.PROJECT_NAME  = #{pd.projectName}
+        </if>
+
+    </select>
+
+
+    <insert id="saveAnalysis" parameterType="com.dyx.entity.TblAnalysis" >
+        insert into tbl_analysis (PROJECT_ID, ANALYSIS_RESULT,
+        ANALYSIS_BASE,ANALYSIS_BASE_NAME, TYPE, STATUS,
+        CREATE_TIME)
+        values (
+         #{projectId,jdbcType=INTEGER},
+         #{analysisResult,jdbcType=VARCHAR},
+         #{analysisBase,jdbcType=VARCHAR},
+         #{analysisBaseName,jdbcType=VARCHAR},
+          #{type,jdbcType=INTEGER}
+          , 1,
+        NOW())
+    </insert>
 </mapper>

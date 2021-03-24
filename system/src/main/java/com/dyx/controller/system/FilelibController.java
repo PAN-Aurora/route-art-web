@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dyx.controller.base.BaseController;
 import com.dyx.service.es.EsService;
 import com.dyx.service.system.FilelibService;
+import com.dyx.util.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
@@ -16,10 +17,6 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 
 import com.dyx.entity.PageData;
-import com.dyx.util.Const;
-import com.dyx.util.FileUpload;
-import com.dyx.util.PathUtil;
-import com.dyx.util.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -182,20 +179,29 @@ public class FilelibController extends BaseController {
             filelibService.save(pd);
             
             String path = filePath+fileName;
+
+
             //获取文件 读取文件内容 
             StringBuilder  buffer = this.getTextFromWordOrPdf(path);
             System.out.println(buffer.toString().replaceAll("\r\t", ""));
             System.out.println(buffer.toString().length());
-            
+            String type ="doc";
+            String pdfPath = path;
+            if (path.endsWith(".doc")) {
+                type ="doc";
+                pdfPath = filePath+fileid+".pdf";
+                PdfUtil.doc2pdf(path,pdfPath);
+
+            } else if (path.endsWith("docx")) {
+                type ="docx";
+                pdfPath = filePath+fileid+".pdf";
+                PdfUtil.doc2pdf(path,pdfPath);
+            } else if (path.endsWith("pdf")) {
+                type ="pdf";
+
+            }
             if(buffer.toString().length()>0) {
-            	String type ="doc";
-                if (path.endsWith(".doc")) {
-                	type ="doc";
-                } else if (path.endsWith("docx")) {
-                	type ="docx";
-                } else if (path.endsWith("pdf")) {
-                	type ="pdf";
-               	}
+
                	//获取文件大小 M
                 String size  = String.valueOf(file.getSize());
                 double  fileSize =  Double.valueOf(size)/1024/1024;
@@ -209,6 +215,7 @@ public class FilelibController extends BaseController {
                 jsonObject.put("file_title", fileName);
                 jsonObject.put("file_type", type);
                 jsonObject.put("file_url", path);
+                jsonObject.put("file_url_pdf", pdfPath);
                 jsonObject.put("file_content", buffer.toString().replaceAll("\r\t", ""));
                 
                 DateFormat date = DateFormat.getDateTimeInstance(); 

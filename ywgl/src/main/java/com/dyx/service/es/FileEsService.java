@@ -29,6 +29,15 @@ public interface FileEsService {
      * @return
      */
     public  Map<String, Object> searchDataById(String index, String type, String id, String fields) ;
+
+    /**
+     * 通过多个id返回多条数据
+     * @param index  索引，类似数据库
+     * @param type 类型，类似表
+     * @param idList  id集合
+     * @return
+     */
+    public  List<Map<String, Object>> searchDataByIdBatch(String index, String type, String[] idList);
     
     /**
      * 使用分词查询,并分页

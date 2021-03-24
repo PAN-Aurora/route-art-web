@@ -170,11 +170,14 @@ public class ProjectController extends BaseController {
 		//把当前用户id放入查询条件中
 		pd.put("CJR",strUserId);
 		//关键词检索条件
-		String keyWords = pd.getString("keyWords").replace("%","\\%");
-		//获取关键词
-		if(Tools.notEmpty(keyWords)) {
-			pd.put("keyWords", keyWords.trim());
+		if(pd.getString("keyWords")!=null && pd.getString("keyWords") !=""){
+			String keyWords = pd.getString("keyWords").replace("%","\\%");
+			//获取关键词
+			if(Tools.notEmpty(keyWords)) {
+				pd.put("keyWords", keyWords.trim());
+			}
 		}
+
 		page.setPd(pd);
 		List<TblProject>	projectList = projectService.selectPorjectList(page);
 		//将数据 page返回到前台

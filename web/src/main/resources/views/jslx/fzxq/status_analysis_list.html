@@ -44,19 +44,20 @@
                                                         class="feather icon-plus"></i>文件分析
                                                 </a>
                                             </td>
-                                            <td style="vertical-align:top;">
-                                                <a v-show="true" class="btn btn-light btn-sm"
-                                                   v-on:click="makeReport(MENU_ID,'add');"><i
-                                                        style="margin-top:-3px;margin-left: -6px;"
-                                                        class="feather icon-plus"></i>评论
-                                                </a>
-                                            </td>
-                                            <td><span class="searchName">模糊查询：</span>
+                                            <td><span class="searchName">项目名称：</span>
                                                 <div class="input-group input-group-sm mb-3 adjustMarg"
                                                      style="float: left;width: auto;">
-                                                    <input class="form-control" type="text" v-model="keyWords"
+                                                    <input class="form-control" type="text" v-model="analysisResult"
                                                            onkeydown="keyDown()" style="width: 250px"
-                                                           title="请输入文档内容描述信息" placeholder="请输入文档内容描述信息"/>
+                                                           title="请输入项目名称" placeholder="请输入项目名称"/>
+                                                </div>
+                                            </td>
+                                            <td><span class="searchName">分析依据：</span>
+                                                <div class="input-group input-group-sm mb-3 adjustMarg"
+                                                     style="float: left;width: auto;">
+                                                    <input class="form-control" type="text" v-model="projectName"
+                                                           onkeydown="keyDown()" style="width: 250px"
+                                                           title="请输入分析依据" placeholder="请输入分析依据"/>
                                                 </div>
                                             </td>
 
@@ -69,11 +70,11 @@
                                                     <i style="margin-top:-3px;margin-left: -6px;"
                                                        class="feather icon-refresh-cw"></i>重置</a>
 
-                                                <a v-show="true" class="btn btn-light btn-sm" v-on:click="goExcel"
-                                                   title="导出到excel表格">
-                                                    <i style="margin-top:-3px;margin-left: -6px;"
-                                                       class="mdi mdi-cloud-download"></i>导出
-                                                </a>
+                                                <!--<a v-show="true" class="btn btn-light btn-sm" v-on:click="goExcel"-->
+                                                   <!--title="导出到excel表格">-->
+                                                    <!--<i style="margin-top:-3px;margin-left: -6px;"-->
+                                                       <!--class="mdi mdi-cloud-download"></i>导出-->
+                                                <!--</a>-->
                                             </td>
                                             <td v-show="loading">
                                                 <!-- [加载状态 ] start -->
@@ -102,11 +103,12 @@
                                                     </div>
                                                 </th>
                                                 <th style="width:50px;">序号</th>
-                                                <th>文档编号</th>
-                                                <th>文档名称</th>
-                                                <th>文档类型</th>
-                                                <th>文档大小</th>
-                                                <th>编制时间</th>
+                                                <th>项目编号</th>
+                                                <th>项目名称</th>
+                                                <th>分析依据</th>
+                                                <th>分析结论</th>
+                                                <th>分析类型</th>
+                                                <th>分析时间</th>
                                                 <th>操作</th>
                                             </tr>
                                             </thead>
@@ -126,15 +128,15 @@
                                                     <td scope="row" class="boldXh">
                                                         {{page.showCount*(page.currentPage-1)+index+1}}
                                                     </td>
-                                                    <td>{{data.file_no}}</td>
-                                                    <td><a v-bind:href="data.url" target="_blank">{{data.file_name}}</a></td>
-                                                    <td>{{data.file_type}}</td>
-                                                    <td>{{data.file_size}}</td>
-                                                    <td>{{data.created_time}}</td>
+                                                    <td>{{data.projectNo}}</td>
+                                                    <td>{{data.projectName}}</td>
+                                                    <td>
+                                                        <a v-for="(name,i) in data.analysisBaseName.split(';')"  href="javascript:void(0);" v-on:click="showFile(data,i)">{{name}};</a>
+                                                    </td>
+                                                    <td>{{data.analysisResult}}</td>
+                                                    <td>{{data.type==1?'国内':'国外'}}</td>
+                                                    <td>{{data.createTime}}</td>
                                                      <td class="boldCz">
-                                                         <a  title="下载源文件" v-on:click="downFile(data)"
-                                                            style="cursor:pointer;"><i
-                                                                 class="mdi mdi-cloud-download"></i></a>
                                                         <a  title="删除" v-on:click="goDel(data)"
                                                            style="cursor:pointer;"><i class="feather icon-x"></i></a>
                                                     </td>
@@ -166,7 +168,7 @@
     </div>
     <form id="myForm" name="myForm" method="post">
         <input type="hidden" name="DATA_IDS" v-model="DATA_IDS"/>
-        <input type="hidden" name="keyWords" v-model="keyWords"/>
+        <input type="hidden" name="analysisResult" v-model="analysisResult"/>
         <input type="hidden" name="startTime" v-model="startTime"/>
         <input type="hidden" name="endTime" v-model="endTime"/>
         <input type="hidden" name="SSBMNM" v-model="SSBMNM"/>
